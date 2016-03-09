@@ -1,4 +1,4 @@
-// Generated on 2016-03-09 using generator-angular 0.15.1
+
 'use strict';
 
 var gulp = require('gulp');
@@ -9,29 +9,29 @@ var rimraf = require('rimraf');
 var wiredep = require('wiredep').stream;
 var runSequence = require('run-sequence');
 
-var yeoman = {
+var audition = {
   app: require('./bower.json').appPath || 'app',
   dist: 'dist'
 };
 
 var paths = {
-  scripts: [yeoman.app + '/scripts/**/*.js'],
-  styles: [yeoman.app + '/styles/**/*.css'],
+  scripts: [audition.app + '/scripts/**/*.js'],
+  styles: [audition.app + '/styles/**/*.css'],
   test: ['test/spec/**/*.js'],
   testRequire: [
-    yeoman.app + '/bower_components/angular/angular.js',
-    yeoman.app + '/bower_components/angular-mocks/angular-mocks.js',
-    yeoman.app + '/bower_components/angular-resource/angular-resource.js',
-    yeoman.app + '/bower_components/angular-cookies/angular-cookies.js',
-    yeoman.app + '/bower_components/angular-sanitize/angular-sanitize.js',
-    yeoman.app + '/bower_components/angular-route/angular-route.js',
+    audition.app + '/bower_components/angular/angular.js',
+    audition.app + '/bower_components/angular-mocks/angular-mocks.js',
+    audition.app + '/bower_components/angular-resource/angular-resource.js',
+    audition.app + '/bower_components/angular-cookies/angular-cookies.js',
+    audition.app + '/bower_components/angular-sanitize/angular-sanitize.js',
+    audition.app + '/bower_components/angular-route/angular-route.js',
     'test/mock/**/*.js',
     'test/spec/**/*.js'
   ],
   karma: 'karma.conf.js',
   views: {
-    main: yeoman.app + '/index.html',
-    files: [yeoman.app + '/views/**/*.html']
+    main: audition.app + '/index.html',
+    files: [audition.app + '/views/**/*.html']
   }
 };
 
@@ -71,7 +71,7 @@ gulp.task('start:client', ['start:server', 'styles'], function () {
 
 gulp.task('start:server', function() {
   $.connect.server({
-    root: [yeoman.app, '.tmp'],
+    root: [audition.app, '.tmp'],
     livereload: true,
     // Change this to '0.0.0.0' to access the server from outside.
     port: 9000
@@ -80,7 +80,7 @@ gulp.task('start:server', function() {
 
 gulp.task('start:server:test', function() {
   $.connect.server({
-    root: ['test', yeoman.app, '.tmp'],
+    root: ['test', audition.app, '.tmp'],
     livereload: true,
     port: 9001
   });
@@ -117,7 +117,7 @@ gulp.task('serve', function (cb) {
 
 gulp.task('serve:prod', function() {
   $.connect.server({
-    root: [yeoman.dist],
+    root: [audition.dist],
     livereload: true,
     port: 9000
   });
@@ -136,10 +136,10 @@ gulp.task('test', ['start:server:test'], function () {
 gulp.task('bower', function () {
   return gulp.src(paths.views.main)
     .pipe(wiredep({
-      directory: yeoman.app + '/bower_components',
+      directory: audition.app + '/bower_components',
       ignorePath: '..'
     }))
-  .pipe(gulp.dest(yeoman.app + '/views'));
+  .pipe(gulp.dest(audition.app + '/views'));
 });
 
 ///////////
@@ -155,7 +155,7 @@ gulp.task('client:build', ['html', 'styles'], function () {
   var cssFilter = $.filter('**/*.css');
 
   return gulp.src(paths.views.main)
-    .pipe($.useref({searchPath: [yeoman.app, '.tmp']}))
+    .pipe($.useref({searchPath: [audition.app, '.tmp']}))
     .pipe(jsFilter)
     .pipe($.ngAnnotate())
     .pipe($.uglify())
@@ -165,32 +165,32 @@ gulp.task('client:build', ['html', 'styles'], function () {
     .pipe(cssFilter.restore())
     .pipe($.rev())
     .pipe($.revReplace())
-    .pipe(gulp.dest(yeoman.dist));
+    .pipe(gulp.dest(audition.dist));
 });
 
 gulp.task('html', function () {
-  return gulp.src(yeoman.app + '/views/**/*')
-    .pipe(gulp.dest(yeoman.dist + '/views'));
+  return gulp.src(audition.app + '/views/**/*')
+    .pipe(gulp.dest(audition.dist + '/views'));
 });
 
 gulp.task('images', function () {
-  return gulp.src(yeoman.app + '/images/**/*')
+  return gulp.src(audition.app + '/images/**/*')
     .pipe($.cache($.imagemin({
         optimizationLevel: 5,
         progressive: true,
         interlaced: true
     })))
-    .pipe(gulp.dest(yeoman.dist + '/images'));
+    .pipe(gulp.dest(audition.dist + '/images'));
 });
 
 gulp.task('copy:extras', function () {
-  return gulp.src(yeoman.app + '/*/.*', { dot: true })
-    .pipe(gulp.dest(yeoman.dist));
+  return gulp.src(audition.app + '/*/.*', { dot: true })
+    .pipe(gulp.dest(audition.dist));
 });
 
 gulp.task('copy:fonts', function () {
-  return gulp.src(yeoman.app + '/fonts/**/*')
-    .pipe(gulp.dest(yeoman.dist + '/fonts'));
+  return gulp.src(audition.app + '/fonts/**/*')
+    .pipe(gulp.dest(audition.dist + '/fonts'));
 });
 
 gulp.task('build', ['clean:dist'], function () {

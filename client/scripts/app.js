@@ -6,7 +6,7 @@
  * @description
  * # auditionApp
  *
- * Main module of the application.
+ * Modulo principal do cliente
  */
 angular
   .module('auditionApp', [
@@ -24,10 +24,10 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
+      .when('/visualizar', {
+        templateUrl: 'views/visualizar.html',
+        controller: 'VisualizarCtrl',
+        controllerAs: 'visualizar'
       })
       .otherwise({
         redirectTo: '/'
