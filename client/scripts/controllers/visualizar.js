@@ -16,6 +16,7 @@ app.controller('VisualizarCtrl', function ($scope) {
     $scope.logSelecionado = null;
     $scope.indexSelecionado = null;
 
+
     $scope.clickTable = function(log, index) {
       $scope.logSelecionado = log;
       $scope.indexSelecionado = index;
@@ -23,13 +24,25 @@ app.controller('VisualizarCtrl', function ($scope) {
 
     $scope.pesquisar = function(log) {
       if ($scope.pesquisa) {
-        return log.aplicacao.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "aplicacao" ||
-            log.usuario.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "usuario" ||
-            log.acao.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "acao" ||
-            log.id.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "id" ||
-            log.datas.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "datas" ||
-            log.ip.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "ip" ||
-            log.criticidade.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "criticidade"
+
+        if($scope.filtroPopular === "todos"){
+          return log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+          log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+          log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+          log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+          log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+          log.criticidade.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0
+
+        }else{
+          return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "aplicacao" ||
+            log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "usuario" ||
+            log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "acao" ||
+            log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "id" ||
+            log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "datas" ||
+            log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "ip" ||
+            log.criticidade.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "criticidade"
+        }
+
       }
       return true;
     };
