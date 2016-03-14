@@ -1,4 +1,4 @@
-resources.projectroot = /Users/anderson/Projetos/audit-view
+resources.projectroot = /home/anderson/Projetos/audit-view
 spring.datasource.username=anderson
 spring.datasource.password=1234
 spring.datasource.url=jdbc:postgresql://localhost/audit

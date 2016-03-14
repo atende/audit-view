@@ -6,8 +6,11 @@ src/main/resources/application-dev.properties
 /classes
 /.gradle/
 /atlassian-ide-plugin.xml
-src/main/webapp/packages
-src/main/webapp/node_modules
+client/node_modules
+client/bower_components
+client/dist
+client/.tmp
+client/.sass-cache
 test-output/
 target/
 logs/
