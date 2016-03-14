@@ -23,12 +23,13 @@ app.controller('VisualizarCtrl', function ($scope) {
 
     $scope.pesquisar = function(log) {
       if ($scope.pesquisa) {
-        return log.aplicacao.indexOf($scope.pesquisa) == 0 ||
-            log.usuario.indexOf($scope.pesquisa) == 0 ||
-            log.acao.indexOf($scope.pesquisa) == 0 ||
-            log.datas.indexOf($scope.pesquisa) == 0 ||
-            log.ip.indexOf($scope.pesquisa) == 0 ||
-            log.criticidade.indexOf($scope.pesquisa) == 0;
+        return log.aplicacao.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "aplicacao" ||
+            log.usuario.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "usuario" ||
+            log.acao.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "acao" ||
+            log.id.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "id" ||
+            log.datas.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "datas" ||
+            log.ip.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "ip" ||
+            log.criticidade.indexOf($scope.pesquisa) == 0 && $scope.filtroPopular === "criticidade"
       }
       return true;
     };
@@ -37,34 +38,42 @@ app.controller('VisualizarCtrl', function ($scope) {
       {
         aplicacao: "Mapa PUC",
         usuario: "Anderson",
-        acao: "teste",
+        acao: "teste1",
+        id: "12341",
         datas: "10/03/2016 : 10:53",
         ip: "192.168.254.254",
-        criticidade: "altawa"
-      },
-      {
-        aplicacao: "Audit-Web",
-        usuario: "Andersonss",
-        acao: "teste",
-        datas: "10/03/2016 : 10:53",
-        ip: "192.168.254.254",
-        criticidade: "alta"
-      },
-      {
-        aplicacao: "SGL",
-        usuario: "Anderson",
-        acao: "teste",
-        datas: "10/03/2016 : 10:53",
-        ip: "192.168.255.254",
-        criticidade: "alta"
+        criticidade: "altawa",
+        descricao: "bhsadgjkdsa"
       },
       {
         aplicacao: "SGI",
-        usuario: "Anderson",
-        acao: "teste",
-        datas: "10/03/2016 : 10:53",
-        ip: "192.167.254.254",
-        criticidade: "alta"
+        usuario: "Giovanni",
+        acao: "teste2",
+        id: "12342",
+        datas: "11/03/2016 : 10:53",
+        ip: "192.168.254.254",
+        criticidade: "altawa",
+        descricao: ""
+      },
+      {
+        aplicacao: "AUDIT",
+        usuario: "Paulo",
+        acao: "teste3",
+        id: "12343",
+        datas: "12/03/2016 : 10:53",
+        ip: "192.168.254.254",
+        criticidade: "altawa",
+        descricao: ""
+      },
+      {
+        aplicacao: "SGL",
+        usuario: "Bruno",
+        acao: "teste4",
+        id: "12344",
+        datas: "13/03/2016 : 10:53",
+        ip: "192.168.254.254",
+        criticidade: "altawa",
+        descricao: ""
       }
     ]
 

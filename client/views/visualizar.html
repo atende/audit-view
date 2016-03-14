@@ -12,9 +12,18 @@
       </div >
 
       <select class="form-control"
-              ng-model="order" >
-          <option value="applicacao" > Aplicação (ASC)</option >
-          <option value="-aplicacao" > Aplicação (DEC)</option >
+              ng-model="filtroPopular">
+
+        <option value='' disabled selected>Filtro</option>
+
+        <option value="aplicacao" > Aplicação </option >
+        <option value="usuario" > Usuário </option >
+        <option value="acao" > Ação </option >
+        <option value="id" > ID </option >
+        <option value="datas" > Datas </option >
+        <option value="ip" > IP </option >
+        <option value="criticidade" > Criticidade </option >
+
       </select >
 
       </form>
@@ -32,12 +41,14 @@
         </th>
         <th> Usuário </th>
         <th> Ação </th>
+        <th> ID </th>
         <th> Data e Hora </th>
         <th> IP </th>
         <th> Criticidade </th>
+
     </tr>
 
-      <tr ng-repeat="log in logsFiltrados = ( logs | filter: pesquisar | orderBy: order)"
+      <tr ng-repeat="log in logsFiltrados = ( logs | filter: pesquisar | orderBy: order )"
           ng-style="{
 				 'background-color': $index == indexSelecionado ? 'lightgray' : ''
 				 }"
@@ -47,16 +58,18 @@
         <td> {{log.aplicacao }} </td>
         <td> {{ log.usuario }} </td>
         <td> {{ log.acao }} </td>
+        <td> {{ log.id }} </td>
         <td> {{ log.datas }} </td>
         <td> {{ log.ip }} </td>
         <td> {{ log.criticidade }} </td>
+
       </tr>
 
         <tr ng-show="logsFiltrados.length == 0" >
             <td colspan="7" >
                 <div class="alert alert-info" >
                     <p class="text-center" >
-                        No results found for search term '{{ pesquisa }}'
+                        Nenhum resultado encontrado para '{{ pesquisa }}' na coluna '{{ filtroPopular }}'.
                     </p >
                 </div >
             </td >
@@ -78,12 +91,14 @@
                           <table class="table display">
                               <thead>
                               <tr>
-                                  <th> Aplicação </th>
-                                  <th> Usuário </th>
-                                  <th> Ação </th>
-                                  <th> Data e Hora </th>
-                                  <th> IP </th>
-                                  <th> Criticidade </th>
+                                <th> Aplicação </th>
+                                <th> Usuário </th>
+                                <th> Ação </th>
+                                <th> ID </th>
+                                <th> Data e Hora </th>
+                                <th> IP </th>
+                                <th> Criticidade </th>
+
                               </tr>
                               </thead>
                               <tbody>
@@ -91,11 +106,14 @@
                                   <td> {{ logSelecionado.aplicacao }} </td>
                                   <td> {{ logSelecionado.usuario }} </td>
                                   <td> {{ logSelecionado.acao }} </td>
+                                  <td> {{ logSelecionado.id }} </td>
                                   <td> {{ logSelecionado.datas }} </td>
                                   <td> {{ logSelecionado.ip }} </td>
                                   <td> {{ logSelecionado.criticidade }} </td>
                               </tr>
                               </tbody>
+                            <th> Descrição </th>
+                            <td> {{ logSelecionado.descricao}} </td>
                           </table>
                       </div>
                       <div class="modal-footer">
