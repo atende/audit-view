@@ -29,7 +29,7 @@
 
     <!-- Add your site or application content here -->
     <div class="header">
-      <div class="navbar navbar-default" role="navigation">
+      <div class="" role="navigation" style="box-shadow: 0 8px 6px -6px #999">
         <div class="container">
           <div class="navbar-header">
 
@@ -40,16 +40,24 @@
               <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="#/">audition</a>
+            <a class="navbar-brand">Auditorias dos sistemas desenvolvidos na PUC Minas</a>
           </div>
 
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
-
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav navbar-right">
               <li class="active"><a href="#/">Home</a></li>
-              <li><a ng-href="#/visualizar">Visualizar</a></li>
+              <li class="dropdown" class="active"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Visualizar<span class="caret"></span></a>
+                <ul class="dropdown-menu" ng-init="logs=[{text:'Logs A-repeat',link:'#/visualizar'},{text:'Logs B-repeat',link:'#'}]">
+                  <li class="dropdown-header" style="background: #a6e1ec" >Grupo 1</li>
+                  <li><a ng-href="#/visualizar">Logs 1</a></li>
+                  <li class="disabled"><a ng-href="#">Logs 2</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header" style="background: #a6e1ec" >Grupo 2</li>
+                  <li ng-repeat="log in logs"><a ng-href="{{log.link}}">{{log.text}}</a></li>
+                </ul>
             </ul>
           </div>
+
         </div>
       </div>
     </div>
@@ -88,6 +96,13 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- menu dropdown -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
