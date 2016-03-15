@@ -26,7 +26,8 @@ app.controller('VisualizarCtrl', function ($scope) {
       if ($scope.pesquisa) {
 
         if($scope.filtroPopular === "todos"){
-          return log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+          return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+          log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
           log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
           log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
           log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
