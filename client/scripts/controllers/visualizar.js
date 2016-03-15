@@ -16,33 +16,57 @@ app.controller('VisualizarCtrl', function ($scope) {
     $scope.logSelecionado = null;
     $scope.indexSelecionado = null;
 
+    $scope.filtrosDeAplicacao = [];
 
     $scope.clickTable = function(log, index) {
       $scope.logSelecionado = log;
       $scope.indexSelecionado = index;
     }
 
+
+
     $scope.pesquisar = function(log) {
       if ($scope.pesquisa) {
 
-        if($scope.filtroPopular === "todos"){
-          return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
-          log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
-          log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
-          log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
-          log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
-          log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
-          log.criticidade.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0
-
-        }else{
-          return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "aplicacao" ||
-            log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "usuario" ||
-            log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "acao" ||
-            log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "id" ||
-            log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "datas" ||
-            log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "ip" ||
-            log.criticidade.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "criticidade"
+        if($scope.cb_aplicacao){
+          return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
         }
+        if($scope.cb_usuario){
+          return log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
+        }
+        if($scope.cb_acao){
+          return log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
+        }
+        if($scope.cb_id){
+          return log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
+        }
+        if($scope.cb_datas){
+          return log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
+        }
+        if($scope.cb_ip){
+          return log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
+        }
+        if($scope.cb_criticidade){
+          return log.criticidade.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
+        }
+        //if($scope.filtroPopular === "todos"){
+        //  return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+        //  log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+        //  log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+        //  log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+        //  log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+        //  log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+        //  log.criticidade.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0
+        //
+        //}else{
+        //  return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "aplicacao" ||
+        //    log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "usuario" ||
+        //    log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "acao" ||
+        //    log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "id" ||
+        //    log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "datas" ||
+        //    log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "ip" ||
+        //    log.criticidade.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 && $scope.filtroPopular === "criticidade"
+        //}
 
       }
       return true;
