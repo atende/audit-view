@@ -12,6 +12,7 @@ var app = angular.module('auditionApp');
 
 app.controller('VisualizarCtrl', function ($scope) {
 
+    $scope.filtros = [];
 
     $scope.logSelecionado = null;
     $scope.indexSelecionado = null;
@@ -21,33 +22,40 @@ app.controller('VisualizarCtrl', function ($scope) {
     $scope.clickTable = function(log, index) {
       $scope.logSelecionado = log;
       $scope.indexSelecionado = index;
-    }
-
+    };
 
 
     $scope.pesquisar = function(log) {
       if ($scope.pesquisa) {
 
-        if($scope.cb_aplicacao){
+        if($scope.radio_filtro == "aplicacao"){
           return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
         }
-        if($scope.cb_usuario){
+        else if($scope.radio_filtro == "usuario"){
           return log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
         }
-        if($scope.cb_acao){
+        else if($scope.radio_filtro == "acao"){
           return log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
         }
-        if($scope.cb_id){
+        else if($scope.radio_filtro == "id"){
           return log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
         }
-        if($scope.cb_datas){
+        else if($scope.radio_filtro == "datas"){
           return log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
         }
-        if($scope.cb_ip){
+        else if($scope.radio_filtro == "ip"){
           return log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
         }
-        if($scope.cb_criticidade){
+        else if($scope.radio_filtro == "criticidade"){
           return log.criticidade.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
+        }else{
+            return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+            log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+            log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+            log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+            log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+            log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
+            log.criticidade.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
         }
         //if($scope.filtroPopular === "todos"){
         //  return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0 ||
@@ -116,3 +124,33 @@ app.controller('VisualizarCtrl', function ($scope) {
     ]
 
   });
+
+/*
+ $scope.incluirFiltro = function(filtro) {
+ var i = $.inArray(filtro, $scope.filtros);
+ if (i > -1) {
+ $scope.filtros.splice(i, 1);
+ } else {
+ $scope.filtros.push(filtro);
+ console.log($scope.filtros);
+ }
+ };
+
+ $scope.logFiltro = function(log) {
+
+ console.log("Filtros: ");
+ console.log($scope.filtros);
+
+ if ($scope.filtros.length > 0) {
+
+ if($scope.cb_aplicacao){
+
+ if ($.inArray("aplicacao", $scope.filtros) >= 0 ){
+ return log.aplicacao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
+ }
+ }
+ }
+ return false;
+ };
+
+ */

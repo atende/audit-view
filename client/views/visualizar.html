@@ -26,15 +26,18 @@
       </select >
 
     <br><label> Filtros </label>
-    <br><label>Aplicação: <input type="checkbox" ng-model="cb_aplicacao"/></label>
-    <label>Usuário: <input type="checkbox" ng-model="cb_usuario"/></label>
-    <label>Ação: <input type="checkbox" ng-model="cb_acao"/></label>
-    <label>ID: <input type="checkbox" ng-model="cb_id"/></label>
-    <label>Data e Hora: <input type="checkbox" ng-model="cb_datas"/></label>
-    <label>IP: <input type="checkbox" ng-model="cb_ip"/></label>
-    <label>Criticidade: <input type="checkbox" ng-model="cb_criticidade"/></label>
+    <label>Todos: <input type="radio" ng-model="radio_filtro" value="todos" ng-checked="true"/></label>
+    <br><label>Aplicação: <input type="radio" ng-model="radio_filtro" value="aplicacao"/></label>
+    <label>Usuário: <input type="radio" ng-model="radio_filtro" value="usuario"/></label>
+    <label>Ação: <input type="radio" ng-model="radio_filtro" value="acao"/></label>
+    <label>ID: <input type="radio" ng-model="radio_filtro" value="id"/></label>
+    <label>Data e Hora: <input type="radio" ng-model="radio_filtro" value="datas"/></label>
+    <label>IP: <input type="radio" ng-model="radio_filtro" value="ip"/></label>
+    <label>Criticidade: <input type="radio" ng-model="radio_filtro" value="criticidade"/></label>
 
       </form>
+
+
 
 
   <div ng-controller="VisualizarCtrl">
@@ -84,7 +87,6 @@
         </tr >
 
     </table>
-
 
 
       <div id="details">
