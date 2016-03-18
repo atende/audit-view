@@ -1,6 +1,7 @@
 
   <form class="form-inline well well-sm" >
-      <span class="glyphicon glyphicon-search" ></span >
+
+   <span class="glyphicon glyphicon-search" ></span >
 
       <div class="form-group" >
           <input type="text"
@@ -11,29 +12,28 @@
           />
       </div >
 
-      <select class="form-control"
-              ng-model="filtroPopular">
+    <select class="form-control"
+            ng-model="criticidadeSelecionada">
 
-        <option value="todos" selected> Todos </option >
-        <option value="aplicacao" > Aplicação </option >
-        <option value="usuario" > Usuário </option >
-        <option value="acao" > Ação </option >
-        <option value="id" > ID </option >
-        <option value="datas" > Datas </option >
-        <option value="ip" > IP </option >
-        <option value="criticidade" > Criticidade </option >
+      <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
+      <option ng-repeat="crit  in criticidades" value="{{crit}}" > {{crit}} </option >
 
-      </select >
+    </select >
+
+    <select class="form-control"
+            ng-model="aplicacaoSelecionada">
+
+      <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
+      <option ng-repeat="aplic  in aplicacoes" value="{{aplic}}" > {{aplic}} </option >
+
+    </select >
 
     <br><label> Filtros </label>
-    <label>Todos: <input type="radio" ng-model="radio_filtro" value="todos" ng-checked="true"/></label>
-    <br><label>Aplicação: <input type="radio" ng-model="radio_filtro" value="aplicacao"/></label>
-    <label>Usuário: <input type="radio" ng-model="radio_filtro" value="usuario"/></label>
+    <br><label>Usuário: <input type="radio" ng-model="radio_filtro" value="usuario"/></label>
     <label>Ação: <input type="radio" ng-model="radio_filtro" value="acao"/></label>
     <label>ID: <input type="radio" ng-model="radio_filtro" value="id"/></label>
     <label>Data e Hora: <input type="radio" ng-model="radio_filtro" value="datas"/></label>
     <label>IP: <input type="radio" ng-model="radio_filtro" value="ip"/></label>
-    <label>Criticidade: <input type="radio" ng-model="radio_filtro" value="criticidade"/></label>
 
       </form>
 
@@ -76,15 +76,7 @@
 
       </tr>
 
-        <tr ng-show="logsFiltrados.length == 0" >
-            <td colspan="7" >
-                <div class="alert alert-info" >
-                    <p class="text-center" >
-                        Nenhum resultado encontrado para '{{ pesquisa }}' na coluna '{{ filtroPopular }}'.
-                    </p >
-                </div >
-            </td >
-        </tr >
+
 
     </table>
 
