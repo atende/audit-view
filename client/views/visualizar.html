@@ -38,8 +38,6 @@
       </form>
 
 
-
-
   <div ng-controller="VisualizarCtrl">
 
     <table class="table table-condensed">
@@ -75,6 +73,17 @@
         <td> {{ log.criticidade }} </td>
 
       </tr>
+
+
+      <tr ng-show="logsFiltrados.length == 0" >
+        <td colspan="7" >
+          <div class="alert alert-info" >
+            <p class="text-center" >
+              Nenhum resultado encontrado para {{ pesquisa }}.
+            </p >
+          </div >
+        </td >
+      </tr >
 
 
 
