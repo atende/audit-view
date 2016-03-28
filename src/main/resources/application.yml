@@ -1,0 +1,15 @@
+#https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html
+#http://icei.pucminas.br/code/projects/LOGIN/repos/sgl/browse/server/src/main/resources/application.yml
+
+#import org.springframework.stereotype.*
+#import org.springframework.beans.factory.annotation.*
+
+#@Component
+#public class MyBean {
+
+#    @Value("${name}")
+#    private String name;
+
+#    // ...
+
+#}
