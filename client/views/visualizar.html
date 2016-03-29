@@ -1,145 +1,141 @@
+<form class="form-inline well well-sm">
 
-  <form class="form-inline well well-sm" >
+  <span class="glyphicon glyphicon-search"></span>
 
-   <span class="glyphicon glyphicon-search" ></span >
+  <div class="form-group">
+    <input type="text"
+           class="form-control"
+           id="name"
+           ng-model="pesquisa"
+           placeholder="Pesquisar ..."
+    />
+  </div>
 
-      <div class="form-group" >
-          <input type="text"
-                 class="form-control"
-                 id="name"
-                 ng-model="pesquisa"
-                 placeholder="Pesquisar ..."
-          />
-      </div >
+  <select class="form-control"
+          ng-model="criticidadeSelecionada">
 
-    <select class="form-control"
-            ng-model="criticidadeSelecionada">
+    <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
+    <option ng-repeat="crit  in criticidades" value="{{crit}}"> {{crit}}</option>
 
-      <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
-      <option ng-repeat="crit  in criticidades" value="{{crit}}" > {{crit}} </option >
+  </select>
 
-    </select >
+  <select class="form-control"
+          ng-model="aplicacaoSelecionada">
 
-    <select class="form-control"
-            ng-model="aplicacaoSelecionada">
+    <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
+    <option ng-repeat="aplic  in aplicacoes" value="{{aplic}}"> {{aplic}}</option>
 
-      <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
-      <option ng-repeat="aplic  in aplicacoes" value="{{aplic}}" > {{aplic}} </option >
+  </select>
 
-    </select >
+  <br><label> Filtros </label>
+  <br><label>Usuário: <input type="radio" ng-model="radio_filtro" value="usuario"/></label>
+  <label>Ação: <input type="radio" ng-model="radio_filtro" value="acao"/></label>
+  <label>ID: <input type="radio" ng-model="radio_filtro" value="id"/></label>
+  <label>Data e Hora: <input type="radio" ng-model="radio_filtro" value="datas"/></label>
+  <label>IP: <input type="radio" ng-model="radio_filtro" value="ip"/></label>
 
-    <br><label> Filtros </label>
-    <br><label>Usuário: <input type="radio" ng-model="radio_filtro" value="usuario"/></label>
-    <label>Ação: <input type="radio" ng-model="radio_filtro" value="acao"/></label>
-    <label>ID: <input type="radio" ng-model="radio_filtro" value="id"/></label>
-    <label>Data e Hora: <input type="radio" ng-model="radio_filtro" value="datas"/></label>
-    <label>IP: <input type="radio" ng-model="radio_filtro" value="ip"/></label>
-
-      </form>
+</form>
 
 
-  <div ng-controller="VisualizarCtrl">
+<div ng-controller="VisualizarCtrl">
 
-    <table class="table table-condensed">
+  <table class="table table-condensed">
 
     <tr>
-        <th> # </th>
-        <th> Aplicação
-          <span ng-click="order = 'aplicacao'" class="glyphicon glyphicon-menu-up"></span>
-          <span ng-click="order = '-aplicacao'" class="glyphicon glyphicon-menu-down"></span>
-        </th>
-        <th> Usuário </th>
-        <th> Ação </th>
-        <th> ID </th>
-        <th> Data e Hora </th>
-        <th> IP </th>
-        <th> Criticidade </th>
+      <th> #</th>
+      <th> Aplicação
+        <span ng-click="order = 'aplicacao'" class="glyphicon glyphicon-menu-up"></span>
+        <span ng-click="order = '-aplicacao'" class="glyphicon glyphicon-menu-down"></span>
+      </th>
+      <th> Usuário</th>
+      <th> Ação</th>
+      <th> ID</th>
+      <th> Data e Hora</th>
+      <th> IP</th>
+      <th> Criticidade</th>
 
     </tr>
 
-      <tr ng-repeat="log in logsFiltrados = ( logs | filter: pesquisar | orderBy: order )"
-          ng-style="{
+    <tr ng-repeat="log in logsFiltrados = ( logs | filter: pesquisar | orderBy: order )"
+        ng-style="{
 				 'background-color': $index == indexSelecionado ? 'lightgray' : ''
 				 }"
-          ng-click="clickTable(log, $index)"
-          data-toggle="modal" data-target="#myModal">
-        <td> {{$index}} </td>
-        <td> {{log.aplicacao }} </td>
-        <td> {{ log.usuario }} </td>
-        <td> {{ log.acao }} </td>
-        <td> {{ log.id }} </td>
-        <td> {{ log.datas }} </td>
-        <td> {{ log.ip }} </td>
-        <td> {{ log.criticidade }} </td>
+        ng-click="clickTable(log, $index)"
+        data-toggle="modal" data-target="#myModal">
+      <td> {{$index}}</td>
+      <td> {{log.aplicacao }}</td>
+      <td> {{ log.usuario }}</td>
+      <td> {{ log.acao }}</td>
+      <td> {{ log.id }}</td>
+      <td> {{ log.datas }}</td>
+      <td> {{ log.ip }}</td>
+      <td> {{ log.criticidade }}</td>
 
-      </tr>
-
-
-      <tr ng-show="logsFiltrados.length == 0" >
-        <td colspan="7" >
-          <div class="alert alert-info" >
-            <p class="text-center" >
-              Nenhum resultado encontrado para {{ pesquisa }}.
-            </p >
-          </div >
-        </td >
-      </tr >
+    </tr>
 
 
+    <tr ng-show="logsFiltrados.length == 0 ">
+      <td colspan="7">
+        <div class="alert alert-info">
+          <p class="text-center">
+            Nenhum resultado encontrado.
+          </p>
+        </div>
+      </td>
+    </tr>
 
-    </table>
+
+  </table>
 
 
-      <div id="details">
-          <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-               aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal"
-                                  aria-hidden="true">&times;</button>
-                          <h4 class="modal-title" id="myModalLabel">Detalhes</h4>
-                      </div>
-                      <div class="modal-body">
-                          <table class="table display">
-                              <thead>
-                              <tr>
-                                <th> Aplicação </th>
-                                <th> Usuário </th>
-                                <th> Ação </th>
-                                <th> ID </th>
-                                <th> Data e Hora </th>
-                                <th> IP </th>
-                                <th> Criticidade </th>
-
-                              </tr>
-                              </thead>
-                              <tbody>
-                              <tr>
-                                  <td> {{ logSelecionado.aplicacao }} </td>
-                                  <td> {{ logSelecionado.usuario }} </td>
-                                  <td> {{ logSelecionado.acao }} </td>
-                                  <td> {{ logSelecionado.id }} </td>
-                                  <td> {{ logSelecionado.datas }} </td>
-                                  <td> {{ logSelecionado.ip }} </td>
-                                  <td> {{ logSelecionado.criticidade }} </td>
-                              </tr>
-                              </tbody>
-                            <th> Descrição </th>
-                            <td> {{ logSelecionado.descricao}} </td>
-                          </table>
-                      </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      </div>
-                  </div>
-              </div>
+  <div id="details">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"
+                    aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Detalhes</h4>
           </div>
-      </div>
+          <div class="modal-body">
+            <table class="table display">
+              <thead>
+              <tr>
+                <th> Aplicação</th>
+                <th> Usuário</th>
+                <th> Ação</th>
+                <th> ID</th>
+                <th> Data e Hora</th>
+                <th> IP</th>
+                <th> Criticidade</th>
+              </tr>
 
+              </thead>
+              <tbody>
+              <tr>
+                <td> {{ logSelecionado.aplicacao }}</td>
+                <td> {{ logSelecionado.usuario }}</td>
+                <td> {{ logSelecionado.acao }}</td>
+                <td> {{ logSelecionado.id }}</td>
+                <td> {{ logSelecionado.datas }}</td>
+                <td> {{ logSelecionado.ip }}</td>
+                <td> {{ logSelecionado.criticidade }}</td>
+              </tr>
+              </tbody>
+              <th> Descrição</th>
+              <td> {{ logSelecionado.descricao}}</td>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-
+</div>
 
 
 <!--
