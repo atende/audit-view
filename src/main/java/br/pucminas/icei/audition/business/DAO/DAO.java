@@ -1,6 +1,6 @@
 package br.pucminas.icei.audition.business.DAO;
 
-import br.pucminas.icei.audition.business.logs.entity.Logs;
+//import br.pucminas.icei.audition.business.logs.entity.Logs;
 
 import java.util.Collection;
 

@@ -35,7 +35,7 @@ info:
 
 spring:
   main:
-    sources: br.pucminas.icei.audition.Application
+    sources: br.pucminas.icei.audition
   thymeleaf:
     mode: LEGACYHTML5
   jpa:
@@ -62,13 +62,13 @@ server:
   port: 8080
 
 logging:
-  file: logs/application_log
-  level:
-    ROOT: WARN
-    org.apache.http: WARN
-multipart:
-  max-file-size: 100Mb
-  max-request-size: 101Mb
+#  file: logs/application_log
+#  level:
+#    ROOT: WARN
+#    org.apache.http: WARN
+#multipart:
+#  max-file-size: 100Mb
+#  max-request-size: 101Mb
 ---
 
 spring:
