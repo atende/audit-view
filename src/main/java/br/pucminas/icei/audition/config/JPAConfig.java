@@ -10,16 +10,17 @@ import org.springframework.context.annotation.Configuration;
 import java.sql.SQLException;
 
 /**
- * Created by bruno on 17/03/16.
+ * @author Bruno Henrique Moraes D'Amato
  */
-public class JPAConfig {
-    @Configuration
-    @ConfigurationProperties(prefix = "params.datasource")
-    public class JPAConfigHikari extends HikariConfig {//dependência de compile('com.zaxxer:HikariCP:2.4.4') ou outro a ser importado?
-        //A configuração deve ser realizada em apllication-dev.properties ou deve se criar um somente para ele?
-        @Bean
-        public HikariDataSource dataSource() throws SQLException {
-            return new HikariDataSource(this);
-        }
+@Configuration
+@ConfigurationProperties(prefix = "params.datasource")
+public class JPAConfig extends HikariConfig {
+
+    //dependência de compile('com.zaxxer:HikariCP:2.4.4') ou outro a ser importado?
+    //A configuração deve ser realizada em apllication-dev.properties ou deve se criar um somente para ele?
+    @Bean
+    public HikariDataSource dataSource() throws SQLException {
+        return new HikariDataSource(this);
     }
 }
+
