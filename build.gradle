@@ -23,25 +23,21 @@ targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	maven {
+		url "http://oss.sonatype.org/content/groups/public"
+	}
 }
-
 
 dependencies {
 	compile project(':entity-model')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.3')
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
-
-eclipse {
-	classpath {
-		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-	}
-}
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '2.11'

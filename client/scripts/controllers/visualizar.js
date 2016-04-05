@@ -27,11 +27,11 @@ app.controller('VisualizarCtrl', function ($scope) {
       $scope.indexSelecionado = index;
     };
 
-  $scope.ResponseDetails = null;
+
 
     $scope.popular = function () {
 
-      $http.get('http://localhost:8080/api/auditevent/search/findByAction')
+      $http.get('http://localhost:8080/api/auditevent')
         .success(function (data, status, headers, config) {
           $scope.ResponseDetails = "Data: " + data +
             "<br />status: " + status +

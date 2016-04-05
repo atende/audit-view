@@ -87,10 +87,6 @@
 
   </table>
 
-  <div data-ng-init="popular()">
-    <td>{{ResponseDetails}}</td>
-  </div>
-
 
   <div id="details">
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -137,6 +133,10 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div data-ng-init="popular()">
+    <td>{{ResponseDetails.value}}</td>
   </div>
 
 </div>
