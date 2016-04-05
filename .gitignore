@@ -30,3 +30,4 @@ conf/dev.conf
 conf/test.conf
 /*.log
 /work
+/src/main/resources/application-dev.properties
