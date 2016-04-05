@@ -27,6 +27,25 @@ app.controller('VisualizarCtrl', function ($scope) {
       $scope.indexSelecionado = index;
     };
 
+  $scope.ResponseDetails = null;
+
+    $scope.popular = function () {
+
+      $http.get('http://localhost:8080/api/auditevent/search/findByAction')
+        .success(function (data, status, headers, config) {
+          $scope.ResponseDetails = "Data: " + data +
+            "<br />status: " + status +
+            "<br />headers: " + jsonFilter(header) +
+            "<br />config: " + jsonFilter(config);
+        })
+        .error(function (data, status, header, config) {
+          $scope.ResponseDetails = "Data: " + data +
+            "<br />status: " + status +
+            "<br />headers: " + jsonFilter(header) +
+            "<br />config: " + jsonFilter(config);
+        });
+    };
+
 
     $scope.pesquisar = function(log) {
       if ($scope.pesquisa) {
