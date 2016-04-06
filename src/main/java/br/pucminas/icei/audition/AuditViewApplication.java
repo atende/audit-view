@@ -1,5 +1,7 @@
 package br.pucminas.icei.audition;
 
+import br.pucminas.icei.audition.entity.AuditEvent;
+import br.pucminas.icei.audition.entity.SecurityLevel;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -75,6 +77,7 @@ public class AuditViewApplication {
 				env.getProperty("server.port"),
 				InetAddress.getLocalHost().getHostAddress(),
 				env.getProperty("server.port"));
+
 	}
 
 	/**

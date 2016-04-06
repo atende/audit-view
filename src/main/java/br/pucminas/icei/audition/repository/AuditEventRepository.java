@@ -7,6 +7,7 @@ package br.pucminas.icei.audition.repository;
 import java.util.List;
 
 import br.pucminas.icei.audition.entity.AuditEvent;
+import br.pucminas.icei.audition.entity.SecurityLevel;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -17,7 +18,13 @@ public interface AuditEventRepository extends PagingAndSortingRepository<AuditEv
 
     List<AuditEvent> findByAction(@Param("action") String action);
 
-    List<AuditEvent> find(@Param("search") String search, @Param("securityLevel") String securityLevel,
-                          @Param("applicationName") String applicationName, @Param("filter") String filter);
+    List<AuditEvent> findBySecurityLevel(@Param("securityLevel") SecurityLevel securityLevel);
+
+    List<AuditEvent> findByApplicationName(@Param("appName") String appName);
+
+    List<AuditEvent> findByUserName(@Param("userName") String userName);
+
+    List<AuditEvent> findByIp(@Param("ip") String ip);
+
 
 }
