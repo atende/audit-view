@@ -10,7 +10,7 @@
 
 var app = angular.module('auditionApp');
 
-app.controller('VisualizarCtrl', function ($scope) {
+app.controller('VisualizarCtrl', function ($scope, $http) {
 
     $scope.filtros = [];
 
@@ -22,21 +22,24 @@ app.controller('VisualizarCtrl', function ($scope) {
 
     $scope.filtrosDeAplicacao = [];
 
-    $scope.clickTable = function(log, index) {
+    $scope.clickTable = function(log) {
       $scope.logSelecionado = log;
-      $scope.indexSelecionado = index;
     };
+
+    $scope.eventos = [];
 
 
 
     $scope.popular = function () {
 
-      $http.get('http://localhost:8080/api/auditevent')
+      $http.get('http://127.0.0.1:8080/api/auditevent/search/findByAction?action=create')
         .success(function (data, status, headers, config) {
-          $scope.ResponseDetails = "Data: " + data +
-            "<br />status: " + status +
-            "<br />headers: " + jsonFilter(header) +
-            "<br />config: " + jsonFilter(config);
+          $scope.ResponseDetails = "Data: " + data;
+
+          for (var i = 0; i < data._embedded.auditevent.length; i++) {
+             $scope.eventos[i] = data._embedded.auditevent[i];
+          }
+
         })
         .error(function (data, status, header, config) {
           $scope.ResponseDetails = "Data: " + data +
@@ -102,49 +105,6 @@ app.controller('VisualizarCtrl', function ($scope) {
 
       return true;
     };
-
-    $scope.logs = [
-      {
-        aplicacao: "Mapa PUC",
-        usuario: "Anderson",
-        acao: "teste1",
-        id: "12341",
-        datas: "10/03/2016 : 10:53",
-        ip: "192.168.254.254",
-        criticidade: "Alta",
-        descricao: "bhsadgjkdsa"
-      },
-      {
-        aplicacao: "SGI",
-        usuario: "Giovanni",
-        acao: "teste2",
-        id: "12342",
-        datas: "11/03/2016 : 10:53",
-        ip: "192.168.254.254",
-        criticidade: "Alta",
-        descricao: ""
-      },
-      {
-        aplicacao: "AUDIT",
-        usuario: "Paulo",
-        acao: "teste3",
-        id: "12343",
-        datas: "12/03/2016 : 10:53",
-        ip: "192.168.254.254",
-        criticidade: "Alta",
-        descricao: ""
-      },
-      {
-        aplicacao: "SGL",
-        usuario: "Bruno",
-        acao: "teste4",
-        id: "12344",
-        datas: "13/03/2016 : 10:53",
-        ip: "192.168.254.254",
-        criticidade: "Alta",
-        descricao: ""
-      }
-    ]
 
   });
 

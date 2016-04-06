@@ -17,4 +17,7 @@ public interface AuditEventRepository extends PagingAndSortingRepository<AuditEv
 
     List<AuditEvent> findByAction(@Param("action") String action);
 
+    List<AuditEvent> find(@Param("search") String search, @Param("securityLevel") String securityLevel,
+                          @Param("applicationName") String applicationName, @Param("filter") String filter);
+
 }

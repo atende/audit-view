@@ -44,8 +44,8 @@
     <tr>
       <th> #</th>
       <th> Aplicação
-        <span ng-click="order = 'aplicacao'" class="glyphicon glyphicon-menu-up"></span>
-        <span ng-click="order = '-aplicacao'" class="glyphicon glyphicon-menu-down"></span>
+        <span ng-click="order = 'applicationName'" class="glyphicon glyphicon-menu-up"></span>
+        <span ng-click="order = '-applicationName'" class="glyphicon glyphicon-menu-down"></span>
       </th>
       <th> Usuário</th>
       <th> Ação</th>
@@ -56,20 +56,20 @@
 
     </tr>
 
-    <tr ng-repeat="log in logsFiltrados = ( logs | filter: pesquisar | orderBy: order )"
+    <tr ng-repeat="auditevent in eventosFiltrados = (eventos | filter: pesquisar | orderBy: order )"
         ng-style="{
 				 'background-color': $index == indexSelecionado ? 'lightgray' : ''
 				 }"
-        ng-click="clickTable(log, $index)"
+        ng-click="clickTable(auditevent)"
         data-toggle="modal" data-target="#myModal">
-      <td> {{$index}}</td>
-      <td> {{log.aplicacao }}</td>
-      <td> {{ log.usuario }}</td>
-      <td> {{ log.acao }}</td>
-      <td> {{ log.id }}</td>
-      <td> {{ log.datas }}</td>
-      <td> {{ log.ip }}</td>
-      <td> {{ log.criticidade }}</td>
+      <td> {{ $index }}</td>
+      <td> {{ auditevent.applicationName }}</td>
+      <td> {{ auditevent.userName }}</td>
+      <td> {{ auditevent.action }}</td>
+      <td> {{ id }}</td>
+      <td> {{ auditevent.dateTime }}</td>
+      <td> {{ auditevent.ip }}</td>
+      <td> {{ auditevent.securityLevel }}</td>
 
     </tr>
 
@@ -114,17 +114,19 @@
               </thead>
               <tbody>
               <tr>
-                <td> {{ logSelecionado.aplicacao }}</td>
-                <td> {{ logSelecionado.usuario }}</td>
-                <td> {{ logSelecionado.acao }}</td>
+
+                <td> {{ logSelecionado.applicationName }}</td>
+                <td> {{ logSelecionado.userName }}</td>
+                <td> {{ logSelecionado.action }}</td>
                 <td> {{ logSelecionado.id }}</td>
-                <td> {{ logSelecionado.datas }}</td>
+                <td> {{ logSelecionado.dateTime }}</td>
                 <td> {{ logSelecionado.ip }}</td>
-                <td> {{ logSelecionado.criticidade }}</td>
+                <td> {{ logSelecionado.securityLevel }}</td>
+
               </tr>
               </tbody>
               <th> Descrição</th>
-              <td> {{ logSelecionado.descricao}}</td>
+              <td> {{ logSelecionado.description}}</td>
             </table>
           </div>
           <div class="modal-footer">
