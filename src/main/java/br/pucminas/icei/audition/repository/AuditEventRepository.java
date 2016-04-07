@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import br.pucminas.icei.audition.entity.AuditEvent;
-import org.springframework.data.jpa.domain.Specification;
+
 import org.springframework.stereotype.Component;
-import sun.swing.BakedArrayList;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,6 +35,7 @@ public class AuditEventRepository {
 
         q.select(root);
         ParameterExpression<String> p = cb.parameter(String.class);
+
 
         List<Predicate> predicates = new ArrayList();
 
