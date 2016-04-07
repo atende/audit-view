@@ -8,6 +8,8 @@ import java.util.List;
 
 import br.pucminas.icei.audition.entity.AuditEvent;
 import br.pucminas.icei.audition.entity.SecurityLevel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -22,9 +24,10 @@ public interface AuditEventRepository extends PagingAndSortingRepository<AuditEv
 
     List<AuditEvent> findByApplicationName(@Param("appName") String appName);
 
-    List<AuditEvent> findByUserName(@Param("userName") String userName);
+//    List<AuditEvent> findByUserName(@Param("userName") String userName);
 
     List<AuditEvent> findByIp(@Param("ip") String ip);
 
+    List<AuditEvent> findPersonalized(@Param("ip") String ip, @Param("appName") String appName);
 
 }
