@@ -4,27 +4,51 @@ package br.pucminas.icei.audition.repository;
  * @author Claudinei Gomes Mendes
  */
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import br.pucminas.icei.audition.entity.AuditEvent;
-import br.pucminas.icei.audition.entity.SecurityLevel;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+import sun.swing.BakedArrayList;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 
-@RepositoryRestResource(collectionResourceRel = "auditevent", path = "auditevent")
-public interface AuditEventRepository extends PagingAndSortingRepository<AuditEvent, Long> {
+@Component
+public class AuditEventRepository {
+    @PersistenceContext
+    private EntityManager em;
 
-    List<AuditEvent> findByAction(@Param("action") String action);
+    public List<AuditEvent> search(Map<String, String> filtro){
+        return buildQuery(filtro).getResultList();
+    }
 
-    List<AuditEvent> findBySecurityLevel(@Param("securityLevel") SecurityLevel securityLevel);
+    private TypedQuery<AuditEvent> buildQuery(Map<String, String> filtro) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<AuditEvent> q = cb.createQuery(AuditEvent.class);
+        Root<AuditEvent> root = q.from(AuditEvent.class);
 
-    List<AuditEvent> findByApplicationName(@Param("appName") String appName);
+        q.select(root);
+        ParameterExpression<String> p = cb.parameter(String.class);
 
-    List<AuditEvent> findByUserName(@Param("userName") String userName);
+        List<Predicate> predicates = new ArrayList();
 
-    List<AuditEvent> findByIp(@Param("ip") String ip);
+        Iterator it = filtro.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            predicates.add(cb.equal(root.get((String) pair.getKey()), pair.getValue()));
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+        CriteriaQuery<AuditEvent> where = q.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+
+        return em.createQuery(where);
+
+    }
 
 
 }
