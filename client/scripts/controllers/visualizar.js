@@ -32,43 +32,24 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
     $scope.popular = function () {
 
-      var filtro = '{ "filtro" : [' +
-        '{ "pesquisar":' + $scope.pesquisa + ' },' +
-        '{ "citicidade":' + $scope.criticidadeSelecionada + ' },' +
-        '{ "aplicacao":' + $scope.aplicacaoSelecionada + ' }, ' +
-        '{ "radioButton":' + $scope.radio_filtro + ' }' +
-        ' ]}';
+      var filtro = '{filtro:[' +
+        '{pesquisar:' + $scope.pesquisa + '},' +
+        '{citicidade:' + $scope.criticidadeSelecionada + '},' +
+        '{aplicacao:' + $scope.aplicacaoSelecionada + '},' +
+        '{radioButton:' + $scope.radio_filtro + '}' +
+        ']}';
 
-      console.log(filtro);
-      console.log("teste");
-
-      $http.post('http://127.0.0.1:8080/api/auditevent/findPersonalized', filtro)
-        .success(function (data, status, headers, config) {
-          $scope.PostDataResponse = data;
-        })
-        .error(function (data, status, header, config) {
-          $scope.ResponseDetails = "Data: " + data +
-            "<hr />status: " + status +
-            "<hr />headers: " + header +
-            "<hr />config: " + config;
-        });
-
-      $http.get('http://127.0.0.1:8080/api/auditevent')
-        .success(function (data, status, headers, config) {
-          $scope.ResponseDetails = "Data: " + data;
-
-          for (var i = 0; i < data._embedded.auditevent.length; i++) {
-            $scope.eventos[i] = data._embedded.auditevent[i];
-          }
-
-        })
-        .error(function (data, status, header, config) {
-          $scope.ResponseDetails = "Data: " + data +
-            "<br />status: " + status +
-            "<br />headers: " + jsonFilter(header) +
-            "<br />config: " + jsonFilter(config);
-        });
-
+      $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "http://localhost:8080/rest/auditevent/search",
+        data: JSON.stringify(filtro2),
+        dataType: 'json',
+        timeout: 600000,
+        success: function (data) {
+          console.log(data);
+        }
+      });
 
     }
 

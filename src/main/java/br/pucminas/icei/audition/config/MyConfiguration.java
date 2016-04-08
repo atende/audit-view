@@ -15,5 +15,6 @@ public class MyConfiguration extends RepositoryRestConfigurerAdapter {
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.exposeIdsFor(AuditEvent.class);
+
     }
 }
