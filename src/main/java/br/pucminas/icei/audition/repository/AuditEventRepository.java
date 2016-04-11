@@ -4,37 +4,43 @@ package br.pucminas.icei.audition.repository;
  * @author Claudinei Gomes Mendes
  */
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import br.pucminas.icei.audition.entity.AuditEvent;
-
+import br.pucminas.icei.audition.entity.SecurityLevel;
 import org.springframework.stereotype.Component;
-
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class AuditEventRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public List<AuditEvent> search(Map<String, String> filtro){
+    public List<AuditEvent> search(Map<String, Object> filtro){
+        String securityLevel = (String) filtro.get("securityLevel");
+        if(securityLevel != null){
+            filtro.put("securityLevel", SecurityLevel.valueOf(securityLevel));
+        }
         return buildQuery(filtro).getResultList();
     }
 
-    private TypedQuery<AuditEvent> buildQuery(Map<String, String> filtro) {
+    public List<String> listApplicationNames(){
+        return em.createQuery("SELECT distinct e.applicationName from AuditEvent e").getResultList();
+    }
+
+
+    private TypedQuery<AuditEvent> buildQuery(Map<String, Object> filtro) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AuditEvent> q = cb.createQuery(AuditEvent.class);
         Root<AuditEvent> root = q.from(AuditEvent.class);
 
         q.select(root);
-        ParameterExpression<String> p = cb.parameter(String.class);
 
 
         List<Predicate> predicates = new ArrayList();

@@ -27,11 +27,16 @@ public class AuditController {
 //    }
 
     @RequestMapping(value="/search", method = RequestMethod.POST, consumes = { "application/json" } )
-    public ResponseEntity<List<AuditEvent>> procurar(@RequestBody Map<String, String> filtro){
+    public ResponseEntity<List<AuditEvent>> procurar(@RequestBody Map<String, Object> filtro){
 
         List<AuditEvent> result = auditEventRepository.search(filtro);
 
         return ResponseEntity.ok(result);
 
+    }
+    
+    @RequestMapping(value = "/applications", method = RequestMethod.GET)
+    public List<String> listarApplications(){
+        return auditEventRepository.listApplicationNames();
     }
 }

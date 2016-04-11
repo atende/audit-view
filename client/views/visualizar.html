@@ -1,3 +1,4 @@
+<div ng-controller="VisualizarCtrl">
 <form class="form-inline well well-sm">
 
   <span class="glyphicon glyphicon-search"></span>
@@ -12,15 +13,15 @@
   </div>
 
   <select class="form-control"
-          ng-model="criticidadeSelecionada">
+          ng-model="filtro.securityLevel">
 
     <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
     <option ng-repeat="crit  in criticidades" value="{{crit}}"> {{crit}}</option>
 
   </select>
 
-  <select class="form-control"
-          ng-model="aplicacaoSelecionada">
+  <select data-ng-init="loadApplications()" class="form-control"
+          ng-model="filtro.applicationName">
 
     <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
     <option ng-repeat="aplic  in aplicacoes" value="{{aplic}}"> {{aplic}}</option>
@@ -28,10 +29,10 @@
   </select>
 
   <br><label> Filtros </label>
-  <br><label>Usuário: <input type="radio" ng-model="radio_filtro" value="usuario"/></label>
-  <label>Ação: <input type="radio" ng-model="radio_filtro" value="acao"/></label>
+  <br><label>Usuário: <input type="radio" ng-model="radio_filtro" value="userName"/></label>
+  <label>Ação: <input type="radio" ng-model="radio_filtro" value="action"/></label>
   <label>ID: <input type="radio" ng-model="radio_filtro" value="id"/></label>
-  <label>Data e Hora: <input type="radio" ng-model="radio_filtro" value="datas"/></label>
+  <label>Data e Hora: <input type="radio" ng-model="radio_filtro" value="dateTime"/></label>
   <label>IP: <input type="radio" ng-model="radio_filtro" value="ip"/></label>
 
   <button ng-click="popular()"> Popular </button>
@@ -39,7 +40,7 @@
 </form>
 
 
-<div ng-controller="VisualizarCtrl">
+
 
   <table class="table table-condensed">
 
@@ -58,7 +59,7 @@
 
     </tr>
 
-    <tr ng-repeat="auditevent in eventosFiltrados = (eventos | filter: pesquisar | orderBy: order )"
+    <tr ng-repeat="auditevent in eventos"
         ng-style="{
 				 'background-color': $index == indexSelecionado ? 'lightgray' : ''
 				 }"

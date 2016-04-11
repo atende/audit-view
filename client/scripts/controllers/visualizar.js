@@ -13,9 +13,10 @@ var app = angular.module('auditionApp');
 app.controller('VisualizarCtrl', function ($scope, $http) {
 
     $scope.filtros = [];
+    $scope.filtro = {};
 
-    $scope.criticidades = ["Alta", "Normal", "Baixa"];
-    $scope.aplicacoes = ["SGI", "Mapa PUC", "SGL", "AUDIT"];
+    $scope.criticidades = ["LOW", "NORMAL", "HIGHT"];
+    $scope.aplicacoes = [];
 
     $scope.logSelecionado = null;
     $scope.indexSelecionado = null;
@@ -30,81 +31,45 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
 
 
+    $scope.loadApplications = function(){
+      console.info("Eu sou a mosca que pousou na sua sopa")
+      $http.get('rest/auditevent/applications').then(function(r){
+        $scope.aplicacoes = r.data;
+      })
+    };
+
     $scope.popular = function () {
+      console.log("entrou");
 
-      var filtro = '{filtro:[' +
-        '{pesquisar:' + $scope.pesquisa + '},' +
-        '{citicidade:' + $scope.criticidadeSelecionada + '},' +
-        '{aplicacao:' + $scope.aplicacaoSelecionada + '},' +
-        '{radioButton:' + $scope.radio_filtro + '}' +
-        ']}';
+      $scope.filtro[$scope.radio_filtro] = $scope.pesquisa
 
-      $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "http://localhost:8080/rest/auditevent/search",
-        data: JSON.stringify(filtro2),
-        dataType: 'json',
-        timeout: 600000,
-        success: function (data) {
-          console.log(data);
+      $http.post('rest/auditevent/search', $scope.filtro).then(function (r) {
+          var data = r.data;
+          $scope.eventos = data;
+          console.debug($scope.eventos)
+        },
+        function(){
+          console.log("erro")
         }
-      });
+      );
+
+
+
+      // $.ajax({
+      //   type: "POST",
+      //   contentType: "application/json",
+      //   url: "http://localhost:8080/rest/auditevent/search",
+      //   data: JSON.stringify(filtro),
+      //   dataType: 'json',
+      //   success: function (data) {
+      //     for(var i = 0; i < data.length; i++){
+      //       $scope.eventos[i] = data[i];
+      //       console.log($scope.eventos[i]);
+      //     }
+      //   }
+      // });
 
     }
 
   });
 
-/*
-
-
-
- $scope.pesquisar = function(log) {
- if ($scope.pesquisa) {
-
- var resp = false;
-
- if($scope.radio_filtro == "usuario"){
- resp = log.usuario.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
- }
-
- else if($scope.radio_filtro == "acao"){
- resp = log.acao.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
- }
- else if($scope.radio_filtro == "id"){
- resp = log.id.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
- }
- else if($scope.radio_filtro == "datas"){
- resp = log.datas.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
- }
- else if($scope.radio_filtro == "ip"){
- resp = log.ip.toLowerCase().indexOf($scope.pesquisa.toLowerCase()) == 0;
- }
-
- if($scope.criticidadeSelecionada != undefined){
- console.log(resp);
- resp = resp && log.criticidade.indexOf($scope.criticidadeSelecionada) == 0;
- }
- if($scope.aplicacaoSelecionada != undefined){
- console.log(resp);
- resp = resp && log.aplicacao.indexOf($scope.aplicacaoSelecionada) == 0;
- }
-
- return resp;
-
-
- }else if($scope.aplicacaoSelecionada != undefined && $scope.criticidadeSelecionada == undefined){
- return log.aplicacao.toLowerCase().indexOf($scope.aplicacaoSelecionada.toLowerCase()) == 0;
- }
- else if($scope.criticidadeSelecionada != undefined && $scope.aplicacaoSelecionada == undefined){
- return log.criticidade.toLowerCase().indexOf($scope.criticidadeSelecionada.toLowerCase()) == 0;
- }
- else if($scope.criticidadeSelecionada != undefined && $scope.aplicacaoSelecionada != undefined){
- return log.aplicacao.toLowerCase().indexOf($scope.aplicacaoSelecionada.toLowerCase()) == 0 &&
- log.criticidade.toLowerCase().indexOf($scope.criticidadeSelecionada.toLowerCase()) == 0;
- }
-
- return true;
- };
-
- */
