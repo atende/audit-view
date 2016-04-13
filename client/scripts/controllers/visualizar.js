@@ -42,6 +42,8 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
     $scope.popular = function () {
       console.log("entrou");
 
+      console.log($scope.cb_time);
+
       $scope.filtro[$scope.radio_filtro] = $scope.pesquisa;
 
       $http.post('rest/auditevent/search', $scope.filtro).then(function (r) {

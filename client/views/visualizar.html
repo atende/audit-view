@@ -1,153 +1,193 @@
 <div ng-controller="VisualizarCtrl">
-<form class="form-inline well well-sm">
 
-  <span class="glyphicon glyphicon-search"></span>
+  <div class="row">
+    <div class="col-sm-1">
 
-  <div class="form-group" ng-hide="radio_filtro == 'dateTime'">
-    <input type="text"
-           class="form-control"
-           id="name"
-           ng-model="pesquisa"
-           placeholder="Pesquisar ..."
-    />
-  </div>
+      <div class="leftComboBox">
 
-  <select class="form-control"
-          ng-model="filtro.securityLevel">
+        <form class="form-inline well well-sm">
 
-    <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
-    <option ng-repeat="crit  in criticidades" value="{{crit}}"> {{crit}}</option>
+          <span class="glyphicon glyphicon-search"></span>
+          <!--<div class="form-group">-->
+          <!--<input type="text"-->
+          <!--class="form-control"-->
+          <!--id="name"-->
+          <!--ng-model="pesquisa"-->
+          <!--placeholder="Pesquisar ..."-->
+          <!--/>-->
+          <!--</div>-->
 
-  </select>
+          <br><label>Usuário: <input type="checkbox" ng-model="cb_userName" value="userName"/></label>
+          <label>Ação: <input type="checkbox" ng-model="cb_action" value="action"/></label>
+          <label>ID: <input type="checkbox" ng-model="cb_id" value="id"/></label>
+          <label>Data: <input type="checkbox" ng-model="cb_date" value="date"/></label>
+          <label>Hora: <input type="checkbox" ng-model="cb_time" value="time"/></label>
+          <label>IP: <input type="checkbox" ng-model="cb_ip" value="ip"/></label><br>
 
-  <select data-ng-init="loadApplications()" class="form-control"
-          ng-model="filtro.applicationName">
+          <p class="input-group" ng-show="cb_userName == true">
+            <span class="input-group-addon date-picker-primary">Nome</span>
+            <input type="text" class="input form-control primary-border" ng-model="userName">
+          </p>
 
-    <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
-    <option ng-repeat="aplic  in aplicacoes" value="{{aplic}}"> {{aplic}}</option>
+          <p class="input-group" ng-show="cb_action == true">
+            <span class="input-group-addon date-picker-primary">Ação</span>
+            <input type="text" class="input form-control primary-border" ng-model="action">
+          </p>
 
-  </select>
+          <p class="input-group" ng-show="cb_id == true">
+            <span class="input-group-addon date-picker-primary">Id</span>
+            <input type="text" class="input form-control primary-border" ng-model="id">
+          </p>
+          <!--<div class="col-md-6">-->
+          <p class="input-group" ng-show="cb_date == true">
+            <span class="input-group-addon date-picker-primary">Data Início</span>
+            <input type="date" class="input form-control primary-border" ng-model="dateStart">
+          </p>
 
-  <button ng-click="popular()"> Popular </button>
+          <p class="input-group" ng-show="cb_date == true">
+            <span class="input-group-addon date-picker-primary">Data Fim</span>
+            <input type="date" class="input form-control primary-border" ng-model="dateEnd">
+          </p>
 
-  <br><label> Filtros </label>
-  <br><label>Usuário: <input type="radio" ng-model="radio_filtro" value="userName"/></label>
-  <label>Ação: <input type="radio" ng-model="radio_filtro" value="action"/></label>
-  <label>ID: <input type="radio" ng-model="radio_filtro" value="id"/></label>
-  <label>Data e Hora: <input type="radio" ng-model="radio_filtro" value="dateTime"/></label>
-  <label>IP: <input type="radio" ng-model="radio_filtro" value="ip"/></label><br>
+          <p class="input-group" ng-show="cb_time == true">
+            <span class="input-group-addon date-picker-primary">Hora Início</span>
+            <input type="time" class="input form-control primary-border" ng-model="timeStart">
 
-  <!--<div class="col-md-6">-->
-    <p class="input-group" ng-show="radio_filtro == 'dateTime'">
-      <span class="input-group-addon date-picker-primary">Data Início</span>
-      <input type="date" class="input form-control primary-border" name="start" ng-model="fromDate" ng-change="onChangeDate()" required/>
-      <span class="input-group-addon date-picker-primary">Data Fim</span>
-      <input type="date" class="input form-control primary-border" name="end" ng-model="toDate" ng-change="onChangeDate()" required/>
-    </p>
-  <!--</div>-->
+            <span class="input-group-addon date-picker-primary">Hora Fim</span>
+            <input type="time" class="input form-control primary-border" ng-model="timeEnd">
+          </p>
 
+          <p class="input-group" ng-show="cb_ip == true">
+            <span class="input-group-addon date-picker-primary">Ip</span>
+            <input type="text" class="input form-control primary-border" ng-model="ip">
+          </p>
 
-</form>
+          <br><select class="form-control"
+                      ng-model="filtro.securityLevel">
 
-  <table class="table table-condensed">
+          <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
+          <option ng-repeat="crit  in criticidades" value="{{crit}}"> {{crit}}</option>
 
-    <tr>
-      <th> #</th>
-      <th> Aplicação </th>
-      <th> Usuário</th>
-      <th> Ação</th>
-      <th> ResourceType</th>
-      <th> ID</th>
-      <th> Data e Hora</th>
-      <th> IP</th>
-      <th> Criticidade</th>
+        </select>
 
-    </tr>
+          <select data-ng-init="loadApplications()" class="form-control"
+                  ng-model="filtro.applicationName">
 
-    <tr ng-repeat="auditevent in eventos"
-        ng-style="{
+            <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
+            <option ng-repeat="aplic  in aplicacoes" value="{{aplic}}"> {{aplic}}</option>
+
+          </select>
+
+          <button ng-click="popular()"> Popular</button>
+          <!--</div>-->
+        </form>
+
+      </div>
+    </div>
+
+    <div class="container">
+
+      <table class="table table-condensed">
+
+        <tr>
+          <th> #</th>
+          <th> Aplicação</th>
+          <th> Usuário</th>
+          <th> Ação</th>
+          <th> ResourceType</th>
+          <th> ID</th>
+          <th> Data e Hora</th>
+          <th> IP</th>
+          <th> Criticidade</th>
+
+        </tr>
+
+        <tr ng-repeat="auditevent in eventos"
+            ng-style="{
 				 'background-color': $index == indexSelecionado ? 'lightgray' : ''
 				 }"
-        ng-click="clickTable(auditevent)"
-        data-toggle="modal" data-target="#myModal">
-      <td> {{ $index }}</td>
-      <td> {{ auditevent.applicationName }}</td>
-      <td> {{ auditevent.userName }}</td>
-      <td> {{ auditevent.action }}</td>
-      <td> {{ auditevent.resource.resourceType }}</td>
-      <td> {{ auditevent.id }}</td>
-      <td> {{ auditevent.dateTime }}</td>
-      <td> {{ auditevent.ip }}</td>
-      <td> {{ auditevent.securityLevel }}</td>
+            ng-click="clickTable(auditevent)"
+            data-toggle="modal" data-target="#myModal">
+          <td> {{ $index }}</td>
+          <td> {{ auditevent.applicationName }}</td>
+          <td> {{ auditevent.userName }}</td>
+          <td> {{ auditevent.action }}</td>
+          <td> {{ auditevent.resource.resourceType }}</td>
+          <td> {{ auditevent.id }}</td>
+          <td> {{ auditevent.dateTime }}</td>
+          <td> {{ auditevent.ip }}</td>
+          <td> {{ auditevent.securityLevel }}</td>
 
-    </tr>
-
-
-    <tr ng-show="logsFiltrados.length == 0 ">
-      <td colspan="8">
-        <div class="alert alert-info">
-          <p class="text-center">
-            Nenhum resultado encontrado.
-          </p>
-        </div>
-      </td>
-    </tr>
+        </tr>
 
 
-  </table>
+        <tr ng-show="logsFiltrados.length == 0 ">
+          <td colspan="8">
+            <div class="alert alert-info">
+              <p class="text-center">
+                Nenhum resultado encontrado.
+              </p>
+            </div>
+          </td>
+        </tr>
 
 
-  <div id="details">
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"
-                    aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Detalhes</h4>
-          </div>
-          <div class="modal-body">
-            <table class="table display">
-              <thead>
-              <tr>
-                <th> Aplicação</th>
-                <th> Usuário</th>
-                <th> Ação</th>
-                <th> ID</th>
-                <th> Data e Hora</th>
-                <th> IP</th>
-                <th> Criticidade</th>
-              </tr>
+      </table>
+    </div>
 
-              </thead>
-              <tbody>
-              <tr>
 
-                <td> {{ logSelecionado.applicationName }}</td>
-                <td> {{ logSelecionado.userName }}</td>
-                <td> {{ logSelecionado.action }}</td>
-                <td> {{ logSelecionado.id }}</td>
-                <td> {{ logSelecionado.dateTime }}</td>
-                <td> {{ logSelecionado.ip }}</td>
-                <td> {{ logSelecionado.securityLevel }}</td>
+    <div id="details">
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+           aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                      aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">Detalhes</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table display">
+                <thead>
+                <tr>
+                  <th> Aplicação</th>
+                  <th> Usuário</th>
+                  <th> Ação</th>
+                  <th> ID</th>
+                  <th> Data e Hora</th>
+                  <th> IP</th>
+                  <th> Criticidade</th>
+                </tr>
 
-              </tr>
-              </tbody>
-              <th> Descrição</th>
-              <td> {{ logSelecionado.description}}</td>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </thead>
+                <tbody>
+                <tr>
+
+                  <td> {{ logSelecionado.applicationName }}</td>
+                  <td> {{ logSelecionado.userName }}</td>
+                  <td> {{ logSelecionado.action }}</td>
+                  <td> {{ logSelecionado.id }}</td>
+                  <td> {{ logSelecionado.dateTime }}</td>
+                  <td> {{ logSelecionado.ip }}</td>
+                  <td> {{ logSelecionado.securityLevel }}</td>
+
+                </tr>
+                </tbody>
+                <th> Descrição</th>
+                <td> {{ logSelecionado.description}}</td>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div data-ng-init="popular()">
-    <td>{{ResponseDetails.value}}</td>
+    <div data-ng-init="popular()">
+      <td>{{ResponseDetails.value}}</td>
+    </div>
   </div>
 
 </div>
