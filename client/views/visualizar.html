@@ -17,50 +17,30 @@
           <!--/>-->
           <!--</div>-->
 
-          <br><label>Usuário: <input type="checkbox" ng-model="cb_userName" value="userName"/></label>
-          <label>Ação: <input type="checkbox" ng-model="cb_action" value="action"/></label>
-          <label>ID: <input type="checkbox" ng-model="cb_id" value="id"/></label>
-          <label>Data: <input type="checkbox" ng-model="cb_date" value="date"/></label>
-          <label>Hora: <input type="checkbox" ng-model="cb_time" value="time"/></label>
-          <label>IP: <input type="checkbox" ng-model="cb_ip" value="ip"/></label><br>
-
-          <p class="input-group" ng-show="cb_userName == true">
-            <span class="input-group-addon date-picker-primary">Nome</span>
+            <br><span>Nome</span>
             <input type="text" class="input form-control primary-border" ng-model="userName">
-          </p>
 
-          <p class="input-group" ng-show="cb_action == true">
-            <span class="input-group-addon date-picker-primary">Ação</span>
+            <br><span >Ação</span>
             <input type="text" class="input form-control primary-border" ng-model="action">
-          </p>
 
-          <p class="input-group" ng-show="cb_id == true">
-            <span class="input-group-addon date-picker-primary">Id</span>
+            <br><span >Id</span>
             <input type="text" class="input form-control primary-border" ng-model="id">
-          </p>
-          <!--<div class="col-md-6">-->
-          <p class="input-group" ng-show="cb_date == true">
-            <span class="input-group-addon date-picker-primary">Data Início</span>
+
+            <br><span class="input-group-addon date-picker-primary">Data Início</span>
             <input type="date" class="input form-control primary-border" ng-model="dateStart">
-          </p>
 
-          <p class="input-group" ng-show="cb_date == true">
-            <span class="input-group-addon date-picker-primary">Data Fim</span>
+            <br><span class="input-group-addon date-picker-primary">Data Fim</span>
             <input type="date" class="input form-control primary-border" ng-model="dateEnd">
-          </p>
 
-          <p class="input-group" ng-show="cb_time == true">
-            <span class="input-group-addon date-picker-primary">Hora Início</span>
+            <br><span class="input-group-addon">Hora Início</span>
             <input type="time" class="input form-control primary-border" ng-model="timeStart">
 
-            <span class="input-group-addon date-picker-primary">Hora Fim</span>
+            <br><span class="input-group-addon date-picker-primary">Hora Fim</span>
             <input type="time" class="input form-control primary-border" ng-model="timeEnd">
-          </p>
 
-          <p class="input-group" ng-show="cb_ip == true">
-            <span class="input-group-addon date-picker-primary">Ip</span>
+            <br><span >Ip</span>
             <input type="text" class="input form-control primary-border" ng-model="ip">
-          </p>
+
 
           <br><select class="form-control"
                       ng-model="filtro.securityLevel">
