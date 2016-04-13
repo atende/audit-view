@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,8 @@ public class AuditController {
     @RequestMapping(value="/search", method = RequestMethod.POST, consumes = { "application/json" } )
     public ResponseEntity<List<AuditEvent>> procurar(@RequestBody Map<String, Object> filtro){
 
-        List<AuditEvent> result = auditEventRepository.search(filtro);
+        Map<String, Object> novoFiltro = filterBlankParameter(filtro);
+        List<AuditEvent> result = auditEventRepository.search(novoFiltro);
 
         return ResponseEntity.ok(result);
 
@@ -38,5 +40,31 @@ public class AuditController {
     @RequestMapping(value = "/applications", method = RequestMethod.GET)
     public List<String> listarApplications(){
         return auditEventRepository.listApplicationNames();
+    }
+
+    private Map<String, Object> filterBlankParameter(Map<String, Object> filtro){
+        Map<String, Object> resp = filtro;
+
+
+        Iterator it = resp.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Object value = pair.getValue();
+
+            if(value == null || isAEmptyString(value)) {
+                it.remove();
+                resp.remove(pair.getKey(), value);
+            }
+        }
+
+        return resp;
+    }
+
+    private boolean isAEmptyString(Object o){
+        if(o instanceof String){
+            String s = (String)o;
+            return s.trim().equals("");
+        }
+        return false;
     }
 }

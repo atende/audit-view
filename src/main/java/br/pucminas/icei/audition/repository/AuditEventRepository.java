@@ -6,12 +6,16 @@ package br.pucminas.icei.audition.repository;
 
 import br.pucminas.icei.audition.entity.AuditEvent;
 import br.pucminas.icei.audition.entity.SecurityLevel;
+import org.hibernate.jpa.boot.scan.spi.ScanOptions;
 import org.springframework.stereotype.Component;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

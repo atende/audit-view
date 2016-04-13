@@ -12,6 +12,8 @@ var app = angular.module('auditionApp');
 
 app.controller('VisualizarCtrl', function ($scope, $http) {
 
+    var lastChecked;
+
     $scope.filtros = [];
     $scope.filtro = {};
 
@@ -32,7 +34,6 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
 
     $scope.loadApplications = function(){
-      console.info("Eu sou a mosca que pousou na sua sopa")
       $http.get('rest/auditevent/applications').then(function(r){
         $scope.aplicacoes = r.data;
       })
@@ -41,7 +42,7 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
     $scope.popular = function () {
       console.log("entrou");
 
-      $scope.filtro[$scope.radio_filtro] = $scope.pesquisa
+      $scope.filtro[$scope.radio_filtro] = $scope.pesquisa;
 
       $http.post('rest/auditevent/search', $scope.filtro).then(function (r) {
           var data = r.data;
@@ -52,8 +53,6 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
           console.log("erro")
         }
       );
-
-
 
       // $.ajax({
       //   type: "POST",

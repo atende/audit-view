@@ -3,7 +3,7 @@
 
   <span class="glyphicon glyphicon-search"></span>
 
-  <div class="form-group">
+  <div class="form-group" ng-hide="radio_filtro == 'dateTime'">
     <input type="text"
            class="form-control"
            id="name"
@@ -28,30 +28,35 @@
 
   </select>
 
+  <button ng-click="popular()"> Popular </button>
+
   <br><label> Filtros </label>
   <br><label>Usuário: <input type="radio" ng-model="radio_filtro" value="userName"/></label>
   <label>Ação: <input type="radio" ng-model="radio_filtro" value="action"/></label>
   <label>ID: <input type="radio" ng-model="radio_filtro" value="id"/></label>
   <label>Data e Hora: <input type="radio" ng-model="radio_filtro" value="dateTime"/></label>
-  <label>IP: <input type="radio" ng-model="radio_filtro" value="ip"/></label>
+  <label>IP: <input type="radio" ng-model="radio_filtro" value="ip"/></label><br>
 
-  <button ng-click="popular()"> Popular </button>
+  <!--<div class="col-md-6">-->
+    <p class="input-group" ng-show="radio_filtro == 'dateTime'">
+      <span class="input-group-addon date-picker-primary">Data Início</span>
+      <input type="date" class="input form-control primary-border" name="start" ng-model="fromDate" ng-change="onChangeDate()" required/>
+      <span class="input-group-addon date-picker-primary">Data Fim</span>
+      <input type="date" class="input form-control primary-border" name="end" ng-model="toDate" ng-change="onChangeDate()" required/>
+    </p>
+  <!--</div>-->
+
 
 </form>
-
-
-
 
   <table class="table table-condensed">
 
     <tr>
       <th> #</th>
-      <th> Aplicação
-        <span ng-click="order = 'applicationName'" class="glyphicon glyphicon-menu-up"></span>
-        <span ng-click="order = '-applicationName'" class="glyphicon glyphicon-menu-down"></span>
-      </th>
+      <th> Aplicação </th>
       <th> Usuário</th>
       <th> Ação</th>
+      <th> ResourceType</th>
       <th> ID</th>
       <th> Data e Hora</th>
       <th> IP</th>
@@ -69,6 +74,7 @@
       <td> {{ auditevent.applicationName }}</td>
       <td> {{ auditevent.userName }}</td>
       <td> {{ auditevent.action }}</td>
+      <td> {{ auditevent.resource.resourceType }}</td>
       <td> {{ auditevent.id }}</td>
       <td> {{ auditevent.dateTime }}</td>
       <td> {{ auditevent.ip }}</td>
@@ -78,7 +84,7 @@
 
 
     <tr ng-show="logsFiltrados.length == 0 ">
-      <td colspan="7">
+      <td colspan="8">
         <div class="alert alert-info">
           <p class="text-center">
             Nenhum resultado encontrado.
