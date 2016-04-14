@@ -111,3 +111,8 @@ body {
   max-width: 300px;
   max-height: 300px;
 }
+
+.logo {
+  max-width: 50px;
+  max-height: 50px;
+}

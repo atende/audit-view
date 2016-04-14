@@ -61,12 +61,12 @@
       <table class="table table-condensed">
 
         <tr>
-          <th> #</th>
+          <th> ID</th>
           <th> Aplicação</th>
           <th> Usuário</th>
           <th> Ação</th>
           <th> ResourceType</th>
-          <th> ID</th>
+          <th> ResourceId</th>
           <th> Data e Hora</th>
           <th> IP</th>
           <th> Criticidade</th>
@@ -74,16 +74,16 @@
 
         <tr ng-repeat="auditevent in eventos"
             ng-style="{
-				 'background-color': $index == indexSelecionado ? 'lightgray' : ''
+				 'background-color': auditevent.id == logSelecionado.id ? 'lightgray' : ''
 				 }"
             ng-click="clickTable(auditevent)"
             data-toggle="modal" data-target="#myModal">
-          <td> {{ $index }}</td>
+          <td> {{ auditevent.id }}</td>
           <td> {{ auditevent.applicationName }}</td>
           <td> {{ auditevent.userName }}</td>
           <td> {{ auditevent.action }}</td>
           <td> {{ auditevent.resource.resourceType }}</td>
-          <td> {{ auditevent.id }}</td>
+          <td> {{ auditevent.resource.resourceId }}</td>
           <td> {{ auditevent.dateTime }}</td>
           <td> {{ auditevent.ip }}</td>
           <td> {{ auditevent.securityLevel }}</td>

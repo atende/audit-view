@@ -57,6 +57,7 @@ public class AuditEventRepository {
         }
         CriteriaQuery<AuditEvent> where = q.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
+        where.orderBy(cb.asc(root.get("dateTime")));
         return em.createQuery(where);
 
     }
