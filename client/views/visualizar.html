@@ -8,38 +8,30 @@
         <form class="form-inline well well-sm">
 
           <span class="glyphicon glyphicon-search"></span>
-          <!--<div class="form-group">-->
-          <!--<input type="text"-->
-          <!--class="form-control"-->
-          <!--id="name"-->
-          <!--ng-model="pesquisa"-->
-          <!--placeholder="Pesquisar ..."-->
-          <!--/>-->
-          <!--</div>-->
 
-            <br><span>Nome</span>
-            <input type="text" class="input form-control primary-border" ng-model="userName">
+            <br><span>Nome do Usuário: </span><br>
+            <input type="text" class="form-control" ng-model="filtro.userName">
 
-            <br><span >Ação</span>
-            <input type="text" class="input form-control primary-border" ng-model="action">
+            <br><span>Ação: </span><br>
+            <input type="text" class="form-control" ng-model="filtro.action">
 
-            <br><span >Id</span>
-            <input type="text" class="input form-control primary-border" ng-model="id">
+            <br><span>Id: </span><br>
+            <input type="text" class="form-control" ng-model="filtro.id">
 
-            <br><span class="input-group-addon date-picker-primary">Data Início</span>
-            <input type="date" class="input form-control primary-border" ng-model="dateStart">
+            <br><span>Data Início: </span><br>
+            <input type="date" class="input form-control primary-border" ng-model="filtro.dateStart">
 
-            <br><span class="input-group-addon date-picker-primary">Data Fim</span>
-            <input type="date" class="input form-control primary-border" ng-model="dateEnd">
+            <br><span>Data Fim: </span><br>
+            <input type="date" class="input form-control primary-border" ng-model="filtro.dateEnd">
 
-            <br><span class="input-group-addon">Hora Início</span>
-            <input type="time" class="input form-control primary-border" ng-model="timeStart">
+            <br><span>Hora Início: </span><br>
+            <input type="time" class="input form-control primary-border" ng-model="filtro.timeStart">
 
-            <br><span class="input-group-addon date-picker-primary">Hora Fim</span>
-            <input type="time" class="input form-control primary-border" ng-model="timeEnd">
+            <br><span>Hora Fim: </span><br>
+            <input type="time" class="input form-control primary-border" ng-model="filtro.timeEnd">
 
-            <br><span >Ip</span>
-            <input type="text" class="input form-control primary-border" ng-model="ip">
+            <br><span >Ip: </span><br>
+            <input type="text" class="input form-control primary-border" ng-model="filtro.ip">
 
 
           <br><select class="form-control"
@@ -66,7 +58,6 @@
     </div>
 
     <div class="container">
-
       <table class="table table-condensed">
 
         <tr>
@@ -79,7 +70,6 @@
           <th> Data e Hora</th>
           <th> IP</th>
           <th> Criticidade</th>
-
         </tr>
 
         <tr ng-repeat="auditevent in eventos"
@@ -119,7 +109,7 @@
     <div id="details">
       <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
            aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal"

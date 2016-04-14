@@ -82,15 +82,27 @@ body {
   }
 }
 
+.containerNavBar {
+  margin-left: 0;
+  margin-right: 20px;
+}
+
+.containerFooter {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .container {
   margin-left: 410px;
   margin-right: 0;
+  margin-top: 30px;
 }
 
 .leftComboBox{
   margin-left: 0;
   margin-right: 400px;
   width: 400px;
+  margin-top: 30px;
 }
 
 .lupa {

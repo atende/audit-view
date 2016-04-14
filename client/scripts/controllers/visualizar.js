@@ -40,7 +40,12 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
     };
 
     $scope.popular = function () {
-      $scope.filtro[$scope.radio_filtro] = $scope.pesquisa;
+      console.debug($scope.filtro);
+
+      console.debug($scope.filtro.dateStart)
+      console.debug($scope.filtro.dateEnd)
+      console.debug($scope.filtro.timeStart)
+      console.debug($scope.filtro.timeEnd)
 
       $http.post('rest/auditevent/search', $scope.filtro).then(function (r) {
           var data = r.data;
