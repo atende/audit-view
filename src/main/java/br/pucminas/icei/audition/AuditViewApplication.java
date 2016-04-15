@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 
 @SpringBootApplication
 @ComponentScan
@@ -71,6 +72,7 @@ public class AuditViewApplication {
 		addDefaultProfile(app, source);
 		ConfigurableApplicationContext run = app.run(args);
 		Environment env = run.getEnvironment();
+
 		log.info("Access URLs:\n----------------------------------------------------------\n\t" +
 						"Local: \t\thttp://127.0.0.1:{}\n\t" +
 						"External: \thttp://{}:{}\n----------------------------------------------------------",

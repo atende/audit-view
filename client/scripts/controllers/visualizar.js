@@ -39,6 +39,18 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
       })
     };
 
+    $scope.testeData = function(){
+
+      console.log("filtro");
+      console.log($scope.filtro);
+      $http.post('rest/auditevent/dates', $scope.filtro).then(function (r) {
+          var data = r.data;
+          $scope.eventos = data;
+          console.log($scope.eventos);
+        }
+      )
+    };
+
     $scope.popular = function () {
       console.debug($scope.filtro);
 

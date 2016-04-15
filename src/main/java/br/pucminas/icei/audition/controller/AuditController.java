@@ -36,11 +36,27 @@ public class AuditController {
         return ResponseEntity.ok(result);
 
     }
-    
+
+
     @RequestMapping(value = "/applications", method = RequestMethod.GET)
     public List<String> listarApplications(){
         return auditEventRepository.listApplicationNames();
     }
+
+    @RequestMapping(value = "/dates", method = RequestMethod.POST)
+    public List<String> listarPorData(@RequestBody Map<String, Object> filtro){
+        Iterator it = filtro.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            System.out.println(filtro.get(pair.getKey()) + " - " + filtro.get(pair.getValue()));
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+
+        return auditEventRepository.searchDate(filtro);
+    }
+
+
 
     private Map<String, Object> filterBlankParameter(Map<String, Object> filtro){
         Map<String, Object> resp = filtro;
