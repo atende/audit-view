@@ -32,7 +32,6 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
     $scope.eventos = [];
 
 
-
     $scope.loadApplications = function(){
       $http.get('rest/auditevent/applications').then(function(r){
         $scope.aplicacoes = r.data;
@@ -46,7 +45,7 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
       $http.post('rest/auditevent/dates', $scope.filtro).then(function (r) {
           var data = r.data;
           $scope.eventos = data;
-          console.log($scope.eventos);
+          console.log($scope.eventos.length);
         }
       )
     };
@@ -62,6 +61,10 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
       $http.post('rest/auditevent/search', $scope.filtro).then(function (r) {
           var data = r.data;
           $scope.eventos = data;
+
+          for(var i = 0; i < data.length; i++){
+            console.debug(data[i].dateTime);
+          }
         }
       );
 

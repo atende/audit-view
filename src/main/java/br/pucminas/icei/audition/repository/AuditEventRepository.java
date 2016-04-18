@@ -43,10 +43,10 @@ public class AuditEventRepository {
         return em.createQuery("SELECT distinct e.applicationName from AuditEvent e").getResultList();
     }
 
-    public List<String> searchDate(Map<String, Object> filtro){
-        return em.createQuery("SELECT distinct e from AuditEvent e WHERE e.dateTime BETWEEN :dateStart AND: dateEnd ")
-                .setParameter("dateStart", filtro.get("dateStart"))
-                .setParameter("dateEnd", filtro.get("dateEnd")).getResultList();
+    public List<String> searchDate(Object dateStart, Object dateEnd){
+        return em.createQuery("SELECT distinct e from AuditEvent e WHERE e.dateTime BETWEEN :dateStart AND:dateEnd ")
+                .setParameter("dateStart", dateStart)
+                .setParameter("dateEnd", dateEnd).getResultList();
     }
 
 //    public TypedQuery<AuditEvent> searchByDate(Map<String, Object> filtro ){

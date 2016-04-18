@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,18 +21,11 @@ public class AuditController {
     @Autowired
     AuditEventRepository auditEventRepository;
 
-//    @RequestMapping(value="/search/{filtro}", method = RequestMethod.GET, consumes = { "application/json" } )
-//    public ResponseEntity<List<AuditEvent>> procurar(@PathVariable Map<String, String> filtro){
-//        List<AuditEvent> result = auditEventRepository.search(filtro);
-//
-//        return ResponseEntity.ok(result);
-//
-//    }
-
     @RequestMapping(value="/search", method = RequestMethod.POST, consumes = { "application/json" } )
     public ResponseEntity<List<AuditEvent>> procurar(@RequestBody Map<String, Object> filtro){
 
         Map<String, Object> novoFiltro = filterBlankParameter(filtro);
+        novoFiltro = deleteFilterDate(novoFiltro);
         List<AuditEvent> result = auditEventRepository.search(novoFiltro);
 
         return ResponseEntity.ok(result);
@@ -45,15 +40,12 @@ public class AuditController {
 
     @RequestMapping(value = "/dates", method = RequestMethod.POST)
     public List<String> listarPorData(@RequestBody Map<String, Object> filtro){
-        Iterator it = filtro.entrySet().iterator();
 
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            System.out.println(filtro.get(pair.getKey()) + " - " + filtro.get(pair.getValue()));
-            it.remove(); // avoids a ConcurrentModificationException
-        }
+        LocalDateTime x = LocalDateTime.now();
+        System.out.println("NOW: "+x);
+        System.out.println("FILTRO: "+filtro.get("dateStart"));
 
-        return auditEventRepository.searchDate(filtro);
+        return auditEventRepository.searchDate(filtro.get("dateStart"), filtro.get("dateEnd"));
     }
 
 
@@ -82,5 +74,23 @@ public class AuditController {
             return s.trim().equals("");
         }
         return false;
+    }
+
+    private Map<String, Object> deleteFilterDate(Map<String, Object> filtro){
+        Map<String, Object> resp = filtro;
+
+        Iterator it = resp.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Object value = pair.getValue();
+
+            if(pair.getKey() == "dateStart" || pair.getKey() == "dateEnd"  || pair.getKey() == "timeStart" || pair.getKey() == "timeEnd") {
+                it.remove();
+                resp.remove(pair.getKey(), value);
+                System.out.println(pair.getKey() + " ---> " + pair.getValue());
+            }
+        }
+
+        return resp;
     }
 }
