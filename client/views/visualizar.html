@@ -10,28 +10,22 @@
           <span class="glyphicon glyphicon-search"></span>
 
             <br><span>Nome do Usuário: </span><br>
-            <input type="text" class="form-control" ng-model="filtro.userName">
+            <input type="text" class="form-control" ng-model="filtro.userName" placeholder="Nome do Usuário">
 
             <br><span>Ação: </span><br>
-            <input type="text" class="form-control" ng-model="filtro.action">
+            <input type="text" class="form-control" ng-model="filtro.action" placeholder="Ação">
 
             <br><span>Id: </span><br>
-            <input type="text" class="form-control" ng-model="filtro.id">
+            <input type="text" class="form-control" ng-model="filtro.id" placeholder="ID do Log">
 
             <br><span>Data Início: </span><br>
-            <input type="datetime-local" class="input form-control primary-border" ng-model="filtro.dateStart">
+            <input type="datetime-local" class="input form-control primary-border" ng-model="dateStart">
 
             <br><span>Data Fim: </span><br>
-            <input type="datetime-local" class="input form-control primary-border" ng-model="filtro.dateEnd">
-
-            <br><span>Hora Início: </span><br>
-            <input type="time" class="input form-control primary-border" ng-model="filtro.timeStart">
-
-            <br><span>Hora Fim: </span><br>
-            <input type="time" class="input form-control primary-border" ng-model="filtro.timeEnd">
+            <input type="datetime-local" class="input form-control primary-border" ng-model="dateEnd">
 
             <br><span >Ip: </span><br>
-            <input type="text" class="input form-control primary-border" ng-model="filtro.ip">
+            <input type="text" class="input form-control primary-border" ng-model="filtro.ip" placeholder="IP">
 
 
           <br><select class="form-control"
@@ -40,7 +34,7 @@
           <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
           <option ng-repeat="crit  in criticidades" value="{{crit}}"> {{crit}}</option>
 
-        </select>
+          </select>
 
           <select data-ng-init="loadApplications()" class="form-control"
                   ng-model="filtro.applicationName">
@@ -50,7 +44,7 @@
 
           </select>
 
-          <button ng-click="popular()"> Popular</button>
+          <button ng-click="testeData()"> Popular</button>
           <button ng-click="testeData()"> TesteData</button>
           <!--</div>-->
         </form>

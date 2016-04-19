@@ -3,11 +3,14 @@ package br.pucminas.icei.audition.controller;
 import br.pucminas.icei.audition.entity.AuditEvent;
 import br.pucminas.icei.audition.repository.AuditEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -38,14 +41,21 @@ public class AuditController {
         return auditEventRepository.listApplicationNames();
     }
 
-    @RequestMapping(value = "/dates", method = RequestMethod.POST)
-    public List<String> listarPorData(@RequestBody Map<String, Object> filtro){
+    @RequestMapping(value = "/dates/{dateStart}/{dateEnd}", method = RequestMethod.POST)
+    public ResponseEntity<List<AuditEvent>> listarPorData(@RequestBody Map<String, Object> filtro,
+                                                          @PathVariable("dateStart") Date dateStart, @PathVariable("dateEnd") Date dateEnd){
 
-        LocalDateTime x = LocalDateTime.now();
-        System.out.println("NOW: "+x);
-        System.out.println("FILTRO: "+filtro.get("dateStart"));
 
-        return auditEventRepository.searchDate(filtro.get("dateStart"), filtro.get("dateEnd"));
+        LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
+        System.out.println(dStart);
+        LocalDateTime dEnd = LocalDateTime.ofInstant(dateEnd.toInstant(), ZoneId.systemDefault());
+        System.out.println(dEnd);
+
+        filtro = filterBlankParameter(filtro);
+
+        List<AuditEvent> result = auditEventRepository.realSearch(filtro, dStart, dEnd);
+
+        return ResponseEntity.ok(result);
     }
 
 

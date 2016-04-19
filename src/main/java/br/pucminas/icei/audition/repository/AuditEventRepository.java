@@ -31,6 +31,14 @@ public class AuditEventRepository {
     @PersistenceContext
     private EntityManager em;
 
+    public List<AuditEvent> realSearch(Map<String, Object> filtro, Object dateStart, Object dateEnd){
+        List<AuditEvent> list1 = search(filtro);
+        List<AuditEvent> list2 = searchDate(dateStart, dateEnd);
+
+        return intersection(list1, list2);
+
+    }
+
     public List<AuditEvent> search(Map<String, Object> filtro){
         String securityLevel = (String) filtro.get("securityLevel");
         if(securityLevel != null){
@@ -43,24 +51,11 @@ public class AuditEventRepository {
         return em.createQuery("SELECT distinct e.applicationName from AuditEvent e").getResultList();
     }
 
-    public List<String> searchDate(Object dateStart, Object dateEnd){
+    public List<AuditEvent> searchDate(Object dateStart, Object dateEnd){
         return em.createQuery("SELECT distinct e from AuditEvent e WHERE e.dateTime BETWEEN :dateStart AND:dateEnd ")
                 .setParameter("dateStart", dateStart)
                 .setParameter("dateEnd", dateEnd).getResultList();
     }
-
-//    public TypedQuery<AuditEvent> searchByDate(Map<String, Object> filtro ){
-//
-//        CriteriaBuilder builder = em.getCriteriaBuilder();
-//        CriteriaQuery<AuditEvent> cq = builder.createQuery(AuditEvent.class);
-//        Metamodel m = em.getMetamodel();
-//        EntityType<AuditEvent> AuditEvent_ = m.entity(AuditEvent.class);
-//        Root<AuditEvent> auditevent = cq.from(AuditEvent.class);
-//
-//        return cq.where(builder.between(auditevent.get("dateTime"), filtro.get("dateStart"), filtro.get("dateEnd")), filtro.get("dateStart"), filtro.get("dateEnd"));
-//
-//    }
-
 
     private TypedQuery<AuditEvent> buildQuery(Map<String, Object> filtro) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -85,5 +80,30 @@ public class AuditEventRepository {
 
     }
 
+    public <T> List<T> intersection(List<T> list1, List<T> list2) {
+        List<T> list = new ArrayList<T>();
+
+        for (T t : list1) {
+            if(list2.contains(t)) {
+                list.add(t);
+            }
+        }
+
+        return list;
+    }
+
+
+
+//    public TypedQuery<AuditEvent> searchByDate(Map<String, Object> filtro ){
+//
+//        CriteriaBuilder builder = em.getCriteriaBuilder();
+//        CriteriaQuery<AuditEvent> cq = builder.createQuery(AuditEvent.class);
+//        Metamodel m = em.getMetamodel();
+//        EntityType<AuditEvent> AuditEvent_ = m.entity(AuditEvent.class);
+//        Root<AuditEvent> auditevent = cq.from(AuditEvent.class);
+//
+//        return cq.where(builder.between(auditevent.get("dateTime"), filtro.get("dateStart"), filtro.get("dateEnd")), filtro.get("dateStart"), filtro.get("dateEnd"));
+//
+//    }
 
 }

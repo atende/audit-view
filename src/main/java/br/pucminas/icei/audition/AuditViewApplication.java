@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
@@ -70,6 +71,7 @@ public class AuditViewApplication {
 		SpringApplication app = new SpringApplication(AuditViewApplication.class);
 		SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
 		addDefaultProfile(app, source);
+
 		ConfigurableApplicationContext run = app.run(args);
 		Environment env = run.getEnvironment();
 

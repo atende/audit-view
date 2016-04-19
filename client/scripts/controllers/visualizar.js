@@ -42,7 +42,9 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
       console.log("filtro");
       console.log($scope.filtro);
-      $http.post('rest/auditevent/dates', $scope.filtro).then(function (r) {
+
+      var url = 'rest/auditevent/dates/' + $scope.dateStart + '/' + $scope.dateEnd;
+      $http.post(url, $scope.filtro).then(function (r) {
           var data = r.data;
           $scope.eventos = data;
           console.log($scope.eventos.length);
@@ -51,19 +53,19 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
     };
 
     $scope.popular = function () {
-      console.debug($scope.filtro);
-
-      console.debug($scope.filtro.dateStart)
-      console.debug($scope.filtro.dateEnd)
-      console.debug($scope.filtro.timeStart)
-      console.debug($scope.filtro.timeEnd)
+      // console.debug($scope.filtro);
+      //
+      // console.debug($scope.filtro.dateStart)
+      // console.debug($scope.filtro.dateEnd)
+      // console.debug($scope.filtro.timeStart)
+      // console.debug($scope.filtro.timeEnd)
 
       $http.post('rest/auditevent/search', $scope.filtro).then(function (r) {
           var data = r.data;
           $scope.eventos = data;
 
           for(var i = 0; i < data.length; i++){
-            console.debug(data[i].dateTime);
+            // console.debug(data[i].dateTime);
           }
         }
       );
