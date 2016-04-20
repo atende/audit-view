@@ -25,11 +25,11 @@ public class AuditController {
     AuditEventRepository auditEventRepository;
 
     @RequestMapping(value="/search", method = RequestMethod.POST, consumes = { "application/json" } )
-    public ResponseEntity<List<AuditEvent>> procurar(@RequestBody Map<String, Object> filtro){
+    public ResponseEntity<List<AuditEvent>> searchWithoutDate(@RequestBody Map<String, Object> filtro){
 
         Map<String, Object> novoFiltro = filterBlankParameter(filtro);
         novoFiltro = deleteFilterDate(novoFiltro);
-        List<AuditEvent> result = auditEventRepository.search(novoFiltro);
+        List<AuditEvent> result = auditEventRepository.searchWithoutDate(novoFiltro);
 
         return ResponseEntity.ok(result);
 
@@ -41,8 +41,8 @@ public class AuditController {
         return auditEventRepository.listApplicationNames();
     }
 
-    @RequestMapping(value = "/dates/{dateStart}/{dateEnd}", method = RequestMethod.POST)
-    public ResponseEntity<List<AuditEvent>> listarPorData(@RequestBody Map<String, Object> filtro,
+    @RequestMapping(value = "/search/dates/{dateStart}/{dateEnd}", method = RequestMethod.POST)
+    public ResponseEntity<List<AuditEvent>> searchWithDate(@RequestBody Map<String, Object> filtro,
                                                           @PathVariable("dateStart") Date dateStart, @PathVariable("dateEnd") Date dateEnd){
 
 
@@ -53,8 +53,7 @@ public class AuditController {
 
         filtro = filterBlankParameter(filtro);
 
-        List<AuditEvent> result = auditEventRepository.realSearch(filtro, dStart, dEnd);
-
+        List<AuditEvent> result = auditEventRepository.searchIncludeDate(filtro, dStart, dEnd);
         return ResponseEntity.ok(result);
     }
 

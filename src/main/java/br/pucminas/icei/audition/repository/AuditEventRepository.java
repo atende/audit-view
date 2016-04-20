@@ -31,15 +31,15 @@ public class AuditEventRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public List<AuditEvent> realSearch(Map<String, Object> filtro, Object dateStart, Object dateEnd){
-        List<AuditEvent> list1 = search(filtro);
+    public List<AuditEvent> searchIncludeDate(Map<String, Object> filtro, Object dateStart, Object dateEnd){
+        List<AuditEvent> list1 = searchWithoutDate(filtro);
         List<AuditEvent> list2 = searchDate(dateStart, dateEnd);
 
         return intersection(list1, list2);
 
     }
 
-    public List<AuditEvent> search(Map<String, Object> filtro){
+    public List<AuditEvent> searchWithoutDate(Map<String, Object> filtro){
         String securityLevel = (String) filtro.get("securityLevel");
         if(securityLevel != null){
             filtro.put("securityLevel", SecurityLevel.valueOf(securityLevel));
@@ -79,6 +79,8 @@ public class AuditEventRepository {
         return em.createQuery(where);
 
     }
+
+
 
     public <T> List<T> intersection(List<T> list1, List<T> list2) {
         List<T> list = new ArrayList<T>();

@@ -38,12 +38,12 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
       })
     };
 
-    $scope.testeData = function(){
+    $scope.searchIncludeDate = function(){
+      console.log("Include date");
+      console.log($scope.dateStart);
+      console.log($scope.dateEnd);
 
-      console.log("filtro");
-      console.log($scope.filtro);
-
-      var url = 'rest/auditevent/dates/' + $scope.dateStart + '/' + $scope.dateEnd;
+      var url = 'rest/auditevent/search/dates/' + $scope.dateStart + '/' + $scope.dateEnd;
       $http.post(url, $scope.filtro).then(function (r) {
           var data = r.data;
           $scope.eventos = data;
@@ -51,6 +51,21 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
         }
       )
     };
+
+  $scope.searchWithoutDate = function(){
+
+    console.log("Without date");
+    console.log($scope.dateStart);
+    console.log($scope.dateEnd);
+
+    var url = 'rest/auditevent/search';
+    $http.post(url, $scope.filtro).then(function (r) {
+        var data = r.data;
+        $scope.eventos = data;
+        console.log($scope.eventos.length);
+      }
+    )
+  };
 
     $scope.popular = function () {
       // console.debug($scope.filtro);
@@ -70,19 +85,7 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
         }
       );
 
-      // $.ajax({
-      //   type: "POST",
-      //   contentType: "application/json",
-      //   url: "http://localhost:8080/rest/auditevent/search",
-      //   data: JSON.stringify(filtro),
-      //   dataType: 'json',
-      //   success: function (data) {
-      //     for(var i = 0; i < data.length; i++){
-      //       $scope.eventos[i] = data[i];
-      //       console.log($scope.eventos[i]);
-      //     }
-      //   }
-      // });
+  
 
     }
 
