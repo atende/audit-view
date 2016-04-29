@@ -47,6 +47,7 @@
           <br><br><button ng-click="(dateStart != undefined && dateEnd != undefined) ? searchIncludeDate() : searchWithoutDate()"
                           class="btn btn-primary btn-sm btn-block"> Pesquisar </button>
 
+
         </form>
 
       </div>
@@ -67,6 +68,7 @@
           <th> Criticidade</th>
         </tr>
 
+
         <tr ng-repeat="auditevent in eventos"
             ng-style="{'background-color': auditevent.id == logSelecionado.id ? 'lightgray' : ''}"
             ng-click="clickTable(auditevent)"
@@ -83,13 +85,11 @@
 
         </tr>
 
-
-
-        <tr ng-show="logsFiltrados.length == 0 ">
-          <td colspan="8">
+        <tr ng-show="eventos.length == 0 ">
+          <td colspan="9">
             <div class="alert alert-info">
               <p class="text-center">
-                Nenhum resultado encontrado.
+                Nenhum resultado encontrado
               </p>
             </div>
           </td>
@@ -100,6 +100,11 @@
 
 
     </div>
+
+    <div data-pagination="" data-num-pages="numPages()"
+         data-current-page="currentPage" data-max-size="maxSize"
+         data-boundary-links="true"></div>
+
 
     <div id="details">
       <div class="modal fade" id="myModal" tabindex="-1" role="dialog"

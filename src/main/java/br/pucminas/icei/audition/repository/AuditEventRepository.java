@@ -36,7 +36,6 @@ public class AuditEventRepository {
         List<AuditEvent> list2 = searchDate(dateStart, dateEnd);
 
         return intersection(list1, list2);
-
     }
 
     public List<AuditEvent> searchWithoutDate(Map<String, Object> filtro){
@@ -93,19 +92,5 @@ public class AuditEventRepository {
 
         return list;
     }
-
-
-
-//    public TypedQuery<AuditEvent> searchByDate(Map<String, Object> filtro ){
-//
-//        CriteriaBuilder builder = em.getCriteriaBuilder();
-//        CriteriaQuery<AuditEvent> cq = builder.createQuery(AuditEvent.class);
-//        Metamodel m = em.getMetamodel();
-//        EntityType<AuditEvent> AuditEvent_ = m.entity(AuditEvent.class);
-//        Root<AuditEvent> auditevent = cq.from(AuditEvent.class);
-//
-//        return cq.where(builder.between(auditevent.get("dateTime"), filtro.get("dateStart"), filtro.get("dateEnd")), filtro.get("dateStart"), filtro.get("dateEnd"));
-//
-//    }
 
 }

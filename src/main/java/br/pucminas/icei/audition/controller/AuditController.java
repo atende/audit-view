@@ -47,9 +47,7 @@ public class AuditController {
 
 
         LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
-        System.out.println(dStart);
         LocalDateTime dEnd = LocalDateTime.ofInstant(dateEnd.toInstant(), ZoneId.systemDefault());
-        System.out.println(dEnd);
 
         filtro = filterBlankParameter(filtro);
 

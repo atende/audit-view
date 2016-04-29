@@ -71,7 +71,6 @@ public class AuditViewApplication {
 		SpringApplication app = new SpringApplication(AuditViewApplication.class);
 		SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
 		addDefaultProfile(app, source);
-
 		ConfigurableApplicationContext run = app.run(args);
 		Environment env = run.getEnvironment();
 
