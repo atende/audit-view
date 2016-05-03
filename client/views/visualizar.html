@@ -1,5 +1,8 @@
 <div ng-controller="VisualizarCtrl">
 
+  <div data-ng-init="popular()">
+  </div>
+
   <div class="row">
     <div class="col-sm-1">
 
@@ -47,6 +50,8 @@
           <br><br><button ng-click="(dateStart != undefined && dateEnd != undefined) ? searchIncludeDate() : searchWithoutDate()"
                           class="btn btn-primary btn-sm btn-block"> Pesquisar </button>
 
+          <br><button ng-click="teste()"> Teste Bootbox </button>
+
 
         </form>
 
@@ -69,7 +74,7 @@
         </tr>
 
 
-        <tr ng-repeat="auditevent in eventos"
+        <tr ng-repeat="auditevent in paginados"
             ng-style="{'background-color': auditevent.id == logSelecionado.id ? 'lightgray' : ''}"
             ng-click="clickTable(auditevent)"
             data-toggle="modal" data-target="#myModal">
@@ -95,15 +100,20 @@
           </td>
         </tr>
 
-
       </table>
 
+      <pagination
+        ng-model="currentPage"
+        items-per-page="numPerPage"
+        total-items="eventos.length"
+        max-size="maxSize"
+        boundary-links="true">
+      </pagination>
 
     </div>
 
-    <div data-pagination="" data-num-pages="numPages()"
-         data-current-page="currentPage" data-max-size="maxSize"
-         data-boundary-links="true"></div>
+
+
 
 
     <div id="details">
@@ -156,10 +166,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div data-ng-init="popular()">
-      <td>{{ResponseDetails.value}}</td>
     </div>
   </div>
 

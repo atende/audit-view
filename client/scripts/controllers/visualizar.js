@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 
 /**
  * @ngdoc function
@@ -8,7 +8,6 @@
  * Controller of the auditionApp
  */
 
-
 // var app = angular.module('auditionApp', [ui.bootstrap]);
 
 var app = angular.module('auditionApp');
@@ -17,7 +16,6 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
     var lastChecked;
 
-    $scope.filtros = [];
     $scope.filtro = {};
 
     $scope.criticidades = ["LOW", "NORMAL", "HIGHT"];
@@ -28,11 +26,30 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
     $scope.filtrosDeAplicacao = [];
 
+
+    $scope.eventos = [];
+
+
+
+    $scope.paginados = [];
+
+
+    $scope.currentPage = 1,
+    $scope.numPerPage = 10,
+    $scope.maxSize = 5;
+
+    $scope.$watch('currentPage + numPerPage + eventos', function() {
+      var begin = (($scope.currentPage - 1) * $scope.numPerPage);
+      var end = begin + $scope.numPerPage;
+
+      $scope.paginados = $scope.eventos.slice(begin, end);
+
+    });
+
+
     $scope.clickTable = function(log) {
       $scope.logSelecionado = log;
     };
-
-    $scope.eventos = [];
 
 
     $scope.loadApplications = function(){
@@ -41,15 +58,21 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
       })
     };
 
+  $scope.teste = function(){
+    bootbox.alert("Custom label text!", "Very good.");
+  };
+
     $scope.checkDate = function(){
       var dataInicio = new Date($scope.dateStart);
       var dataFim = new Date($scope.dateEnd);
       if(dataInicio > dataFim){
         window.alert("Data Inicial tem que ser menor ou igual a Data Final.");
+
         return false;
       }
       return true;
     };
+
 
     $scope.searchIncludeDate = function(){
 
@@ -73,12 +96,6 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
   };
 
     $scope.popular = function () {
-      // console.debug($scope.filtro);
-      //
-      // console.debug($scope.filtro.dateStart)
-      // console.debug($scope.filtro.dateEnd)
-      // console.debug($scope.filtro.timeStart)
-      // console.debug($scope.filtro.timeEnd)
 
       if($scope.checkDate($scope.dateStart, $scope.dateEnd))
         $http.post('rest/auditevent/search', $scope.filtro).then(function (r) {
@@ -88,29 +105,6 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
         );
 
     };
-
-  $scope.filteredTodos = [],
-  $scope.currentPage = 1,
-  $scope.numPerPage = 10,
-  $scope.maxSize = 5;
-
-  $scope.makeTodos = function() {
-    $scope.todos = [];
-    for (var i=1;i<=1000;i++) {
-      $scope.todos.push({ text:'todo '+i, done:false});
-    }
-  };
-  $scope.makeTodos();
-
-  $scope.numPages = function () {
-    return Math.ceil($scope.todos.length / $scope.numPerPage);
-  };
-
-  $scope.$watch('currentPage + numPerPage', function() {
-    var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
-
-    $scope.filteredTodos = $scope.todos.slice(begin, end);
-  });
 
   });
 
