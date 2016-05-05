@@ -115,3 +115,5 @@ body {
   max-width: 50px;
   max-height: 50px;
 }
+
+.tablescroll { height: 410px; width: 130%; margin: 0; overflow: auto; }

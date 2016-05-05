@@ -4,6 +4,7 @@ import br.pucminas.icei.audition.entity.AuditEvent;
 import br.pucminas.icei.audition.repository.AuditEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,12 @@ public class AuditController {
         List<AuditEvent> result = auditEventRepository.searchWithoutDate(novoFiltro);
 
         return ResponseEntity.ok(result);
+    }
 
+    @RequestMapping(value="/create", method = RequestMethod.POST)
+    public ResponseEntity createEvent(@RequestBody AuditEvent auditevent){
+        auditEventRepository.create(auditevent);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 

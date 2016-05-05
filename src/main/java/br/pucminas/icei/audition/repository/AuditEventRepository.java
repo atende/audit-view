@@ -9,6 +9,8 @@ import br.pucminas.icei.audition.entity.SecurityLevel;
 import org.hibernate.jpa.boot.scan.spi.ScanOptions;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Repository
 public class AuditEventRepository {
     @PersistenceContext
     private EntityManager em;
@@ -37,6 +40,12 @@ public class AuditEventRepository {
 
         return intersection(list1, list2);
     }
+
+    @Transactional
+    public void create(AuditEvent auditEvent){
+        em.persist(auditEvent);
+    }
+
 
     public List<AuditEvent> searchWithoutDate(Map<String, Object> filtro){
         String securityLevel = (String) filtro.get("securityLevel");

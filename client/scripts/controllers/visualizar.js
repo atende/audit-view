@@ -35,7 +35,7 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
 
     $scope.currentPage = 1,
-    $scope.numPerPage = 10,
+    $scope.numPerPage = 13,
     $scope.maxSize = 5;
 
     $scope.$watch('currentPage + numPerPage + eventos', function() {
@@ -58,16 +58,11 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
       })
     };
 
-  $scope.teste = function(){
-    bootbox.alert("Custom label text!", "Very good.");
-  };
-
     $scope.checkDate = function(){
       var dataInicio = new Date($scope.dateStart);
       var dataFim = new Date($scope.dateEnd);
       if(dataInicio > dataFim){
-        window.alert("Data Inicial tem que ser menor ou igual a Data Final.");
-
+        $('#myModal2').modal('show');
         return false;
       }
       return true;
@@ -87,6 +82,7 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
     };
 
   $scope.searchWithoutDate = function(){
+    
     var url = 'rest/auditevent/search';
     $http.post(url, $scope.filtro).then(function (r) {
         var data = r.data;
