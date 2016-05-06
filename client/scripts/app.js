@@ -31,6 +31,11 @@ angular
         controller: 'VisualizarCtrl',
         controllerAs: 'visualizar'
       })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs: 'login'
+      })
       .otherwise({
         redirectTo: '/'
       });

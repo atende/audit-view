@@ -29,8 +29,6 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
     $scope.eventos = [];
 
-
-
     $scope.paginados = [];
 
 
@@ -46,6 +44,19 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
     });
 
+    $scope.inserindoEvento = function(){
+      var json = '{  "id" : "1234",  "applicationName" : "sgl",  "userName" : "fulano",  "action" : "create",  "resource": {"resourceType": "aluno", "resourceId": "1234"},  "dateTime" : "2016-04-05T11:01:13.637",  "ip" : "192.168.254.1",  "securityLevel" : "NORMAL",  "description" : "criando aluno fulano" }';
+      json = JSON.parse(json);
+
+      console.log(json);
+
+      $http.post('rest/auditevent/create', json).then(function (r) {
+          var data = r.data;
+          console.log(data);
+        }
+      );
+
+    };
 
     $scope.clickTable = function(log) {
       $scope.logSelecionado = log;
@@ -82,7 +93,7 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
     };
 
   $scope.searchWithoutDate = function(){
-    
+
     var url = 'rest/auditevent/search';
     $http.post(url, $scope.filtro).then(function (r) {
         var data = r.data;

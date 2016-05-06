@@ -35,6 +35,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.3')
 
+	compile('org.apache.httpcomponents:httpclient:4.5.2')
+
 
 	compile('org.keycloak:keycloak-core:1.9.2.Final')
 	compile('org.keycloak:keycloak-model-api:1.8.1.Final')
