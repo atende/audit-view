@@ -14,8 +14,6 @@ var app = angular.module('auditionApp');
 
 app.controller('VisualizarCtrl', function ($scope, $http) {
 
-    var lastChecked;
-
     $scope.filtro = {};
 
     $scope.criticidades = ["LOW", "NORMAL", "HIGHT"];
@@ -33,16 +31,33 @@ app.controller('VisualizarCtrl', function ($scope, $http) {
 
 
     $scope.currentPage = 1,
-    $scope.numPerPage = 13,
-    $scope.maxSize = 5;
+    $scope.numPerPage = 11,
+    $scope.maxSize = 10;
 
     $scope.$watch('currentPage + numPerPage + eventos', function() {
       var begin = (($scope.currentPage - 1) * $scope.numPerPage);
       var end = begin + $scope.numPerPage;
 
+      $scope.paginados = [];
+
+      console.log("teste");
+
       $scope.paginados = $scope.eventos.slice(begin, end);
 
     });
+
+
+  $scope.$watch('eventos', function() {
+    var begin = (($scope.currentPage - 1) * $scope.numPerPage);
+    var end = begin + $scope.numPerPage;
+
+    $scope.paginados = [];
+
+    console.log("teste");
+
+    $scope.paginados = $scope.eventos.slice(begin, end);
+
+  });
 
     $scope.inserindoEvento = function(){
       var json = '{  "id" : "1234",  "applicationName" : "sgl",  "userName" : "fulano",  "action" : "create",  "resource": {"resourceType": "aluno", "resourceId": "1234"},  "dateTime" : "2016-04-05T11:01:13.637",  "ip" : "192.168.254.1",  "securityLevel" : "NORMAL",  "description" : "criando aluno fulano" }';

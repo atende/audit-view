@@ -82,7 +82,7 @@
           </tr>
 
 
-          <tr ng-repeat="auditevent in teste = ( paginados | orderBy: order )"
+          <tr ng-repeat="auditevent in filtrados = ( paginados | orderBy: order )"
               ng-style="{'background-color': auditevent.id == logSelecionado.id ? 'lightgray' : ''}"
               ng-click="clickTable(auditevent)"
               data-toggle="modal" data-target="#myModal">
@@ -138,7 +138,7 @@
             Data inicial tem que ser menor ou igual a data final.
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
           </div>
         </div>
 
@@ -194,7 +194,7 @@
               </table>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
             </div>
           </div>
         </div>
