@@ -53,6 +53,12 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+task bowerInstall(type: Exec) {
+	workingDir "${projectDir}/src/main/webapp"
+	commandLine 'bower', 'install'
+}
+
+jar.dependsOn(bowerInstall)
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '2.11'
