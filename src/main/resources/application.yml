@@ -50,6 +50,9 @@ spring:
     username: ${audition.database.username}
     password: ${audition.database.password}
     url: ${audition.database.url}
+  data:
+    rest:
+      base-path: /api
 
 server:
   tomcat:
