@@ -10,7 +10,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
  */
 
 @Configuration
-public class MyConfiguration extends RepositoryRestConfigurerAdapter {
+public class RestConfig extends RepositoryRestConfigurerAdapter {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
