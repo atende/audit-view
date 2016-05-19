@@ -28,11 +28,13 @@ repositories {
 	}
 }
 
+
 dependencies {
 	compile project(':entity-model')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('com.zaxxer:HikariCP:2.4.4')//JPA HikariCP
 	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.3')
 
 	compile('org.apache.httpcomponents:httpclient:4.5.2')
