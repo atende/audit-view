@@ -1,4 +1,5 @@
 package br.pucminas.icei.audition.config;
+import br.pucminas.icei.audition.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -43,7 +44,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private String appVersion;
 
     private String getProjectRootRequired() {
-        Assert.state((this.projectRoot != null && !this.projectRoot.trim().equals("")), "Please set \"resources.projectRoot\" in application.yml");
+        Assert.state((this.projectRoot != null && !this.projectRoot.trim().equals("")), "Please set \"resources.projectroot\" in application-dev.properties");
         return this.projectRoot;
     }
     @Override
@@ -88,7 +89,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     protected String getApplicationVersion() {
-        return this.env.acceptsProfiles("development") ? "dev" : this.appVersion;
+        return this.env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT) ? "dev" : this.appVersion;
     }
     // Internationalization and Locale
 
@@ -110,6 +111,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      * @return
      */
     private boolean devMode(){
-        return this.env.acceptsProfiles("dev");
+        return this.env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
     }
 }

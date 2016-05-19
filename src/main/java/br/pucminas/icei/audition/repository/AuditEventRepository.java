@@ -60,7 +60,7 @@ public class AuditEventRepository {
     }
 
     public List<AuditEvent> searchDate(Object dateStart, Object dateEnd){
-        return em.createQuery("SELECT distinct e from AuditEvent e WHERE e.dateTime BETWEEN :dateStart AND:dateEnd ")
+        return em.createQuery("SELECT distinct e from AuditEvent e WHERE e.dateTime BETWEEN :dateStart AND :dateEnd ")
                 .setParameter("dateStart", dateStart)
                 .setParameter("dateEnd", dateEnd).getResultList();
     }
