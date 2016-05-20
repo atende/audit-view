@@ -32,9 +32,6 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: ${audition.database.username}
-    password: ${audition.database.password}
-    jdbc-url: ${audition.database.url}
   data:
     rest:
       base-path: /api
