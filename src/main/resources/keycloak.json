@@ -1,0 +1,10 @@
+{
+  "realm": "apps",
+  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAihhX0RY/8HjAQMUb0w1Tn47zmeSr6CE2CQCr1Y6wnTa0+t72ihxBB+WXRS23uuzHVIwmzC+VrpSFujNBSTDLkauL9EgGRuQXIXkPSbzMdhYoh9FM7qIoHsGRcz8eGXDuufz9jB/ELnFNt8ee3M9uaBwztp4eoV4j7quNMBIKSvHo3JXitCYC2fv7ShtkhiiuSU/+1Nis5A+K5KoQpoA72En9jVH+ZnHEeKFMyKXWuzwDQV5NquLuV54CU0xVptKMp0j20S4xbx/jb4BMlcL3pRbaoItq+tOaOoSqmOxVO/kH/dCAoNtz3pc55WObRuk6xP3mdhhi1wW+kNA0Q3NwpwIDAQAB",
+  "auth-server-url": "http://auth.icei.pucminas.br:8180/auth",
+  "ssl-required": "external",
+  "resource": "audit-view",
+  "credentials": {
+    "secret": "fc270fd4-0186-43db-aacb-4f259726fdaa"
+  }
+}
