@@ -2,7 +2,7 @@
 
 The application can be configure using spring boot configuration properties
 
-http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html
+[http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html]
 
 That mean you can use startup params like in: `java -jar application.jar --spring.datasource.username=bla` or environment
 variables like `export SPRING_DATASOURCE_USERNAME=bla`
@@ -32,3 +32,6 @@ As Environment Variables
 As environment variable
 
     export KEYCLOAK_CONFIGURATIONFILE=file:///localhost/of/keycloak.json
+
+
+[http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html]:http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html
