@@ -4,8 +4,8 @@ package br.pucminas.icei.audition.repository;
  * @author Claudinei Gomes Mendes
  */
 
-import br.pucminas.icei.audition.entity.AuditEvent;
-import br.pucminas.icei.audition.entity.SecurityLevel;
+import info.atende.audition.model.entity.AuditEvent;
+import info.atende.audition.model.entity.SecurityLevel;
 import org.hibernate.jpa.boot.scan.spi.ScanOptions;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;

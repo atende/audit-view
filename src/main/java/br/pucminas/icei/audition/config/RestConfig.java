@@ -1,6 +1,6 @@
 package br.pucminas.icei.audition.config;
 
-import br.pucminas.icei.audition.entity.AuditEvent;
+import info.atende.audition.model.entity.AuditEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;

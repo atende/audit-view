@@ -51,6 +51,7 @@ dependencies {
 	compile group: 'org.keycloak', name: 'keycloak-spring-security-adapter', version: '1.9.4.Final'
 	compile('org.codehaus.jackson:jackson-mapper-asl:1.9.13')
 
+	compile group: 'info.atende.audition', name: 'audit-model', version: '1.0.0-SNAPSHOT', changing: true
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

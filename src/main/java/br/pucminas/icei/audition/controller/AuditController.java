@@ -1,7 +1,7 @@
 package br.pucminas.icei.audition.controller;
 
-import br.pucminas.icei.audition.entity.AuditEvent;
 import br.pucminas.icei.audition.repository.AuditEventRepository;
+import info.atende.audition.model.entity.AuditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
