@@ -1,5 +1,6 @@
 package br.pucminas.icei.audition.config;
 
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -36,6 +37,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         messageSource.setDefaultEncoding(encoding);
 
         return messageSource;
+    }
+
+    @Bean
+    public ServerProperties getServerProperties(){
+        return new ServerCustomization();
     }
 
 }

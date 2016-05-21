@@ -4,25 +4,19 @@ package br.pucminas.icei.audition.repository;
  * @author Claudinei Gomes Mendes
  */
 
-import br.pucminas.icei.audition.entity.AuditEvent;
-import br.pucminas.icei.audition.entity.SecurityLevel;
-import org.hibernate.jpa.boot.scan.spi.ScanOptions;
-import org.springframework.cglib.core.Local;
+import info.atende.audition.model.entity.AuditEvent;
+import info.atende.audition.model.entity.SecurityLevel;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
-import java.sql.SQLOutput;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

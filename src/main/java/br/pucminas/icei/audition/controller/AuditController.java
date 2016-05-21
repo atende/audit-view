@@ -1,14 +1,12 @@
 package br.pucminas.icei.audition.controller;
 
-import br.pucminas.icei.audition.entity.AuditEvent;
 import br.pucminas.icei.audition.repository.AuditEventRepository;
+import info.atende.audition.model.entity.AuditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
