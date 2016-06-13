@@ -1,8 +1,5 @@
 package br.pucminas.icei.audition;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,13 +65,13 @@ public class AuditViewApplication {
 		addDefaultProfile(app, source);
 		ConfigurableApplicationContext run = app.run(args);
 		Environment env = run.getEnvironment();
+
 		log.info("Access URLs:\n----------------------------------------------------------\n\t" +
 						"Local: \t\thttp://127.0.0.1:{}\n\t" +
 						"External: \thttp://{}:{}\n----------------------------------------------------------",
 				env.getProperty("server.port"),
 				InetAddress.getLocalHost().getHostAddress(),
 				env.getProperty("server.port"));
-
 
 	}
 

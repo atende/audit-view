@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.3.3.RELEASE'
+		springBootVersion = '1.3.5.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -18,32 +18,50 @@ apply plugin: 'idea'
 jar {
 	baseName = 'audit-view'
 	version = '0.0.1-SNAPSHOT'
+//	from ("${projectDir}/src/main/webapp") {
+//
+//	}
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	maven {
+		url "http://oss.sonatype.org/content/groups/public"
+	}
 }
 
 
 dependencies {
-	compile project(':entity-model')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	// Thymeleaf legacy html
+	runtime group: 'net.sourceforge.nekohtml', name: 'nekohtml', version: '1.9.22'
+
+	compile('com.zaxxer:HikariCP:2.4.4')//JPA HikariCP
+	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.3')
+
+	compile('org.apache.httpcomponents:httpclient:4.5.2')
+
+
+	compile group: 'org.keycloak', name: 'keycloak-spring-security-adapter', version: '1.9.4.Final'
+	compile('org.codehaus.jackson:jackson-mapper-asl:1.9.13')
+
+	compile group: 'info.atende.audition', name: 'audit-model', version: '1.0.0-SNAPSHOT', changing: true
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
-
-eclipse {
-	classpath {
-		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-	}
+task bowerInstall(type: Exec) {
+	workingDir "${projectDir}/src/main/webapp"
+	commandLine 'bower', 'install', '--allow-root'
 }
 
+jar.dependsOn(bowerInstall)
+
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.11'
+	gradleVersion = '2.13'
 }

@@ -19,7 +19,11 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="resources/styles/main.css">
+    <link rel="stylesheet" href="resources/styles/login.css">
+
+
+
     <!-- endbuild -->
   </head>
   <body ng-app="auditionApp">
@@ -30,9 +34,7 @@
     <!-- Add your site or application content here -->
     <div class="header">
       <div class="navbar navbar-default" role="navigation">
-        <div class="container">
           <div class="navbar-header">
-
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
@@ -40,7 +42,9 @@
               <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="#/">audition</a>
+            <!--<a class="navbar-brand" href="#/">audition</a>-->
+            <img class="img-rounded logo" src="resources/images/logging.png" alt="Lupa">
+            <img class="img-rounded" src="resources/images/logo-nome.png" alt="Logo"><br>
           </div>
 
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
@@ -49,18 +53,18 @@
               <li class="active"><a href="#/">Home</a></li>
               <li><a ng-href="#/visualizar">Visualizar</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/sso/logout">Logout</a> </li>
+            </ul>
           </div>
-        </div>
       </div>
     </div>
 
-    <div class="container">
     <div ng-view=""></div>
-    </div>
 
     <div class="footer">
         <nav class="navbar navbar-default navbar-fixed-bottom">
-          <div class="container text-center">
+          <div class="containerFooter text-center">
             <span>Copyright © 2016 - Instituto de Ciências Exatas e Informática</span><br/>
             <span>Av. Dom José Gaspar, 500 - Coração Eucarístico - Belo Horizonte - MG - CEP 30535-901 - Telefone geral:(31)3319-4444</span>
           </div>
@@ -91,10 +95,30 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/visualizar.js"></script>
-        <!-- endbuild -->
+    <!-- menu dropdown -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <script src="node_modules/bootbox/bootbox.js"></script>
+
+    <script src="bower_components/jquery/dist/jquery.js"> </script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <!--<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>-->
+    <script data-require="ui-bootstrap@*" data-semver="0.12.1" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/visualizar.js"></script>
+
+
+    <!-- endbuild -->
+
 </body>
 </html>

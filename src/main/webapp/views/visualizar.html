@@ -1,0 +1,225 @@
+<div ng-controller="VisualizarCtrl">
+
+  <div data-ng-init="popular()">
+  </div>
+
+  <div class="row">
+    <div class="col-sm-1">
+
+      <div class="leftComboBox">
+
+        <form class="form-inline well well-sm">
+
+          <span class="glyphicon glyphicon-search"></span>
+
+          <br><span>Nome do Usuário: </span><br>
+          <input type="text" class="form-control" ng-model="filtro.userName" placeholder="Nome do Usuário">
+
+          <br><span>Ação: </span><br>
+          <input type="text" class="form-control" ng-model="filtro.action" placeholder="Ação">
+
+          <br><span>Id: </span><br>
+          <input type="text" class="form-control" ng-model="filtro.id" placeholder="ID do Log">
+
+          <br><span>Data Início: </span><br>
+          <input type="datetime-local" class="input form-control primary-border" ng-model="dateStart"
+                 placeholder="dd/mm/aaaa --:--">
+
+          <br><span>Data Fim: </span><br>
+          <input type="datetime-local" class="input form-control primary-border" ng-model="dateEnd"
+                 placeholder="dd/mm/aaaa --:--">
+
+          <br><span>Ip: </span><br>
+          <input type="text" class="input form-control primary-border" ng-model="filtro.ip" placeholder="IP">
+
+
+          <br><br><select class="form-control"
+                          ng-model="filtro.securityLevel">
+
+          <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
+          <option ng-repeat="crit  in criticidades" value="{{crit}}"> {{crit}}</option>
+
+        </select>
+
+          <select data-ng-init="loadApplications()" class="form-control"
+                  ng-model="filtro.applicationName">
+
+            <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
+            <option ng-repeat="aplic  in aplicacoes" value="{{aplic}}"> {{aplic}}</option>
+
+          </select>
+
+          <br><br>
+          <button
+            ng-click="(dateStart != undefined && dateEnd != undefined) ? searchIncludeDate() : searchWithoutDate()"
+            id="buttonPesquisar"
+            class="btn btn-primary btn-sm btn-block"> Pesquisar
+          </button>
+
+          <!--<br> <datepicker />-->
+
+        </form>
+
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="table-responsive tablescroll">
+        <table class="table table-hover table-condensed" id="tableMain">
+
+          <tr>
+            <th> ID
+              <span ng-click="order = 'id'" class="glyphicon glyphicon-menu-up"></span>
+              <span ng-click="order = '-id'" class="glyphicon glyphicon-menu-down"></span></th>
+            <th> Aplicação</th>
+            <th> Usuário</th>
+            <th> Ação</th>
+            <th> ResourceType</th>
+            <th> ResourceId</th>
+            <th> Data e Hora</th>
+            <th> IP</th>
+            <th> Criticidade</th>
+          </tr>
+
+
+          <tr ng-repeat="auditevent in filtrados = ( paginados | orderBy: order )"
+              ng-style="{'background-color': auditevent.id == logSelecionado.id ? 'lightgray' : ''}"
+              ng-click="clickTable(auditevent)"
+              data-toggle="modal" data-target="#myModal">
+            <td> {{ auditevent.id }}</td>
+            <td> {{ auditevent.applicationName }}</td>
+            <td> {{ auditevent.userName }}</td>
+            <td> {{ auditevent.action }}</td>
+            <td> {{ auditevent.resource.resourceType }}</td>
+            <td> {{ auditevent.resource.resourceId }}</td>
+            <td> {{ auditevent.dateTime[2] + '/' + auditevent.dateTime[1] + '/' + auditevent.dateTime[0] + ' ' +
+              auditevent.dateTime[3] + ':' + auditevent.dateTime[4] + ':' + auditevent.dateTime[5]}}
+            </td>
+            <td> {{ auditevent.ip }}</td>
+            <td> {{ auditevent.securityLevel }}</td>
+
+          </tr>
+
+          <tr ng-show="eventos.length == 0 ">
+            <td colspan="9">
+              <div class="alert alert-info">
+                <p class="text-center">
+                  Nenhum resultado encontrado
+                </p>
+              </div>
+            </td>
+          </tr>
+
+        </table>
+      </div>
+
+      <pagination
+        ng-model="currentPage"
+        items-per-page="numPerPage"
+        total-items="eventos.length"
+        max-size="maxSize"
+        boundary-links="true">
+      </pagination>
+
+    </div>
+
+
+    <!-- Modal Erro na Data -->
+    <div class="modal fade" id="myModal2" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Erro na data!</h4>
+          </div>
+          <div class="modal-body">
+            Data inicial tem que ser menor ou igual a data final.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal Descrição -->
+    <div id="details">
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+           aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                      aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">Detalhes</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table display">
+                <thead>
+                <tr>
+                  <th> ID</th>
+                  <th> Aplicação</th>
+                  <th> Usuário</th>
+                  <th> Ação</th>
+                  <th> Resource Type</th>
+                  <th> Resource Id</th>
+                  <th> Data e Hora</th>
+                  <th> IP</th>
+                  <th> Criticidade</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr>
+                  <td> {{ logSelecionado.id }}</td>
+                  <td> {{ logSelecionado.applicationName }}</td>
+                  <td> {{ logSelecionado.userName }}</td>
+                  <td> {{ logSelecionado.action }}</td>
+                  <td> {{ logSelecionado.resource.resourceType }}</td>
+                  <td> {{ logSelecionado.resource.resourceId }}</td>
+                  <td> {{ logSelecionado.dateTime[2] + '/' + logSelecionado.dateTime[1] + '/' +
+                    logSelecionado.dateTime[0] + ' ' + logSelecionado.dateTime[3] + ':' + logSelecionado.dateTime[4] +
+                    ':' + logSelecionado.dateTime[5]}}
+                  </td>
+                  <td> {{ logSelecionado.ip }}</td>
+                  <td> {{ logSelecionado.securityLevel }}</td>
+
+                </tr>
+                </tbody>
+                <th> Descrição</th>
+                <td> {{ logSelecionado.description}}</td>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!--
+<p>
+  Um usuário com acesso ao sistema deve ser capaz de ver logs de auditoria.
+  O log deve possuir informações como:
+  Aplicação que gerou o log
+  Usuário que executou a ação
+  Ação
+  Data e Hora
+  IP de localização da máquina cliente
+  Criticidade - Indica o grau de criticidade da ação. Se baixo, normal ou alto. Logs com criticidade alta possuem um grau de sensibilidade maior, por exemplo: A ação de troca de senha de um usuário pode ter sensibilidade baixa, a ação de deletar multiplos usuários pode ter sensibilidade alta. Quem define isso é a aplicação.
+  Deve ser possível filtrar e pesquisar por qualquer uma das informações de log
+  Deve ser possível estender as informações de log, adicionando colunas sem que seja necessário programar nova versão do visualizador
+
+  Aplicação - Usuário - Ação - Data e Hora - IP - Criticidade
+  FILTRO PARA TODOS
+
+</p>
+-->

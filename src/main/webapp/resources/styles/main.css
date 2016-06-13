@@ -48,7 +48,7 @@ body {
 }
 .jumbotron .btn {
   font-size: 21px;
-  padding: 14px 24px;
+  padding: 4px 24px;
 }
 
 /* Supporting marketing content */
@@ -82,9 +82,38 @@ body {
   }
 }
 
+.containerNavBar {
+  margin-left: 0;
+  margin-right: 20px;
+}
+
+.containerFooter {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.container {
+  margin-left: 430px;
+  margin-right: 0;
+  margin-top: 30px;
+}
+
+.leftComboBox{
+  margin-left: 15px;
+  width: 400px;
+  margin-top: 30px;
+}
+
 .lupa {
   height: auto;
   width: auto;
   max-width: 300px;
   max-height: 300px;
 }
+
+.logo {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.tablescroll { height: 410px; width: 130%; margin: 0; overflow: auto; }

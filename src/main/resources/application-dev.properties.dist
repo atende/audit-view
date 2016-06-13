@@ -1,4 +1,5 @@
-resources.projectroot = /home/anderson/Projetos/audit-view
-spring.datasource.username=anderson
+spring.datasource.username=giovanni
 spring.datasource.password=1234
-spring.datasource.url=jdbc:postgresql://localhost/audit
+spring.datasource.jdbc-url=jdbc:postgresql://localhost/audit
+spring.datasource.maximumPoolSize=5
+spring.datasource.connection-timeout=5000

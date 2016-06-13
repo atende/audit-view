@@ -15,7 +15,9 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.bootstrap',
+    'ui.bootstrap.tpls'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -28,6 +30,11 @@ angular
         templateUrl: 'views/visualizar.html',
         controller: 'VisualizarCtrl',
         controllerAs: 'visualizar'
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs: 'login'
       })
       .otherwise({
         redirectTo: '/'
