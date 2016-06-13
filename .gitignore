@@ -33,3 +33,8 @@ conf/test.conf
 /src/main/resources/application-dev.properties
 /src/main/resources/keycloak-dev.json
 /src/main/resources/keycloak.json
+# Wercker
+_builds/
+_cache/
+_projects/
+_steps/

@@ -1,3 +1,5 @@
+[![wercker status](https://app.wercker.com/status/5116f2ef82779fbea92e5ca1803c39ab/m "wercker status")](https://app.wercker.com/project/bykey/5116f2ef82779fbea92e5ca1803c39ab)
+
 # About
 
 This project is a view for logs in relational databases. The logs are collected by the **audit-mq-collector** project, and

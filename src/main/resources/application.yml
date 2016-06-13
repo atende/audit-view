@@ -5,6 +5,8 @@ project:
   name: audition
   description: Auditoria dos sistemas desenvolvidos na PUC Minas
 
+keycloak:
+  configurationFile: classpath:/keycloak.json
 
 info:
   build:
