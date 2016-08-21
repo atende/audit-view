@@ -21,7 +21,7 @@ We need 3 things:
 This application has spring security but it do not authenticate the users. It delegates to the single sign on server
 [keycloak]
 
-I assume you understand what that means, and way is awesome. If not, don't worry, go to the [keycloak]
+I assume you understand what that means, and why is awesome. If not, don't worry, go to the [keycloak]
 site and learn it.
 
 <p class="alert alert-info">
@@ -33,6 +33,12 @@ another role by using
 in keycloak server. That adds the flexibility needed
 
 </p>
+
+## Running Keycloak
+
+The simplest way to try and is to use docker to run keycloak server:
+
+    docker run -d -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8081:8080 jboss/keycloak 
 
 ## Configure the database
 
