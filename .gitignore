@@ -39,3 +39,4 @@ _cache/
 _projects/
 _steps/
 .wercker/
+src/main/webapp/

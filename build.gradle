@@ -17,6 +17,7 @@ apply plugin: 'idea'
 idea {
 	module {
 		excludeDirs += file('.wercker')
+		excludeDirs += file('client/dist')
 	}
 }
 
