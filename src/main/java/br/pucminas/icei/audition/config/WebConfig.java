@@ -94,7 +94,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                     .addTransformer(appCacheTransformer);
     }
     protected String getApplicationVersion() {
-        return this.env.acceptsProfiles("development") ? "dev" : this.appVersion;
+        return this.devMode() ? "dev" : this.appVersion;
     }
 
     private boolean devMode(){
@@ -121,7 +121,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
             resources.add(r);
         }
         resources.add(getClientFolderLocation());
-        resources.add(getClientFolderLocation() + "dist/dev/");
+        resources.add(getClientFolderLocation() + "dist/");
         return resources.toArray(new String[resources.size()]);
     }
 
