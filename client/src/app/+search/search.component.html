@@ -77,7 +77,7 @@
           </tr>
 
 
-          <tr *ngFor="let auditevent of filtrados"
+          <tr *ngFor="let auditevent of eventos"
               [style.background-color]="auditevent.id == logSelecionado.id ? 'lightgray' : ''"
               (click)="clickTable(auditevent)"
               data-toggle="modal" data-target="#myModal">

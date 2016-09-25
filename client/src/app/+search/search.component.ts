@@ -56,7 +56,7 @@ export class SearchComponent {
 
     if (this.checkDate()) {
       var url = 'rest/auditevent/search/dates/' + this.dateStart + '/' + this.dateEnd;
-      this.http.post(url, this.filtro).toPromise().then(function (r) {
+      this.http.post(url, this.filtro).toPromise().then(r => {
           var data = r.json();
           this.eventos = data;
         }
@@ -67,7 +67,7 @@ export class SearchComponent {
   searchWithoutDate() {
 
     var url = 'rest/auditevent/search';
-    this.http.post(url, this.filtro).toPromise().then(function (r) {
+    this.http.post(url, this.filtro).toPromise().then(r => {
         var data = r.json();
         this.eventos = data;
       }
