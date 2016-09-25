@@ -7,10 +7,8 @@ import { HomeComponent } from './+home/index';
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'search', component: SearchComponent },
-    { path: '', component: HomeComponent }    
+    { path: '', component: HomeComponent }
 ];
-
-console.info(appRoutes);
 
 export const appRoutingProviders: any[] = [
 
