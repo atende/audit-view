@@ -7,6 +7,18 @@ services:
 
 build:
   steps:
+    - script:
+      name: "setup npm cache"
+      code: |
+         su ciuser
+         debug 'Creating $WERCKER_CACHE_DIR/wercker/npm'
+         mkdir -p $WERCKER_CACHE_DIR/wercker/npm
+         debug 'Creating $WERCKER_CACHE_DIR/wercker/node_modules'
+         mkdir -p $WERCKER_CACHE_DIR/wercker/node_modules
+         debug 'Configuring npm to use wercker cache'
+         npm config set cache $WERCKER_CACHE_DIR/wercker/npm
+         rm -rf $WERCKER_SOURCE_DIR/node_modules
+         ln -s $WERCKER_CACHE_DIR/node_modules $WERCKER_SOURCE_DIR/node_modules
     - script: 
       name: "Wait for POSTGRES connection" 
       code: | 
@@ -16,14 +28,21 @@ build:
           sleep 3; 
         done
     - script:
+      name: "start display"
+      code: |
+        /etc/init.d/xvfb start
+    - script:
       name: gradle build
       code: |
+        su ciuser
+        export DISPLAY=:99
         export GRADLE_USER_HOME=$WERCKER_CACHE_DIR/gradle
         export SPRING_PROFILES_ACTIVE=ci
-        ./gradlew --full-stacktrace build
+        ./gradlew build
     - script:
       name: build docs
       code: |
+        su ciuser
         mkdocs build
 deploy:
   steps:
