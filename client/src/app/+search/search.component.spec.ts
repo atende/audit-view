@@ -1,37 +1,11 @@
-import { TestComponentBuilder } from '@angular/core/testing';
-import { disableDeprecatedForms, provideForms } from '@angular/forms';
-import { Component } from '@angular/core';
-import {
-  inject,
-  async
-} from '@angular/core/testing';
-import { getDOM } from '@angular/platform-browser/src/dom/dom_adapter';
+/* tslint:disable:no-unused-variable */
 
-import { AboutComponent } from './search.component';
+import { TestBed, async } from '@angular/core/testing';
+import { SearchComponent } from './search.component';
 
-export function main() {
-  describe('About component', () => {
-    // Disable old forms
-    let providerArr: any[];
-
-    beforeEach(() => { providerArr = [disableDeprecatedForms(), provideForms()]; });
-
-    it('should work',
-      async(inject([TestComponentBuilder], (tcb: TestComponentBuilder) => {
-        tcb.overrideProviders(TestComponent, providerArr)
-          .createAsync(TestComponent)
-          .then((rootTC: any) => {
-            let aboutDOMEl = rootTC.debugElement.children[0].nativeElement;
-
-	    expect(getDOM().querySelectorAll(aboutDOMEl, 'h2')[0].textContent).toEqual('Features');
-          });
-        })));
-    });
-}
-
-@Component({
-  selector: 'test-cmp',
-  directives: [AboutComponent],
-  template: '<sd-about></sd-about>'
-})
-class TestComponent {}
+describe('Component: Search', () => {
+  it('should create an instance', () => {
+    let component = new SearchComponent(null);
+    expect(component).toBeTruthy();
+  });
+});

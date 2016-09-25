@@ -1,17 +1,17 @@
-import {Component} from '@angular/core';
-import {Http} from "@angular/http";
+import {Component, OnInit} from '@angular/core';
+import {Http} from '@angular/http';
 
 /**
  * This class represents the lazy loaded AboutComponent.
  */
 @Component({
-  selector: 'sd-search',
+  selector: 'app-search',
   templateUrl: 'search.component.html',
   styleUrls: ['search.component.css']
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   filtro = {};
-  criticidades = ["LOW", "NORMAL", "HIGHT"];
+  criticidades = ['LOW', 'NORMAL', 'HIGHT'];
   aplicacoes = [];
   logSelecionado = {
     resource: {},
@@ -32,10 +32,15 @@ export class SearchComponent {
 
   }
 
+  ngOnInit() {
+    this.loadApplications();
+    this.popular();
+  }
+
   loadApplications() {
-    this.http.get('rest/auditevent/applications').toPromise().then(r => {
+    this.http.get('rest/auditevent/applications').subscribe(r => {
       this.aplicacoes = r.json();
-    })
+    });
   };
 
   clickTable(log) {
@@ -43,8 +48,8 @@ export class SearchComponent {
   }
 
   checkDate() {
-    var dataInicio = new Date(this.dateStart);
-    var dataFim = new Date(this.dateEnd);
+    let dataInicio = new Date(this.dateStart);
+    let dataFim = new Date(this.dateEnd);
     if (dataInicio > dataFim) {
       (<any>$('#myModal2')).modal('show');
       return false;
@@ -53,37 +58,27 @@ export class SearchComponent {
   }
 
   searchIncludeDate() {
-
     if (this.checkDate()) {
-      var url = 'rest/auditevent/search/dates/' + this.dateStart + '/' + this.dateEnd;
-      this.http.post(url, this.filtro).toPromise().then(r => {
-          var data = r.json();
-          this.eventos = data;
-        }
-      )
+      let url = 'rest/auditevent/search/dates/' + this.dateStart + '/' + this.dateEnd;
+      this.http.post(url, this.filtro).subscribe(r => {
+        let data = r.json();
+        this.eventos = data;
+      });
     }
   }
 
   searchWithoutDate() {
-
-    var url = 'rest/auditevent/search';
-    this.http.post(url, this.filtro).toPromise().then(r => {
-        var data = r.json();
-        this.eventos = data;
-      }
-    )
+    let url = 'rest/auditevent/search';
+    this.http.post(url, this.filtro).subscribe(r => {
+      this.eventos = r.json();
+    });
   };
 
   popular() {
-
-    if (this.checkDate())
-      this.http.post('rest/auditevent/search', this.filtro).toPromise().then(function (r) {
-          var data = r.json();
-          this.eventos = data;
-        }
-      );
-
+    if (this.checkDate()) {
+      this.http.post('rest/auditevent/search', this.filtro).subscribe(function (r) {
+        this.eventos = r.json();
+      });
+    }
   }
-
-
 }
