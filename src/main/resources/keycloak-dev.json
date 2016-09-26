@@ -1,8 +1,10 @@
 {
-  "realm": "master",
-  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApLEM0wpm/RpNNQ/4HVBc4PEKAXBWVQftEBkXYaXnRu1ulLonT7nxT6tcmd+btwLfiUw9ijcJOVLRlKyMys6cQjSgSyhLhFP3WURL57qiwMqAd/6QJVIhmm7rQmKOR5z7AzRZeXwS6qF846nM31vpjQsfMDx2TFk5aoLT5Xx57zF5zmuixaHttjkvlFPJHeVPr8Wn/MRfTvini3sjxjShhAM+x7TOHTTXRdq9TrrI0JEp6dwtnw9gB7CHuLOerYDGL7ZCPkd2u1JLPKOV3ea72G291HH4xhoZy4dvAeq3WOHQqKZrIiCmRvZkq2JdBXCxUORkxhmXA1WmXWzWF9fOzwIDAQAB",
-  "auth-server-url": "http://localhost:8081/auth",
+  "realm": "staging",
+  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmYiTHrPTk4ZsbZ2kJdgj2KhC2aPxd6mnBKe3OGtftO+7YdIxZzW2CeZ+pi5gq1AeSw/zVAAGwQey63YCdlVseIDT2bFYxB28Qef9P4JP6qhbBhUTTMvX+65Xi9BhHK9XhYzQakK5p/lIsa6gjTVw9UAtqsDZHhqli1TvZlyCthph/OAH/unU64lUt8GiUeIPYnR1Lm4YbflhANOq3usY57wOaYEkUDOPnxbJX64kVt9Pds4pA3uiQEJ1pdT57c4g/PC5f7DYstDIMinW8sPsrQz9KIakgtn1iCfXX0Wh7fALhzkYFR0pZjqJCjNQFQkIhtupGSIweWD+25jpna+FEQIDAQAB",
+  "auth-server-url": "http://auth.icei.pucminas.br:8180/auth",
   "ssl-required": "external",
   "resource": "audit-view",
-  "public-client": true
+  "credentials": {
+    "secret": "6e77c01b-a692-4bcb-bf97-a10339c12af7"
+  }
 }
