@@ -7,7 +7,7 @@
   padding: 0 16px;
 }
 
-nav a {
+a {
   color: #8f8f8f;
   font-size: 14px;
   font-weight: 500;
@@ -16,8 +16,13 @@ nav a {
   text-decoration: none;
   vertical-align: middle;
   text-transform: uppercase;
+  cursor: pointer !important;
 }
 
-nav a.router-link-active {
+a.router-link-active {
   color: #106cc8;
+}
+
+a:hover {
+  cursor: pointer;
 }
