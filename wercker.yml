@@ -8,25 +8,26 @@ services:
 build:
   steps:
     - script:
-      name: "setup npm cache"
+      name: "Wait for POSTGRES connection"
       code: |
-         su ciuser
-         debug 'Creating $WERCKER_CACHE_DIR/wercker/npm'
-         mkdir -p $WERCKER_CACHE_DIR/wercker/npm
-         debug 'Creating $WERCKER_CACHE_DIR/wercker/node_modules'
-         mkdir -p $WERCKER_CACHE_DIR/wercker/node_modules
-         debug 'Configuring npm to use wercker cache'
-         npm config set cache $WERCKER_CACHE_DIR/wercker/npm
-         rm -rf $WERCKER_SOURCE_DIR/node_modules
-         ln -s $WERCKER_CACHE_DIR/node_modules $WERCKER_SOURCE_DIR/node_modules
-    - script: 
-      name: "Wait for POSTGRES connection" 
-      code: | 
         echo "Postgresql on $POSTGRES_PORT_5432_TCP_ADDR $POSTGRES_PORT_5432_TCP_PORT"
-        while ! pg_isready -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT 
-        do 
-          sleep 3; 
+        while ! pg_isready -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT
+        do
+          sleep 3;
         done
+#    - script:
+#      name: "setup npm cache"
+#      code: |
+#         su ciuser
+#         debug 'Creating $WERCKER_CACHE_DIR/wercker/npm'
+#         mkdir -p $WERCKER_CACHE_DIR/wercker/npm
+#         debug 'Creating $WERCKER_CACHE_DIR/wercker/node_modules'
+#         mkdir -p $WERCKER_CACHE_DIR/wercker/node_modules
+#         debug 'Configuring npm to use wercker cache'
+#         npm config set cache $WERCKER_CACHE_DIR/wercker/npm
+#         rm -rf $WERCKER_SOURCE_DIR/client/node_modules
+#         ln -s $WERCKER_CACHE_DIR/node_modules $WERCKER_SOURCE_DIR/client/node_modules
+
     - script:
       name: "start display"
       code: |
@@ -38,7 +39,11 @@ build:
         export DISPLAY=:99
         export GRADLE_USER_HOME=$WERCKER_CACHE_DIR/gradle
         export SPRING_PROFILES_ACTIVE=ci
-        ./gradlew build
+        if [ -e src/main/resources/application-test.properties ]
+        then
+          rm src/main/resources/application-test.properties
+        fi
+        ./gradlew test
     - script:
       name: build docs
       code: |
