@@ -1,10 +1,10 @@
-import { Client2Page } from './app.po';
+import { AuditViewPage } from './app.po';
 
-describe('client2 App', function() {
-  let page: Client2Page;
+describe('audit-view App', function() {
+  let page: AuditViewPage;
 
   beforeEach(() => {
-    page = new Client2Page();
+    page = new AuditViewPage();
   });
 
   it('should display message saying app works', () => {

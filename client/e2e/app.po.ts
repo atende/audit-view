@@ -1,6 +1,6 @@
-import { browser, element, by } from 'protractor/globals';
+import { browser, element, by } from 'protractor';
 
-export class Client2Page {
+export class AuditViewPage {
   navigateTo() {
     return browser.get('/');
   }

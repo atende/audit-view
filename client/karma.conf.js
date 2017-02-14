@@ -17,6 +17,9 @@ module.exports = function (config) {
     preprocessors: {
       './src/test.ts': ['angular-cli']
     },
+    mime: {
+      'text/x-typescript': ['ts','tsx']
+    },
     remapIstanbulReporter: {
       reports: {
         html: 'coverage',
@@ -27,19 +30,14 @@ module.exports = function (config) {
       config: './angular-cli.json',
       environment: 'dev'
     },
-    reporters: ['progress', 'karma-remap-istanbul'],
+    reporters: config.angularCli && config.angularCli.codeCoverage
+              ? ['progress', 'karma-remap-istanbul']
+              : ['progress'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome_No_Sandbox'],
-    // you can define custom flags
-    customLaunchers: {
-      Chrome_No_Sandbox: {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
-      }
-    },
+    browsers: ['Chrome'],
     singleRun: false
   });
 };
