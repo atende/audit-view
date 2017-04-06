@@ -1,10 +1,10 @@
-import { AuditViewPage } from './app.po';
+import { Angular01Page } from './app.po';
 
-describe('audit-view App', function() {
-  let page: AuditViewPage;
+describe('angular01 App', () => {
+  let page: Angular01Page;
 
   beforeEach(() => {
-    page = new AuditViewPage();
+    page = new Angular01Page();
   });
 
   it('should display message saying app works', () => {
