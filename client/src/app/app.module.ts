@@ -9,12 +9,17 @@ import { AppComponent } from './app.component';
 import { HomeModule } from './+home/home.module';
 import { SearchModule } from './+search/search.module';
 import {SharedModule} from "./shared/shared.module";
+import { AuthModule, InitOptions } from "angular-spa";
+
+import {environment} from '../environments/environment';
+
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    AuthModule,
     BrowserModule,
     SharedModule,
     HttpModule,
@@ -23,7 +28,15 @@ import {SharedModule} from "./shared/shared.module";
     SearchModule
   ],
   providers: [
-    appRoutingProviders
+    appRoutingProviders,
+    {
+      provide: InitOptions,
+      useValue: {
+        url: environment.keycloak.url,
+        realm: environment.keycloak.realm,
+        clientId: environment.keycloak.clientId
+      }
+    }
   ],
   bootstrap: [AppComponent]
 })
