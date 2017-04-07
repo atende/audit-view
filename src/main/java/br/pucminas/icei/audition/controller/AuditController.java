@@ -1,5 +1,6 @@
 package br.pucminas.icei.audition.controller;
 
+import br.pucminas.icei.audition.dto.SearchResponse;
 import br.pucminas.icei.audition.repository.AuditEventRepository;
 import info.atende.audition.model.AuditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,11 @@ public class AuditController {
     AuditEventRepository auditEventRepository;
 
     @RequestMapping(value="/search", method = RequestMethod.POST, consumes = { "application/json" } )
-    public ResponseEntity<List<AuditEvent>> searchWithoutDate(@RequestBody Map<String, Object> filtro){
+    public ResponseEntity<SearchResponse> searchWithoutDate(@RequestBody Map<String, Object> filtro){
 
         Map<String, Object> novoFiltro = filterBlankParameter(filtro);
         novoFiltro = deleteFilterDate(novoFiltro);
-        List<AuditEvent> result = auditEventRepository.searchWithoutDate(novoFiltro);
+        SearchResponse result = auditEventRepository.searchWithoutDate(novoFiltro);
 
         return ResponseEntity.ok(result);
     }

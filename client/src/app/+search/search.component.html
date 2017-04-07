@@ -58,7 +58,7 @@
     </div>
 
     <div class="col-sm-9">
-      <p-dataTable paginator="true" [rows]="100"  [value]="eventos">
+      <p-dataTable paginator="true" lazy="true" [totalRecords]="totalRecords" (onLazyLoad)="onLazyLoad($event)" [rows]="100"  [value]="eventos">
         <p-column field="id" header="ID"></p-column>
         <p-column field="applicationName" header="Application"></p-column>
         <p-column field="userName" header="User"></p-column>

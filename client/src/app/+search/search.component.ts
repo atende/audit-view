@@ -28,6 +28,8 @@ export class SearchComponent implements OnInit {
   dateEnd;
   filtrados: any = [];
 
+  totalRecords = 0
+
   constructor(private http: Http) {
 
   }
@@ -61,8 +63,11 @@ export class SearchComponent implements OnInit {
     if (this.checkDate()) {
       let url = 'rest/auditevent/search/dates/' + this.dateStart + '/' + this.dateEnd;
       this.http.post(url, this.filtro).subscribe(r => {
-        let data = r.json();
+        let response = r.json();
+        let data = response.data
+        let total = response.total
         this.eventos = data;
+        this.totalRecords = total
       });
     }
   }
@@ -70,15 +75,27 @@ export class SearchComponent implements OnInit {
   searchWithoutDate() {
     let url = 'rest/auditevent/search';
     this.http.post(url, this.filtro).subscribe(r => {
-      this.eventos = r.json();
+      let response = r.json();
+      let data = response.data
+      let total = response.total
+      this.eventos = data;
+      this.totalRecords = total
     });
   };
 
   popular() {
     if (this.checkDate()) {
       this.http.post('rest/auditevent/search', this.filtro).subscribe(function (r) {
-        this.eventos = r.json();
+        let response = r.json();
+        let data = response.data
+        let total = response.total
+        this.eventos = data;
+        this.totalRecords = total
       });
     }
+  }
+
+  onLazyLoad(event) {
+    console.info(event)
   }
 }

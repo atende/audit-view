@@ -4,6 +4,7 @@ package br.pucminas.icei.audition.repository;
  * @author Claudinei Gomes Mendes
  */
 
+import br.pucminas.icei.audition.dto.SearchResponse;
 import info.atende.audition.model.AuditEvent;
 import info.atende.audition.model.SecurityLevel;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Repository
@@ -29,7 +27,7 @@ public class AuditEventRepository {
     private EntityManager em;
 
     public List<AuditEvent> searchIncludeDate(Map<String, Object> filtro, Object dateStart, Object dateEnd){
-        List<AuditEvent> list1 = searchWithoutDate(filtro);
+        List<AuditEvent> list1 = searchWithoutDate(filtro).getData();
         List<AuditEvent> list2 = searchDate(dateStart, dateEnd);
 
         return intersection(list1, list2);
@@ -41,12 +39,12 @@ public class AuditEventRepository {
     }
 
 
-    public List<AuditEvent> searchWithoutDate(Map<String, Object> filtro){
+    public SearchResponse searchWithoutDate(Map<String, Object> filtro){
         String securityLevel = (String) filtro.get("securityLevel");
         if(securityLevel != null){
             filtro.put("securityLevel", SecurityLevel.valueOf(securityLevel));
         }
-        return buildQuery(filtro).getResultList();
+        return buildQuery(filtro);
     }
 
     public List<String> listApplicationNames(){
@@ -59,12 +57,10 @@ public class AuditEventRepository {
                 .setParameter("dateEnd", dateEnd).getResultList();
     }
 
-    private TypedQuery<AuditEvent> buildQuery(Map<String, Object> filtro) {
+    private SearchResponse buildQuery(Map<String, Object> filtro) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AuditEvent> q = cb.createQuery(AuditEvent.class);
         Root<AuditEvent> root = q.from(AuditEvent.class);
-
-        q.select(root);
 
 
         List<Predicate> predicates = new ArrayList();
@@ -80,10 +76,19 @@ public class AuditEventRepository {
             }
             it.remove(); // avoids a ConcurrentModificationException
         }
+
+        // Query for count
+
+
         CriteriaQuery<AuditEvent> where = q.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
+        Long countResult = JpaUtils.count(em, where);
+        q.select(root);
         where.orderBy(cb.asc(root.get("dateTime")));
-        return em.createQuery(where);
+
+        TypedQuery<AuditEvent> query = em.createQuery(where);
+        List<AuditEvent> result = query.getResultList();
+        return new SearchResponse(countResult, result);
 
     }
 
