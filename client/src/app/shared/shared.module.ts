@@ -11,7 +11,7 @@ import { NavbarComponent } from './navbar/index';
  */
 
 @NgModule({
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   declarations: [ToolbarComponent, NavbarComponent],
   exports: [ToolbarComponent, NavbarComponent,
     CommonModule, FormsModule, RouterModule]

@@ -10,10 +10,10 @@ import {Http} from '@angular/http';
   styleUrls: ['search.component.css']
 })
 export class SearchComponent implements OnInit {
-  filtro = {};
+  filtro: any = {};
   criticidades = ['LOW', 'NORMAL', 'HIGHT'];
   aplicacoes = [];
-  logSelecionado = {
+  logSelecionado: any = {
     resource: {},
     dateTime: {}
   };
@@ -26,7 +26,7 @@ export class SearchComponent implements OnInit {
   maxSize = 10;
   dateStart;
   dateEnd;
-  filtrados = [];
+  filtrados: any = [];
 
   constructor(private http: Http) {
 

@@ -6,23 +6,21 @@ import { HttpModule } from '@angular/http';
 import {routing, appRoutingProviders} from './app.routes';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './+home/home.component';
-import { SearchComponent } from './+search/search.component';
-import {ToolbarComponent, NavbarComponent} from './shared/index'
+import { HomeModule } from './+home/home.module';
+import { SearchModule } from './+search/search.module';
+import {SharedModule} from "./shared/shared.module";
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ToolbarComponent,
-    NavbarComponent,
-    HomeComponent,
-    SearchComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
+    SharedModule,
     HttpModule,
-    routing
+    routing,
+    HomeModule,
+    SearchModule
   ],
   providers: [
     appRoutingProviders
