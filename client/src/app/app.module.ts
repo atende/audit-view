@@ -1,14 +1,15 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
-import { HttpModule } from "@angular/http";
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 
-import { appRoutingProviders, routing } from "./app.routes";
+import {routing, appRoutingProviders} from './app.routes';
 
-import { AppComponent } from "./app.component";
-import { HomeModule } from "./+home/home.module";
-import { SearchModule } from "./+search/search.module";
+import { AppComponent } from './app.component';
 import { SharedModule } from "./shared/shared.module";
 import { AuthModule, InitOptions } from 'angular-spa';
+import { HomeModule } from "./+home/home.module";
+import { SearchModule } from "./+search/search.module";
+
 import { environment } from '../environments/environment';
 
 
@@ -38,5 +39,4 @@ import { environment } from '../environments/environment';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }
