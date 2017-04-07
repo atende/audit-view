@@ -21,8 +21,7 @@
                  placeholder="dd/mm/aaaa --:--">
 
           <br><span>Data Fim: </span><br>
-          <input name="dataFim" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateEnd"
-                 placeholder="dd/mm/aaaa --:--">
+          <p-calendar name="dataFim" [(ngModel)]="dateEnd"></p-calendar>
 
           <br><span>Ip: </span><br>
           <input name="ip" type="text" class="input form-control primary-border" [(ngModel)]="filtro.ip" placeholder="IP">
