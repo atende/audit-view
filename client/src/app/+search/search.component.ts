@@ -29,7 +29,7 @@ export class SearchComponent implements OnInit {
   filtrados: any = [];
 
   totalRecords = 0
-
+  rows = 100
   constructor(private http: Http) {
 
   }
@@ -51,7 +51,7 @@ export class SearchComponent implements OnInit {
 
 
   popular() {
-    this.onLazyLoad({first: 0, rows: 100})
+    this.onLazyLoad({first: 0, rows: this.rows})
   }
 
   onLazyLoad(event) {
@@ -64,9 +64,6 @@ export class SearchComponent implements OnInit {
       requestHeaders.append("dateEnd", this.dateEnd)
 
     }
-    console.log(requestHeaders)
-    console.log(this.dateEnd)
-    console.log(this.dateStart)
     this.http.post(url, this.filtro, {headers: requestHeaders}).subscribe(r => {
       let response = r.json();
       let data = response.data

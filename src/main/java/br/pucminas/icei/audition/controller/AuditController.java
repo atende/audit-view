@@ -41,8 +41,6 @@ public class AuditController {
         novoFiltro = deleteFilterDate(novoFiltro);
 
         SearchResponse result =  null;
-        logger.error(dateStart.toString());
-        logger.error(dateEnd.toString());
         if(dateStart != null && dateEnd != null) {
             LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
             LocalDateTime dEnd = LocalDateTime.ofInstant(dateEnd.toInstant(), ZoneId.systemDefault());

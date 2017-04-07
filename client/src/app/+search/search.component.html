@@ -58,7 +58,12 @@
     </div>
 
     <div class="col-sm-9">
-      <p-dataTable paginator="true" lazy="true" [totalRecords]="totalRecords" (onLazyLoad)="onLazyLoad($event)" [rows]="100"  [value]="eventos">
+      <h1>Total: {{totalRecords}}</h1>
+      <div class="form-group">
+        <label>Results per page: </label><input type="number" [(ngModel)]="rows" placeholder="Results per page" />
+      </div>
+      <p-dataTable paginator="true" lazy="true" [totalRecords]="totalRecords" (onLazyLoad)="onLazyLoad($event)"
+                   [rows]="rows"  [value]="eventos">
         <p-column field="id" header="ID"></p-column>
         <p-column field="applicationName" header="Application"></p-column>
         <p-column field="userName" header="User"></p-column>
