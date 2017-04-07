@@ -62,8 +62,16 @@
       <div class="form-group">
         <label>Results per page: </label><input type="number" [(ngModel)]="rows" placeholder="Results per page" />
       </div>
-      <p-dataTable paginator="true" lazy="true" [totalRecords]="totalRecords" (onLazyLoad)="onLazyLoad($event)"
-                   [rows]="rows"  [value]="eventos">
+      <p-dataTable #dt paginator="true" lazy="true" [totalRecords]="totalRecords" (onLazyLoad)="onLazyLoad($event)"
+                   [rows]="rows"  [value]="eventos"
+                   exportFilename="audit_view">
+
+        <p-header>
+          <div class="ui-helper-clearfix">
+            <button type="button" pButton icon="fa-file-o" iconPos="left" label="CSV" (click)="dt.exportCSV()" style="float:left"></button>
+          </div>
+        </p-header>
+
         <p-column field="id" header="ID"></p-column>
         <p-column field="applicationName" header="Application"></p-column>
         <p-column field="userName" header="User"></p-column>
