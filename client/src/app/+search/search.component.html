@@ -57,55 +57,23 @@
       </div>
     </div>
 
-    <div class="container">
-      <div class="table-responsive tablescroll">
-        <table class="table table-hover table-condensed" id="tableMain">
-
-          <tr>
-            <th> ID
-              <span class="glyphicon glyphicon-menu-up"></span>
-              <span class="glyphicon glyphicon-menu-down"></span></th>
-            <th> Aplicação</th>
-            <th> Usuário</th>
-            <th> Ação</th>
-            <th> ResourceType</th>
-            <th> ResourceId</th>
-            <th> Data e Hora</th>
-            <th> IP</th>
-            <th> Criticidade</th>
-          </tr>
-
-
-          <tr *ngFor="let auditevent of eventos"
-              [style.background-color]="auditevent.id == logSelecionado.id ? 'lightgray' : ''"
-              (click)="clickTable(auditevent)"
-              data-toggle="modal" data-target="#myModal">
-            <td> {{ auditevent.id }}</td>
-            <td> {{ auditevent.applicationName }}</td>
-            <td> {{ auditevent.userName }}</td>
-            <td> {{ auditevent.action }}</td>
-            <td> {{ auditevent.resource.resourceType }}</td>
-            <td> {{ auditevent.resource.resourceId }}</td>
-            <td> {{ auditevent.dateTime[2] + '/' + auditevent.dateTime[1] + '/' + auditevent.dateTime[0] + ' ' +
-              auditevent.dateTime[3] + ':' + auditevent.dateTime[4] + ':' + auditevent.dateTime[5]}}
-            </td>
-            <td> {{ auditevent.ip }}</td>
-            <td> {{ auditevent.securityLevel }}</td>
-
-          </tr>
-
-          <tr [hidden]="eventos.length == 0 ">
-            <td colspan="9">
-              <div class="alert alert-info">
-                <p class="text-center">
-                  Nenhum resultado encontrado
-                </p>
-              </div>
-            </td>
-          </tr>
-
-        </table>
-      </div>
+    <div class="col-sm-9">
+      <p-dataTable paginator="true" [rows]="100"  [value]="eventos">
+        <p-column field="id" header="ID"></p-column>
+        <p-column field="applicationName" header="Application"></p-column>
+        <p-column field="userName" header="User"></p-column>
+        <p-column field="action" header="Action"></p-column>
+        <p-column field="resource.resourceType" header="Resource Type"></p-column>
+        <p-column field="resource.resourceId" header="Resource ID"></p-column>
+        <p-column field="dateTime" header="Date Time">
+          <template let-event="rowData" pTemplate type="body">
+            <span> {{event.dateTime[2] + '/' + event.dateTime[1] + '/' + event.dateTime[0] + ' ' +
+              event.dateTime[3] + ':' + event.dateTime[4] + ':' + event.dateTime[5]}}</span>
+          </template>
+        </p-column>
+        <p-column field="ip" header="IP Address"></p-column>
+        <p-column field="securityLevel" header="Security Level"></p-column>
+      </p-dataTable>
 
     </div>
 
