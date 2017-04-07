@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -26,38 +27,36 @@ public class AuditEventRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public List<AuditEvent> searchIncludeDate(Map<String, Object> filtro, Object dateStart, Object dateEnd){
-        List<AuditEvent> list1 = searchWithoutDate(filtro).getData();
-        List<AuditEvent> list2 = searchDate(dateStart, dateEnd);
-
-        return intersection(list1, list2);
-    }
-
     @Transactional
-    public void create(AuditEvent auditEvent){
+    public void create(AuditEvent auditEvent) {
         em.persist(auditEvent);
     }
 
 
-    public SearchResponse searchWithoutDate(Map<String, Object> filtro){
-        String securityLevel = (String) filtro.get("securityLevel");
-        if(securityLevel != null){
-            filtro.put("securityLevel", SecurityLevel.valueOf(securityLevel));
-        }
-        return buildQuery(filtro);
+    public SearchResponse search(Map<String, Object> filtro, Long start, Long max) {
+        return search(filtro, start, max, null, null);
     }
 
-    public List<String> listApplicationNames(){
+    public SearchResponse search(Map<String, Object> filtro, Long start, Long max,
+                                 LocalDateTime dStart, LocalDateTime dEnd) {
+
+        String securityLevel = (String) filtro.get("securityLevel");
+        if (securityLevel != null) {
+            filtro.put("securityLevel", SecurityLevel.valueOf(securityLevel));
+        }
+        return buildQuery(filtro, start, max, dStart, dEnd);
+
+    }
+
+    public List<String> listApplicationNames() {
         return em.createQuery("SELECT distinct e.applicationName from AuditEvent e").getResultList();
     }
 
-    public List<AuditEvent> searchDate(Object dateStart, Object dateEnd){
-        return em.createQuery("SELECT distinct e from AuditEvent e WHERE e.dateTime BETWEEN :dateStart AND :dateEnd ")
-                .setParameter("dateStart", dateStart)
-                .setParameter("dateEnd", dateEnd).getResultList();
-    }
-
-    private SearchResponse buildQuery(Map<String, Object> filtro) {
+    private SearchResponse buildQuery(Map<String, Object> filtro,
+                                      Long start,
+                                      Long max,
+                                      LocalDateTime dateStart,
+                                      LocalDateTime dateEnd) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AuditEvent> q = cb.createQuery(AuditEvent.class);
         Root<AuditEvent> root = q.from(AuditEvent.class);
@@ -67,17 +66,20 @@ public class AuditEventRepository {
 
         Iterator it = filtro.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
+            Map.Entry pair = (Map.Entry) it.next();
             String key = (String) pair.getKey();
-            if(key == "action") {
+            if (key == "action") {
                 predicates.add(cb.like(root.get(key), pair.getValue() + "%"));
-            }else {
+            } else {
                 predicates.add(cb.equal(root.get(key), pair.getValue()));
             }
             it.remove(); // avoids a ConcurrentModificationException
         }
 
-        // Query for count
+        // Dates
+        if (dateStart != null && dateEnd != null) {
+            predicates.add(cb.between(root.get("dateTime"), dateStart, dateEnd));
+        }
 
 
         CriteriaQuery<AuditEvent> where = q.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
@@ -87,23 +89,17 @@ public class AuditEventRepository {
         where.orderBy(cb.asc(root.get("dateTime")));
 
         TypedQuery<AuditEvent> query = em.createQuery(where);
+
+        // Pagination
+        if (start != null && max != null) {
+            query.setFirstResult(start.intValue())
+                    .setMaxResults(max.intValue());
+        }
+
         List<AuditEvent> result = query.getResultList();
         return new SearchResponse(countResult, result);
 
     }
 
-
-
-    public <T> List<T> intersection(List<T> list1, List<T> list2) {
-        List<T> list = new ArrayList<T>();
-
-        for (T t : list1) {
-            if(list2.contains(t)) {
-                list.add(t);
-            }
-        }
-
-        return list;
-    }
 
 }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, Headers} from '@angular/http';
 
 /**
  * This class represents the lazy loaded AboutComponent.
@@ -49,53 +49,30 @@ export class SearchComponent implements OnInit {
     this.logSelecionado = log;
   }
 
-  checkDate() {
-    let dataInicio = new Date(this.dateStart);
-    let dataFim = new Date(this.dateEnd);
-    if (dataInicio > dataFim) {
-      (<any>$('#myModal2')).modal('show');
-      return false;
-    }
-    return true;
+
+  popular() {
+    this.onLazyLoad({first: 0, rows: 100})
   }
 
-  searchIncludeDate() {
-    if (this.checkDate()) {
-      let url = 'rest/auditevent/search/dates/' + this.dateStart + '/' + this.dateEnd;
-      this.http.post(url, this.filtro).subscribe(r => {
-        let response = r.json();
-        let data = response.data
-        let total = response.total
-        this.eventos = data;
-        this.totalRecords = total
-      });
-    }
-  }
+  onLazyLoad(event) {
+    let requestHeaders = new Headers()
+    requestHeaders.append("first", event.first)
+    requestHeaders.append("max", event.first + event.rows)
+    let url = 'rest/auditevent/search'
+    if(this.dateStart != undefined && this.dateEnd != undefined) {
+      requestHeaders.append("dateStart", this.dateStart);
+      requestHeaders.append("dateEnd", this.dateEnd)
 
-  searchWithoutDate() {
-    let url = 'rest/auditevent/search';
-    this.http.post(url, this.filtro).subscribe(r => {
+    }
+    console.log(requestHeaders)
+    console.log(this.dateEnd)
+    console.log(this.dateStart)
+    this.http.post(url, this.filtro, {headers: requestHeaders}).subscribe(r => {
       let response = r.json();
       let data = response.data
       let total = response.total
       this.eventos = data;
       this.totalRecords = total
     });
-  };
-
-  popular() {
-    if (this.checkDate()) {
-      this.http.post('rest/auditevent/search', this.filtro).subscribe(function (r) {
-        let response = r.json();
-        let data = response.data
-        let total = response.total
-        this.eventos = data;
-        this.totalRecords = total
-      });
-    }
-  }
-
-  onLazyLoad(event) {
-    console.info(event)
   }
 }

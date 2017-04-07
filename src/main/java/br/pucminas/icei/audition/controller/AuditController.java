@@ -3,6 +3,8 @@ package br.pucminas.icei.audition.controller;
 import br.pucminas.icei.audition.dto.SearchResponse;
 import br.pucminas.icei.audition.repository.AuditEventRepository;
 import info.atende.audition.model.AuditEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +23,35 @@ import java.util.Map;
 @RestController
 @RequestMapping("/rest/auditevent")
 public class AuditController {
+
+    private Logger logger = LoggerFactory.getLogger(AuditController.class);
+
     @Autowired
     AuditEventRepository auditEventRepository;
 
     @RequestMapping(value="/search", method = RequestMethod.POST, consumes = { "application/json" } )
-    public ResponseEntity<SearchResponse> searchWithoutDate(@RequestBody Map<String, Object> filtro){
-
+    public ResponseEntity<SearchResponse> search(
+            @RequestBody Map<String, Object> filtro,
+            @RequestHeader(value = "dateStart", required = false) Date dateStart,
+            @RequestHeader(value = "dateEnd", required = false) Date dateEnd,
+            @RequestHeader(value = "first", required = false) Long start,
+            @RequestHeader(value = "max", required = false) Long max)
+    {
         Map<String, Object> novoFiltro = filterBlankParameter(filtro);
         novoFiltro = deleteFilterDate(novoFiltro);
-        SearchResponse result = auditEventRepository.searchWithoutDate(novoFiltro);
+
+        SearchResponse result =  null;
+        logger.error(dateStart.toString());
+        logger.error(dateEnd.toString());
+        if(dateStart != null && dateEnd != null) {
+            LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
+            LocalDateTime dEnd = LocalDateTime.ofInstant(dateEnd.toInstant(), ZoneId.systemDefault());
+            result = auditEventRepository.search(novoFiltro, start, max, dStart, dEnd);
+
+        }else {
+            result = auditEventRepository.search(novoFiltro, start, max);
+        }
+
 
         return ResponseEntity.ok(result);
     }
@@ -39,27 +61,6 @@ public class AuditController {
         auditEventRepository.create(auditevent);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-
-    @RequestMapping(value = "/applications", method = RequestMethod.GET)
-    public List<String> listarApplications(){
-        return auditEventRepository.listApplicationNames();
-    }
-
-    @RequestMapping(value = "/search/dates/{dateStart}/{dateEnd}", method = RequestMethod.POST)
-    public ResponseEntity<List<AuditEvent>> searchWithDate(@RequestBody Map<String, Object> filtro,
-                                                          @PathVariable("dateStart") Date dateStart, @PathVariable("dateEnd") Date dateEnd){
-
-
-        LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
-        LocalDateTime dEnd = LocalDateTime.ofInstant(dateEnd.toInstant(), ZoneId.systemDefault());
-
-        filtro = filterBlankParameter(filtro);
-
-        List<AuditEvent> result = auditEventRepository.searchIncludeDate(filtro, dStart, dEnd);
-        return ResponseEntity.ok(result);
-    }
-
 
 
     private Map<String, Object> filterBlankParameter(Map<String, Object> filtro){
