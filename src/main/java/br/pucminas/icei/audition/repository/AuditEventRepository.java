@@ -72,7 +72,12 @@ public class AuditEventRepository {
         Iterator it = filtro.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            predicates.add(cb.equal(root.get((String) pair.getKey()), pair.getValue()));
+            String key = (String) pair.getKey();
+            if(key == "action") {
+                predicates.add(cb.like(root.get(key), pair.getValue() + "%"));
+            }else {
+                predicates.add(cb.equal(root.get(key), pair.getValue()));
+            }
             it.remove(); // avoids a ConcurrentModificationException
         }
         CriteriaQuery<AuditEvent> where = q.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
