@@ -2,6 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule} from "@angular/platform-browser/animations"
 
 import { ToolbarComponent } from './toolbar/index';
 import { NavbarComponent } from './navbar/index';
@@ -13,10 +14,10 @@ import { CalendarModule } from "primeng/primeng"
  */
 
 @NgModule({
-  imports: [CommonModule, RouterModule, FormsModule, CalendarModule],
+  imports: [CommonModule, RouterModule, FormsModule, CalendarModule, BrowserAnimationsModule],
   declarations: [ToolbarComponent, NavbarComponent],
   exports: [ToolbarComponent, NavbarComponent,
-    CommonModule, FormsModule, RouterModule, CalendarModule]
+    CommonModule, FormsModule, RouterModule, CalendarModule, BrowserAnimationsModule]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
