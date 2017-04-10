@@ -9,8 +9,12 @@ import { SharedModule } from "./shared/shared.module";
 import { AuthModule, InitOptions } from 'angular-spa';
 import { HomeModule } from "./+home/home.module";
 import { SearchModule } from "./+search/search.module";
+import {GrowlModule} from 'primeng/primeng';
 
 import { environment } from '../environments/environment';
+import {Interceptor} from 'angular-http-interceptor'
+import {HttpStatusErrorInterceptor} from "./shared/interceptors/http-status-error";
+import {AppService} from "./app.service";
 
 
 @NgModule({
@@ -24,10 +28,17 @@ import { environment } from '../environments/environment';
     HttpModule,
     routing,
     HomeModule,
+    GrowlModule,
     SearchModule
   ],
   providers: [
     appRoutingProviders,
+    AppService,
+    {
+      provide: Interceptor,
+      useClass: HttpStatusErrorInterceptor,
+      multi: true
+    },
     {
       provide: InitOptions,
       useValue: {
