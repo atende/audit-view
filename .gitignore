@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 build/
+.DS_Store
 #src/main/resources/application-dev.properties
 *.iml
 /classes
