@@ -27,6 +27,7 @@ public class AuditController {
     public ResponseEntity<List<AuditEvent>> searchWithoutDate(@RequestBody Map<String, Object> filtro){
 
         Map<String, Object> novoFiltro = filterBlankParameter(filtro);
+        System.out.println(novoFiltro);
         novoFiltro = deleteFilterDate(novoFiltro);
         List<AuditEvent> result = auditEventRepository.searchWithoutDate(novoFiltro);
 
