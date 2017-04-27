@@ -60,8 +60,6 @@
             class="btn btn-primary btn-sm btn-block"> Pesquisar
           </button>
 
-          <!--<br> <datepicker />-->
-
         </form>
 
       </div>
@@ -69,7 +67,27 @@
 
     <div class="container">
       <div class="table-responsive tablescroll">
-        <table class="table table-hover table-condensed" id="tableMain">
+
+
+        <p-dataTable [value]="eventos"
+                     [rows]="10"
+                     [paginator]="true"
+                     [pageLinks]="3"
+                     [rowsPerPageOptions]="[5,10,20]">
+          <p-header>Lista de Eventos</p-header>
+          <p-column field="id" header="ID"></p-column>
+          <p-column field="applicationName" header="Aplicação"></p-column>
+          <p-column field="userName" header="Usuário"></p-column>
+          <p-column field="action" header="Ação"></p-column>
+          <p-column field="resource.resourceType" header="ResourceType"></p-column>
+          <p-column field="resource.resourceId" header="ResourceId"></p-column>
+          <p-column field="dateTime" header="Data e Hora"></p-column>
+          <p-column field="ip" header="IP"></p-column>
+          <p-column field="securityLevel" header="Criticidade"></p-column>
+        </p-dataTable>
+
+
+        <!--<table class="table table-hover table-condensed" id="tableMain">
 
           <tr>
             <th> ID
@@ -114,7 +132,8 @@
             </td>
           </tr>
 
-        </table>
+        </table>-->
+        <p-paginator rows="10" totalRecords="120" [rowsPerPageOptions]="[10,20,30]"></p-paginator>
       </div>
 
     </div>
