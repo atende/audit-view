@@ -27,7 +27,6 @@ public class AuditController {
     public ResponseEntity<List<AuditEvent>> searchWithoutDate(@RequestBody Map<String, Object> filtro){
 
         Map<String, Object> novoFiltro = filterBlankParameter(filtro);
-        System.out.println(novoFiltro);
         novoFiltro = deleteFilterDate(novoFiltro);
         List<AuditEvent> result = auditEventRepository.searchWithoutDate(novoFiltro);
 
@@ -104,7 +103,6 @@ public class AuditController {
             if(pair.getKey() == "dateStart" || pair.getKey() == "dateEnd"  || pair.getKey() == "timeStart" || pair.getKey() == "timeEnd") {
                 it.remove();
                 resp.remove(pair.getKey(), value);
-                System.out.println(pair.getKey() + " ---> " + pair.getValue());
             }
         }
 
