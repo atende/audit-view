@@ -45,6 +45,11 @@ public class AuditController {
         return auditEventRepository.listApplicationNames();
     }
 
+    @RequestMapping(value = "/resourcetypes", method = RequestMethod.GET)
+    public List<String> listResourceTypes(){
+        return auditEventRepository.listResourceTypes();
+    }
+
     @RequestMapping(value = "/search/dates/{dateStart}/{dateEnd}", method = RequestMethod.POST)
     public ResponseEntity<List<AuditEvent>> searchWithDate(@RequestBody Map<String, Object> filtro,
                                                           @PathVariable("dateStart") Date dateStart, @PathVariable("dateEnd") Date dateEnd){

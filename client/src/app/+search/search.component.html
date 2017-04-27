@@ -27,22 +27,32 @@
           <br><span>Ip: </span><br>
           <input name="ip" type="text" class="input form-control primary-border" [(ngModel)]="filtro.ip" placeholder="IP">
 
-
-          <br><br><select name="securitySevel" class="form-control"
+          <br>Criticidade
+          <br><select name="securitySevel" class="form-control"
                           [(ngModel)]="filtro.securityLevel">
 
-          <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
+          <option value="">---Criticidade---</option> <!-- not selected / blank option -->
           <option *ngFor="let crit  of criticidades" value="{{crit}}"> {{crit}}</option>
 
-        </select>
+          </select>
 
-          <select name="applicationName" class="form-control"
+          <br>Aplicação
+          <br><select name="applicationName" class="form-control"
                   [(ngModel)]="filtro.applicationName">
 
             <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
-            <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}"> {{aplic}}</option>
+            <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}" > {{aplic}}</option>
 
           </select>
+
+          <br>Resource Types
+          <br><select name="resourceTypes" class="form-control"
+                      [(ngModel)]="filtro.resourceType">
+
+          <option value="" selected>---Resource Types---</option> <!-- not selected / blank option -->
+          <option *ngFor="let retp  of resourcesTypes" value="{{retp}}"> {{retp}}</option>
+
+        </select>
 
           <br><br>
           <button

@@ -13,6 +13,7 @@ export class SearchComponent implements OnInit {
   filtro: any = {};
   criticidades = ['LOW', 'NORMAL', 'HIGHT'];
   aplicacoes = [];
+  resourcesTypes = [];
   logSelecionado: any = {
     resource: {},
     dateTime: {}
@@ -34,12 +35,19 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     this.loadApplications();
+    this.loadResourceTypes();
     this.popular();
   }
 
   loadApplications() {
     this.http.get('rest/auditevent/applications').subscribe(r => {
       this.aplicacoes = r.json();
+    });
+  };
+
+  loadResourceTypes() {
+    this.http.get('rest/auditevent/resourcetypes').subscribe(r => {
+      this.resourcesTypes = r.json();
     });
   };
 
