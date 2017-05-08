@@ -82,6 +82,18 @@ export class SearchComponent implements OnInit {
     });
   };
 
+  download() {
+    let url = 'rest/auditevent/planilha';
+    this.http.get(url, this.filtro).subscribe(r => {
+      // let blob: Blob = r.blob();
+      let blob = new Blob([r.arrayBuffer()], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;' });
+
+      window['saveAs'](blob, 'planilha.xls');
+
+      //console.log(r);
+    });
+  };
+
   popular() {
     if (this.checkDate()) {
       this.http.post('rest/auditevent/search', this.filtro).subscribe(function (r) {
