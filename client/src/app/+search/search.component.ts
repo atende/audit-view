@@ -1,5 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, RequestOptions, ResponseContentType} from '@angular/http';
+
+import { saveAs } from 'file-saver';
+import {Observable} from "rxjs/Observable";
+import generateId from "../shared/token/token";
 
 /**
  * This class represents the lazy loaded AboutComponent.
@@ -37,6 +41,9 @@ export class SearchComponent implements OnInit {
     this.loadApplications();
     this.loadResourceTypes();
     this.popular();
+
+    this.filtro.dateStart = "null";
+    this.filtro.dateEnd = "null";
   }
 
   loadApplications() {
@@ -65,34 +72,46 @@ export class SearchComponent implements OnInit {
     return true;
   }
 
-  searchIncludeDate() {
-    if (this.checkDate()) {
-      let url = 'rest/auditevent/search/dates/' + this.dateStart + '/' + this.dateEnd;
-      this.http.post(url, this.filtro).subscribe(r => {
-        let data = r.json();
-        this.eventos = data;
-      });
-    }
-  }
-
-  searchWithoutDate() {
+  search(){
     let url = 'rest/auditevent/search';
+
+    if(this.dateStart != undefined && this.dateEnd != undefined){
+      this.filtro.dateStart = this.dateStart;
+      this.filtro.dateEnd = this.dateEnd;
+    }else{
+      this.filtro.dateStart = "null";
+      this.filtro.dateEnd = "null";
+    }
+
     this.http.post(url, this.filtro).subscribe(r => {
-      this.eventos = r.json();
+      let data = r.json();
+      this.eventos = data;
     });
-  };
+  }
 
   download() {
     let url = 'rest/auditevent/planilha';
-    this.http.get(url, this.filtro).subscribe(r => {
-      // let blob: Blob = r.blob();
+    var token = generateId(6);
+
+    this.http.post(url, {token: token}).subscribe(r => {
+      //let blob: Blob = r.blob();
       let blob = new Blob([r.arrayBuffer()], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;' });
 
       window['saveAs'](blob, 'planilha.xls');
 
+      saveAs(blob, 'planilha.xls');
+
+
+      // var contentType = 'application/vnd.ms-excel';
+      // var blob = new Blob([r.text()], { type: contentType });
+      //
+      // saveAs(blob, 'planilha.xls');
+
+
       //console.log(r);
     });
   };
+
 
   popular() {
     if (this.checkDate()) {
