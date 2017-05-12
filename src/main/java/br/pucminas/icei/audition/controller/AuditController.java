@@ -154,6 +154,15 @@ public class AuditController {
         List<AuditEvent> result = null;
         String token = null;
 
+        String PATH = System.getProperty("user.dir") + "/filesCSV";
+
+        File directory = new File(PATH);
+        if (! directory.exists()){
+            directory.mkdir();
+            // If you require it to make the entire directory path including parents,
+            // use directory.mkdirs(); here instead.
+        }
+
         if(filtro.get("token") != null){
             token = filtro.get("token").toString();
             filtro.remove("token");
@@ -192,7 +201,7 @@ public class AuditController {
 
 
         if(token != null){
-            String fileName = token + ".csv";
+            String fileName = PATH + "/" + token + ".csv";
             writeToCSV(result, fileName);
 
             try {
