@@ -6,8 +6,10 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.util.IOUtils;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,6 +60,11 @@ public class AuditController {
     public ResponseEntity<List<AuditEvent>> search(@RequestBody Map<String, Object> filtro){
 
         List<AuditEvent> result = null;
+        String token = null;
+        if(filtro.get("token") != null){
+            token = filtro.get("token").toString();
+            filtro.remove("token");
+        }
 
         if( !filtro.get("dateStart").toString().equals("null") &&
             !filtro.get("dateEnd").toString().equals("null")){
@@ -90,6 +97,9 @@ public class AuditController {
             result = auditEventRepository.searchWithoutDate(novoFiltro);
         }
 
+        if(token != null){
+            toExcel(result, token);
+        }
 
         return ResponseEntity.ok(result);
     }
@@ -140,39 +150,145 @@ public class AuditController {
     @RequestMapping(value = "/planilha", method = RequestMethod.POST)
     public void getFile( @RequestBody Map<String, Object> filtro,
                          HttpServletResponse response ) {
-        String token = filtro.get("token").toString();
-        String fileName = token + ".xls";
 
-        /*if(filtro.get("date").toString().equals("null")){
-            searchWithDate()
-        }*/
+        List<AuditEvent> result = null;
+        String token = null;
 
-        try {
-            // get your file as InputStream
-            File initialFile = new File(fileName);
-            InputStream is = new FileInputStream(initialFile);
-            // copy it to response's OutputStream
-            response.setContentType("application/xls");
-            response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-            IOUtils.copy(is, response.getOutputStream());
-
-            response.flushBuffer();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException("IOError writing file to output stream");
+        if(filtro.get("token") != null){
+            token = filtro.get("token").toString();
+            filtro.remove("token");
         }
+
+        if( !filtro.get("dateStart").toString().equals("null") &&
+                !filtro.get("dateEnd").toString().equals("null")){
+
+            Date dateStart = null;
+            Date dateEnd = null;
+            try {
+                dateStart = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
+                        .parse(filtro.get("dateStart").toString());
+                dateEnd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
+                        .parse(filtro.get("dateEnd").toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if(dateStart != null && dateEnd != null){
+                LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
+                LocalDateTime dEnd = LocalDateTime.ofInstant(dateEnd.toInstant(), ZoneId.systemDefault());
+                filtro = filterBlankParameter(filtro);
+
+                filtro.remove("dateStart");
+                filtro.remove("dateEnd");
+
+                result = auditEventRepository.searchIncludeDate(filtro, dStart, dEnd);
+            }
+        }else{
+            Map<String, Object> novoFiltro = filterBlankParameter(filtro);
+            novoFiltro = deleteFilterDate(novoFiltro);
+            filtro.remove("dateStart");
+            filtro.remove("dateEnd");
+            result = auditEventRepository.searchWithoutDate(novoFiltro);
+        }
+
+
+        if(token != null){
+            String fileName = token + ".csv";
+            writeToCSV(result, fileName);
+
+            try {
+                // get your file as InputStream
+                File initialFile = new File(fileName);
+                InputStream is = new FileInputStream(initialFile);
+                // copy it to response's OutputStream
+                response.setContentType("application/csv");
+
+                IOUtils.copy(is, response.getOutputStream());
+
+                response.flushBuffer();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                throw new RuntimeException("IOError writing file to output stream");
+            }
+
+            try {
+                Path fileToDeletePath = Paths.get(fileName);
+                Files.delete(fileToDeletePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
 
     }
 
+    //European countries use ";" as
+    //CSV separator because "," is their digit separator
+    private final String CSV_SEPARATOR = ",";
+    private  void writeToCSV(List<AuditEvent> list, String fileName) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
+            StringBuffer oneLine = new StringBuffer();
+            oneLine.append("Id");
+            oneLine.append(CSV_SEPARATOR);
+            oneLine.append("Application Name");
+            oneLine.append(CSV_SEPARATOR);
+            oneLine.append("User Name");
+            oneLine.append(CSV_SEPARATOR);
+            oneLine.append("Action");
+            oneLine.append(CSV_SEPARATOR);
+            oneLine.append("Resource Type");
+            oneLine.append(CSV_SEPARATOR);
+            oneLine.append("Resource Id");
+            oneLine.append(CSV_SEPARATOR);
+            oneLine.append("Date");
+            oneLine.append(CSV_SEPARATOR);
+            oneLine.append("Ip");
+            oneLine.append(CSV_SEPARATOR);
+            oneLine.append("Security Level");
+            bw.write(oneLine.toString());
+            bw.newLine();
 
-    public void toExcel(List<AuditEvent> list, String fileName){
+            for (AuditEvent cd : list) {
+                oneLine = new StringBuffer();
+
+                oneLine.append(cd.getId());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(cd.getApplicationName());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(cd.getUserName());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(cd.getAction());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(cd.getResource().getResourceType());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(cd.getResource().getResourceId());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(cd.getDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(cd.getIp());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(cd.getSecurityLevel().toString());
+                bw.write(oneLine.toString());
+                bw.newLine();
+            }
+            bw.flush();
+            bw.close();
+        } catch (UnsupportedEncodingException e) {
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+    }
+
+
+    public byte[] toExcel(List<AuditEvent> list, String fileName){
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet firstSheet = workbook.createSheet("Resultados do Filtro - AuditView");
 
         FileOutputStream fos = null;
 
         try {
-            fos = new FileOutputStream(new File(fileName));
+            fos = new FileOutputStream(new File(fileName + ".xls"));
 
             // Este trecho obtem uma lista de objetos do tipo CD
             // do banco de dados através de um DAO e itera sobre a lista
@@ -211,6 +327,7 @@ public class AuditController {
 
             workbook.write(fos);
 
+
         } catch (Exception e) {
             System.out.println("Erro ao exportar arquivo");
             e.printStackTrace();
@@ -222,5 +339,6 @@ public class AuditController {
                 e.printStackTrace();
             }
         }
+        return workbook.getBytes();
     }
 }

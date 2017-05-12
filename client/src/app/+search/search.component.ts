@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Http, RequestOptions, ResponseContentType} from '@angular/http';
+import {Http, RequestOptions, Headers} from '@angular/http';
 
 import { saveAs } from 'file-saver';
 import {Observable} from "rxjs/Observable";
@@ -72,7 +72,7 @@ export class SearchComponent implements OnInit {
     return true;
   }
 
-  search(){
+  search(down){
     let url = 'rest/auditevent/search';
 
     if(this.dateStart != undefined && this.dateEnd != undefined){
@@ -82,33 +82,35 @@ export class SearchComponent implements OnInit {
       this.filtro.dateStart = "null";
       this.filtro.dateEnd = "null";
     }
-
-    this.http.post(url, this.filtro).subscribe(r => {
-      let data = r.json();
-      this.eventos = data;
-    });
+    if(down == false){
+      this.http.post(url, this.filtro).subscribe(r => {
+        let data = r.json();
+        this.eventos = data;
+      });
+    }else{
+      this.http.post(url, this.filtro).subscribe(r => {
+        let data = r.json();
+        this.eventos = data;
+        this.filtro.token = generateId(6);
+        this.download();
+      });
+    }
   }
 
   download() {
+    this.filtro.token = generateId(6);
+
     let url = 'rest/auditevent/planilha';
-    var token = generateId(6);
 
-    this.http.post(url, {token: token}).subscribe(r => {
-      //let blob: Blob = r.blob();
-      let blob = new Blob([r.arrayBuffer()], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;' });
+    this.http.post(url, this.filtro).subscribe(r => {
 
-      window['saveAs'](blob, 'planilha.xls');
+      var contentType = {type: "application/csv"}
+      var blob = new Blob([r.arrayBuffer()], contentType);
 
-      saveAs(blob, 'planilha.xls');
+      console.log(r)
+      console.log(blob)
 
-
-      // var contentType = 'application/vnd.ms-excel';
-      // var blob = new Blob([r.text()], { type: contentType });
-      //
-      // saveAs(blob, 'planilha.xls');
-
-
-      //console.log(r);
+      saveAs(blob, 'planilha.csv');
     });
   };
 

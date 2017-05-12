@@ -102,7 +102,7 @@ public class AuditEventRepository {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             String key = (String) pair.getKey();
-            if(key == "action") {
+            if(key.equals("action")) {
                 predicates.add(cb.like(root.get(key), pair.getValue() + "%"));
             }else {
                 predicates.add(cb.equal(root.get(key), pair.getValue()));
