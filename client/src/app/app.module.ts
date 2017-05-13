@@ -11,6 +11,7 @@ import { HomeModule } from "./+home/home.module";
 import { SearchModule } from "./+search/search.module";
 
 import { environment } from '../environments/environment';
+import {AppService} from "./app.service";
 
 
 @NgModule({
@@ -35,7 +36,7 @@ import { environment } from '../environments/environment';
         realm: environment.keycloak.realm,
         clientId: environment.keycloak.clientId
       }
-    }
+    }, AppService
   ],
   bootstrap: [AppComponent]
 })

@@ -87,10 +87,8 @@ public class AuditController {
         }
         if(accept != null && accept.equalsIgnoreCase("application/csv")){
             Worksheet worksheet = new Worksheet();
-
-            InputStream fileStream = worksheet.writeToCSV(result);
-
             try {
+                InputStream fileStream = worksheet.writeToCSV(result);
                 // get your file as InputStream
                 // copy it to response's OutputStream
                 response.setContentType("application/csv");
@@ -100,7 +98,7 @@ public class AuditController {
                 response.flushBuffer();
             } catch (IOException ex) {
                 logger.error(ex.getMessage());
-                throw new RuntimeException("IOError writing file to output stream");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
             }
             // Close response and return OK
             return ResponseEntity.ok().build();

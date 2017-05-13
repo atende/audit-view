@@ -22,12 +22,10 @@ public class Worksheet {
     //CSV separator because "," is their digit separator
     private final String CSV_SEPARATOR = ",";
 
-    public InputStream writeToCSV(List<AuditEvent> list) {
-
-
+    public InputStream writeToCSV(List<AuditEvent> list) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
         try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
             StringBuffer oneLine = new StringBuffer();
             oneLine.append("Id");
             oneLine.append(CSV_SEPARATOR);
@@ -72,25 +70,26 @@ public class Worksheet {
                 bw.write(oneLine.toString());
                 bw.newLine();
             }
-            bw.flush();
-            bw.close();
+
         } catch (IOException e) {
             logger.error(e.getMessage());
+            throw e;
+        } finally {
+            bw.flush();
+            bw.close();
         }
         InputStream in = new ByteArrayInputStream(out.toByteArray());
-        return in;
+        throw new IOException("Teste");
+//        return in;
     }
 
 
-    public byte[] toExcel(List<AuditEvent> list) {
+    public InputStream toExcel(List<AuditEvent> list) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet firstSheet = workbook.createSheet("Resultados do Filtro - AuditView");
 
-        FileOutputStream fos = null;
-
         try {
-            File file = new File("search" + ".xls");
-            fos = new FileOutputStream(file);
 
             // Este trecho obtem uma lista de objetos do tipo CD
             // do banco de dados através de um DAO e itera sobre a lista
@@ -127,20 +126,16 @@ public class Worksheet {
 
             } // fim do for
 
-            workbook.write(fos);
+            workbook.write(out);
 
 
-        } catch (Exception e) {
-            System.out.println("Erro ao exportar arquivo");
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw e;
         } finally {
-            try {
-                fos.flush();
-                fos.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            out.flush();
+            out.close();
         }
-        return workbook.getBytes();
+        ByteArrayInputStream in = new ByteArrayInputStream(workbook.getBytes());
+        return in;
     }
 }
