@@ -79,8 +79,7 @@ public class Worksheet {
             bw.close();
         }
         InputStream in = new ByteArrayInputStream(out.toByteArray());
-        throw new IOException("Teste");
-//        return in;
+        return in;
     }
 
 
