@@ -7,6 +7,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.util.IOUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
@@ -36,6 +38,9 @@ import java.util.*;
 @RestController
 @RequestMapping("/rest/auditevent")
 public class AuditController {
+
+    private Logger logger = LoggerFactory.getLogger(AuditController.class);
+
     @Autowired
     AuditEventRepository auditEventRepository;
 
@@ -57,14 +62,12 @@ public class AuditController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ResponseEntity<List<AuditEvent>> search(@RequestBody Map<String, Object> filtro){
+    public ResponseEntity search(@RequestBody Map<String, Object> filtro,
+                                                   @RequestHeader("Accept") String accept,
+                                                   HttpServletResponse response){
 
         List<AuditEvent> result = null;
-        String token = null;
-        if(filtro.get("token") != null){
-            token = filtro.get("token").toString();
-            filtro.remove("token");
-        }
+        String PATH = System.getProperty("user.dir") + "/filesCSV";
 
         if( !filtro.get("dateStart").toString().equals("null") &&
             !filtro.get("dateEnd").toString().equals("null")){
@@ -96,9 +99,33 @@ public class AuditController {
             filtro.remove("dateEnd");
             result = auditEventRepository.searchWithoutDate(novoFiltro);
         }
+        if(accept != null && accept.equalsIgnoreCase("application/csv")){
+//            toExcel(result);
+            String fileName = PATH + "/" + "search" + ".xls";
+            writeToCSV(result, fileName);
 
-        if(token != null){
-            toExcel(result, token);
+            try {
+                // get your file as InputStream
+                File initialFile = new File(fileName);
+                InputStream is = new FileInputStream(initialFile);
+                // copy it to response's OutputStream
+                response.setContentType("application/csv");
+
+                IOUtils.copy(is, response.getOutputStream());
+
+                response.flushBuffer();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                throw new RuntimeException("IOError writing file to output stream");
+            }
+
+            try {
+                Path fileToDeletePath = Paths.get(fileName);
+                Files.delete(fileToDeletePath);
+            } catch (IOException e) {
+                logger.error("There is a error deleting a file: " + e.getMessage());
+            }
+            return ResponseEntity.ok().build();
         }
 
         return ResponseEntity.ok(result);
@@ -145,90 +172,6 @@ public class AuditController {
         }
 
         return resp;
-    }
-
-    @RequestMapping(value = "/planilha", method = RequestMethod.POST)
-    public void getFile( @RequestBody Map<String, Object> filtro,
-                         HttpServletResponse response ) {
-
-        List<AuditEvent> result = null;
-        String token = null;
-
-        String PATH = System.getProperty("user.dir") + "/filesCSV";
-
-        File directory = new File(PATH);
-        if (! directory.exists()){
-            directory.mkdir();
-            // If you require it to make the entire directory path including parents,
-            // use directory.mkdirs(); here instead.
-        }
-
-        if(filtro.get("token") != null){
-            token = filtro.get("token").toString();
-            filtro.remove("token");
-        }
-
-        if( !filtro.get("dateStart").toString().equals("null") &&
-                !filtro.get("dateEnd").toString().equals("null")){
-
-            Date dateStart = null;
-            Date dateEnd = null;
-            try {
-                dateStart = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-                        .parse(filtro.get("dateStart").toString());
-                dateEnd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-                        .parse(filtro.get("dateEnd").toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if(dateStart != null && dateEnd != null){
-                LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
-                LocalDateTime dEnd = LocalDateTime.ofInstant(dateEnd.toInstant(), ZoneId.systemDefault());
-                filtro = filterBlankParameter(filtro);
-
-                filtro.remove("dateStart");
-                filtro.remove("dateEnd");
-
-                result = auditEventRepository.searchIncludeDate(filtro, dStart, dEnd);
-            }
-        }else{
-            Map<String, Object> novoFiltro = filterBlankParameter(filtro);
-            novoFiltro = deleteFilterDate(novoFiltro);
-            filtro.remove("dateStart");
-            filtro.remove("dateEnd");
-            result = auditEventRepository.searchWithoutDate(novoFiltro);
-        }
-
-
-        if(token != null){
-            String fileName = PATH + "/" + token + ".csv";
-            writeToCSV(result, fileName);
-
-            try {
-                // get your file as InputStream
-                File initialFile = new File(fileName);
-                InputStream is = new FileInputStream(initialFile);
-                // copy it to response's OutputStream
-                response.setContentType("application/csv");
-
-                IOUtils.copy(is, response.getOutputStream());
-
-                response.flushBuffer();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                throw new RuntimeException("IOError writing file to output stream");
-            }
-
-            try {
-                Path fileToDeletePath = Paths.get(fileName);
-                Files.delete(fileToDeletePath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-
     }
 
     //European countries use ";" as
@@ -290,14 +233,15 @@ public class AuditController {
     }
 
 
-    public byte[] toExcel(List<AuditEvent> list, String fileName){
+    public byte[] toExcel(List<AuditEvent> list){
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet firstSheet = workbook.createSheet("Resultados do Filtro - AuditView");
 
         FileOutputStream fos = null;
 
         try {
-            fos = new FileOutputStream(new File(fileName + ".xls"));
+            File file = new File("search" + ".xls");
+            fos = new FileOutputStream(file);
 
             // Este trecho obtem uma lista de objetos do tipo CD
             // do banco de dados através de um DAO e itera sobre a lista

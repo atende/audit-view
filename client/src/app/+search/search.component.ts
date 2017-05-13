@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Http, RequestOptions, Headers} from '@angular/http';
+import {Http, RequestOptions, Response, Headers} from '@angular/http';
 
 import { saveAs } from 'file-saver';
-import {Observable} from "rxjs/Observable";
-import generateId from "../shared/token/token";
 
 /**
  * This class represents the lazy loaded AboutComponent.
@@ -82,36 +80,29 @@ export class SearchComponent implements OnInit {
       this.filtro.dateStart = "null";
       this.filtro.dateEnd = "null";
     }
-    if(down == false){
-      this.http.post(url, this.filtro).subscribe(r => {
-        let data = r.json();
-        this.eventos = data;
-      });
-    }else{
-      this.http.post(url, this.filtro).subscribe(r => {
-        let data = r.json();
-        this.eventos = data;
-        this.filtro.token = generateId(6);
-        this.download();
-      });
+    let headers = new Headers();
+    if(down) {
+      headers.append("Accept", "application/csv");
     }
+    this.http.post(url, this.filtro, {headers: headers}).subscribe(r => {
+      if(r.headers.get("Content-Type") == "application/csv") {
+        this.download(r);
+      }else {
+        let data = r.json();
+        this.eventos = data;
+      }
+    });
   }
 
-  download() {
-    this.filtro.token = generateId(6);
-
-    let url = 'rest/auditevent/planilha';
-
-    this.http.post(url, this.filtro).subscribe(r => {
+  download(response: Response) {
 
       var contentType = {type: "application/csv"}
-      var blob = new Blob([r.arrayBuffer()], contentType);
+      var blob = new Blob([response.arrayBuffer()], contentType);
 
-      console.log(r)
+      console.log(response)
       console.log(blob)
 
       saveAs(blob, 'planilha.csv');
-    });
   };
 
 
