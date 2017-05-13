@@ -95,53 +95,6 @@
         </p-dataTable>
 
 
-        <!--<table class="table table-hover table-condensed" id="tableMain">
-
-          <tr>
-            <th> ID
-              <span class="glyphicon glyphicon-menu-up"></span>
-              <span class="glyphicon glyphicon-menu-down"></span></th>
-            <th> Aplicação</th>
-            <th> Usuário</th>
-            <th> Ação</th>
-            <th> ResourceType</th>
-            <th> ResourceId</th>
-            <th> Data e Hora</th>
-            <th> IP</th>
-            <th> Criticidade</th>
-          </tr>
-
-
-          <tr *ngFor="let auditevent of eventos"
-              [style.background-color]="auditevent.id == logSelecionado.id ? 'lightgray' : ''"
-              (click)="clickTable(auditevent)"
-              data-toggle="modal" data-target="#myModal">
-            <td> {{ auditevent.id }}</td>
-            <td> {{ auditevent.applicationName }}</td>
-            <td> {{ auditevent.userName }}</td>
-            <td> {{ auditevent.action }}</td>
-            <td> {{ auditevent.resource.resourceType }}</td>
-            <td> {{ auditevent.resource.resourceId }}</td>
-            <td> {{ auditevent.dateTime[2] + '/' + auditevent.dateTime[1] + '/' + auditevent.dateTime[0] + ' ' +
-              auditevent.dateTime[3] + ':' + auditevent.dateTime[4] + ':' + auditevent.dateTime[5]}}
-            </td>
-            <td> {{ auditevent.ip }}</td>
-            <td> {{ auditevent.securityLevel }}</td>
-
-          </tr>
-
-          <tr [hidden]="eventos.length != 0 ">
-            <td colspan="9">
-              <div class="alert alert-info">
-                <p class="text-center">
-                  Nenhum resultado encontrado
-                </p>
-              </div>
-            </td>
-          </tr>
-
-        </table>-->
-        <!--<p-paginator rows="10" totalRecords="120" [rowsPerPageOptions]="[10,20,30]"></p-paginator>-->
       </div>
 
     </div>
@@ -224,22 +177,3 @@
       </div>
     </div>
   </div>
-
-
-
-<!--
-<p>
-  Um usuário com acesso ao sistema deve ser capaz de ver logs de auditoria.
-  O log deve possuir informações como:
-  Aplicação que gerou o log
-  Usuário que executou a ação
-  Ação
-  Data e Hora
-  IP de localização da máquina cliente
-  Criticidade - Indica o grau de criticidade da ação. Se baixo, normal ou alto. Logs com criticidade alta possuem um grau de sensibilidade maior, por exemplo: A ação de troca de senha de um usuário pode ter sensibilidade baixa, a ação de deletar multiplos usuários pode ter sensibilidade alta. Quem define isso é a aplicação.
-  Deve ser possível filtrar e pesquisar por qualquer uma das informações de log
-  Deve ser possível estender as informações de log, adicionando colunas sem que seja necessário programar nova versão do visualizador
-  Aplicação - Usuário - Ação - Data e Hora - IP - Criticidade
-  FILTRO PARA TODOS
-</p>
--->

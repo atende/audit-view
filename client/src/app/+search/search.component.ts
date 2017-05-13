@@ -20,16 +20,9 @@ export class SearchComponent implements OnInit {
     resource: {},
     dateTime: {}
   };
-  indexSelecionado = {};
-  filtrosDeAplicacao = [];
   eventos = [];
-  paginados = [];
-  currentPage = 1;
-  numPerPage = 11;
-  maxSize = 10;
   dateStart;
   dateEnd;
-  filtrados: any = [];
 
   constructor(private http: Http) {
 
@@ -84,32 +77,26 @@ export class SearchComponent implements OnInit {
     if(down) {
       headers.append("Accept", "application/csv");
     }
-    this.http.post(url, this.filtro, {headers: headers}).subscribe(r => {
-      if(r.headers.get("Content-Type") == "application/csv") {
-        this.download(r);
+    this.http.post(url, this.filtro, {headers: headers}).subscribe(response => {
+      if(response.headers.get("Content-Type") == "application/csv") {
+        this.download(response);
       }else {
-        let data = r.json();
-        this.eventos = data;
+        this.eventos = response.json();
       }
     });
   }
 
   download(response: Response) {
-
-      var contentType = {type: "application/csv"}
-      var blob = new Blob([response.arrayBuffer()], contentType);
-
-      console.log(response)
-      console.log(blob)
-
+      const contentType = {type: "application/csv"};
+      const blob = new Blob([response.arrayBuffer()], contentType);
       saveAs(blob, 'planilha.csv');
   };
 
 
   popular() {
     if (this.checkDate()) {
-      this.http.post('rest/auditevent/search', this.filtro).subscribe(function (r) {
-        this.eventos = r.json();
+      this.http.post('rest/auditevent/search', this.filtro).subscribe(function (response) {
+        this.eventos = response.json();
       });
     }
   }
