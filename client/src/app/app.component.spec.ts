@@ -5,12 +5,14 @@ import {AppModule} from './app.module';
 import {AppComponent} from './app.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {APP_BASE_HREF} from '@angular/common';
+import {AppService} from "./app.service";
 
 describe('App: Notification Server', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         { provide: APP_BASE_HREF, useValue: '/'},
+        AppService
       ],
       declarations: [
         AppComponent
