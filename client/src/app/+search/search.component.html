@@ -17,41 +17,56 @@
           <input name="id" type="text" class="form-control" [(ngModel)]="filtro.id" placeholder="ID do Log">
 
           <br><span>Data Início: </span><br>
-          <input name="dataInicio" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateStart"
-                 placeholder="dd/mm/aaaa --:--">
+          <p-calendar name="dataInicio" dateFormat="dd.mm.yy" [(ngModel)]="dateStart" [maxDate]="dateEnd" [showTime]="true" [showIcon]="true"></p-calendar>
+
 
           <br><span>Data Fim: </span><br>
-          <input name="dataFim" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateEnd"
-                 placeholder="dd/mm/aaaa --:--">
+          <p-calendar name="dataFim" dateFormat="dd.mm.yy" [(ngModel)]="dateEnd" [minDate]="dateStart" [showTime]="true" [showIcon]="true"></p-calendar>
 
           <br><span>Ip: </span><br>
           <input name="ip" type="text" class="input form-control primary-border" [(ngModel)]="filtro.ip" placeholder="IP">
 
-
-          <br><br><select name="securitySevel" class="form-control"
+          <br>Criticidade
+          <br><select name="securitySevel" class="form-control"
                           [(ngModel)]="filtro.securityLevel">
 
-          <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
+          <option value="">---Criticidade---</option> <!-- not selected / blank option -->
           <option *ngFor="let crit  of criticidades" value="{{crit}}"> {{crit}}</option>
-
-        </select>
-
-          <select name="applicationName" class="form-control"
-                  [(ngModel)]="filtro.applicationName">
-
-            <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
-            <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}"> {{aplic}}</option>
 
           </select>
 
+          <br>Aplicação
+          <br><select name="applicationName" class="form-control"
+                  [(ngModel)]="filtro.applicationName">
+
+            <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
+            <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}" > {{aplic}}</option>
+
+          </select>
+
+          <br>Resource Types
+          <br><select name="resourceTypes" class="form-control"
+                      [(ngModel)]="filtro.resourceType">
+
+          <option value="" selected>---Resource Types---</option> <!-- not selected / blank option -->
+          <option *ngFor="let retp  of resourcesTypes" value="{{retp}}"> {{retp}}</option>
+
+        </select>
+
           <br><br>
+          <!--(click)="(dateStart != undefined && dateEnd != undefined) ? searchIncludeDate() : searchWithoutDate()"-->
           <button
-            (click)="(dateStart != undefined && dateEnd != undefined) ? searchIncludeDate() : searchWithoutDate()"
+            (click)="search(false)"
             id="buttonPesquisar"
             class="btn btn-primary btn-sm btn-block"> Pesquisar
           </button>
 
-          <!--<br> <datepicker />-->
+          <br>
+          <button
+            (click)="search(true)"
+            id="buttonDownload"
+            class="btn btn-primary btn-sm btn-block"> Download
+          </button>
 
         </form>
 
@@ -60,76 +75,28 @@
 
     <div class="container">
       <div class="table-responsive tablescroll">
-        <table class="table table-hover table-condensed" id="tableMain">
-
-          <tr>
-            <th> ID
-              <span class="glyphicon glyphicon-menu-up"></span>
-              <span class="glyphicon glyphicon-menu-down"></span></th>
-            <th> Aplicação</th>
-            <th> Usuário</th>
-            <th> Ação</th>
-            <th> ResourceType</th>
-            <th> ResourceId</th>
-            <th> Data e Hora</th>
-            <th> IP</th>
-            <th> Criticidade</th>
-          </tr>
 
 
-          <tr *ngFor="let auditevent of eventos"
-              [style.background-color]="auditevent.id == logSelecionado.id ? 'lightgray' : ''"
-              (click)="clickTable(auditevent)"
-              data-toggle="modal" data-target="#myModal">
-            <td> {{ auditevent.id }}</td>
-            <td> {{ auditevent.applicationName }}</td>
-            <td> {{ auditevent.userName }}</td>
-            <td> {{ auditevent.action }}</td>
-            <td> {{ auditevent.resource.resourceType }}</td>
-            <td> {{ auditevent.resource.resourceId }}</td>
-            <td> {{ auditevent.dateTime[2] + '/' + auditevent.dateTime[1] + '/' + auditevent.dateTime[0] + ' ' +
-              auditevent.dateTime[3] + ':' + auditevent.dateTime[4] + ':' + auditevent.dateTime[5]}}
-            </td>
-            <td> {{ auditevent.ip }}</td>
-            <td> {{ auditevent.securityLevel }}</td>
+        <p-dataTable [value]="eventos"
+                     [rows]="10"
+                     [paginator]="true"
+                     [pageLinks]="3"
+                     [rowsPerPageOptions]="[5,10,20]">
+          <p-header>Lista de Eventos</p-header>
+          <p-column field="id" header="ID"></p-column>
+          <p-column field="applicationName" header="Aplicação"></p-column>
+          <p-column field="userName" header="Usuário"></p-column>
+          <p-column field="action" header="Ação"></p-column>
+          <p-column field="resource.resourceType" header="ResourceType"></p-column>
+          <p-column field="resource.resourceId" header="ResourceId"></p-column>
+          <p-column field="dateTime" header="Data e Hora"></p-column>
+          <p-column field="ip" header="IP"></p-column>
+          <p-column field="securityLevel" header="Criticidade"></p-column>
+        </p-dataTable>
 
-          </tr>
 
-          <tr [hidden]="eventos.length == 0 ">
-            <td colspan="9">
-              <div class="alert alert-info">
-                <p class="text-center">
-                  Nenhum resultado encontrado
-                </p>
-              </div>
-            </td>
-          </tr>
-
-        </table>
       </div>
 
-    </div>
-
-
-    <!-- Modal Erro na Data -->
-    <div class="modal fade" id="myModal2" role="dialog">
-      <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Erro na data!</h4>
-          </div>
-          <div class="modal-body">
-            Data inicial tem que ser menor ou igual a data final.
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-          </div>
-        </div>
-
-      </div>
     </div>
 
     <!-- Modal Descrição -->
@@ -188,22 +155,3 @@
       </div>
     </div>
   </div>
-
-
-
-<!--
-<p>
-  Um usuário com acesso ao sistema deve ser capaz de ver logs de auditoria.
-  O log deve possuir informações como:
-  Aplicação que gerou o log
-  Usuário que executou a ação
-  Ação
-  Data e Hora
-  IP de localização da máquina cliente
-  Criticidade - Indica o grau de criticidade da ação. Se baixo, normal ou alto. Logs com criticidade alta possuem um grau de sensibilidade maior, por exemplo: A ação de troca de senha de um usuário pode ter sensibilidade baixa, a ação de deletar multiplos usuários pode ter sensibilidade alta. Quem define isso é a aplicação.
-  Deve ser possível filtrar e pesquisar por qualquer uma das informações de log
-  Deve ser possível estender as informações de log, adicionando colunas sem que seja necessário programar nova versão do visualizador
-  Aplicação - Usuário - Ação - Data e Hora - IP - Criticidade
-  FILTRO PARA TODOS
-</p>
--->

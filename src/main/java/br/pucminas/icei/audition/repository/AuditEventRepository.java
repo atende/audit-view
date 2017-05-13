@@ -5,13 +5,16 @@ package br.pucminas.icei.audition.repository;
  */
 
 import info.atende.audition.model.AuditEvent;
+import info.atende.audition.model.Resource;
 import info.atende.audition.model.SecurityLevel;
+import org.springframework.data.rest.core.mapping.ResourceType;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -42,15 +45,41 @@ public class AuditEventRepository {
 
 
     public List<AuditEvent> searchWithoutDate(Map<String, Object> filtro){
+        List<AuditEvent> listByResTyp = null;
+        List<AuditEvent> listResp;
+
         String securityLevel = (String) filtro.get("securityLevel");
         if(securityLevel != null){
             filtro.put("securityLevel", SecurityLevel.valueOf(securityLevel));
         }
-        return buildQuery(filtro).getResultList();
+
+        String resourceType = (String) filtro.get("resourceType");
+        if(resourceType != null){
+            listByResTyp = filterByResourceType(resourceType);
+            filtro.remove("resourceType");
+        }
+
+        listResp = buildQuery(filtro).getResultList();
+
+        if(listByResTyp != null){
+            return intersection(listResp, listByResTyp);
+        }else{
+            return listResp;
+        }
+    }
+
+    public List<AuditEvent> filterByResourceType(String resourceType){
+        return em.createQuery("SELECT e from AuditEvent e WHERE e.resource.resourceType = :rtp")
+                .setParameter("rtp", resourceType)
+                .getResultList();
     }
 
     public List<String> listApplicationNames(){
-        return em.createQuery("SELECT distinct e.applicationName from AuditEvent e").getResultList();
+        return em.createQuery("SELECT distinct e.applicationName from AuditEvent e ORDER BY e.applicationName").getResultList();
+    }
+
+    public List<String> listResourceTypes(){
+        return em.createQuery("SELECT distinct e.resource.resourceType from AuditEvent e").getResultList();
     }
 
     public List<AuditEvent> searchDate(Object dateStart, Object dateEnd){
@@ -72,7 +101,12 @@ public class AuditEventRepository {
         Iterator it = filtro.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            predicates.add(cb.equal(root.get((String) pair.getKey()), pair.getValue()));
+            String key = (String) pair.getKey();
+            if(key.equals("action")) {
+                predicates.add(cb.like(root.get(key), pair.getValue() + "%"));
+            }else {
+                predicates.add(cb.equal(root.get(key), pair.getValue()));
+            }
             it.remove(); // avoids a ConcurrentModificationException
         }
         CriteriaQuery<AuditEvent> where = q.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
