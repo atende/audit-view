@@ -35,7 +35,7 @@ task testJS(type: NpmTask) {
   inputs.dir "src"
   inputs.file "packages.json"
   outputs.dir "dist"
-  args = ['run', 'test:once']
+  args = ['run', 'test:ci']
 }
 
 test.dependsOn testJS

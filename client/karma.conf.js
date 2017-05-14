@@ -12,6 +12,14 @@ module.exports = function (config) {
       require('karma-coverage-istanbul-reporter'),
       require('@angular/cli/plugins/karma')
     ],
+    customLaunchers: {
+      // From the CLI. Not used here but interesting
+      // chrome setup for travis CI using chromium
+      Chrome_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
     client:{
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
