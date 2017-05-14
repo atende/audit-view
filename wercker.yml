@@ -43,6 +43,8 @@ build:
         then
           rm src/main/resources/application-test.properties
         fi
+        cp client/src/environments/environment.prod.ts.dist client/src/environments/environment.prod.ts
+        cp client/src/environments/environment.ts.dist client/src/environments/environment.ts
         ./gradlew test
     - script:
       name: build docs
