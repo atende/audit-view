@@ -1,11 +1,11 @@
 /* tslint:disable:no-unused-variable */
 
 import {TestBed, async} from '@angular/core/testing';
-import {AppModule} from './app.module';
 import {AppComponent} from './app.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {APP_BASE_HREF} from '@angular/common';
 import {AppService} from "./app.service";
+import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 
 describe('App: Notification Server', () => {
   beforeEach(() => {
@@ -17,7 +17,10 @@ describe('App: Notification Server', () => {
       declarations: [
         AppComponent
       ],
-      schemas:      [ NO_ERRORS_SCHEMA ]
+      schemas:      [ NO_ERRORS_SCHEMA ],
+      imports: [
+        SlimLoadingBarModule.forRoot(),
+      ]
     }).compileComponents();
   });
 
