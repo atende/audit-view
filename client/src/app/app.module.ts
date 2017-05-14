@@ -1,17 +1,17 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import {routing, appRoutingProviders} from './app.routes';
 
 import { AppComponent } from './app.component';
-import { HomeModule } from './+home/home.module';
-import { SearchModule } from './+search/search.module';
-import {SharedModule} from "./shared/shared.module";
-import { AuthModule, InitOptions } from "angular-spa";
+import { SharedModule } from "./shared/shared.module";
+import { AuthModule, InitOptions } from 'angular-spa';
+import { HomeModule } from "./+home/home.module";
+import { SearchModule } from "./+search/search.module";
 
-import {environment} from '../environments/environment';
+import { environment } from '../environments/environment';
+import {AppService} from "./app.service";
 
 
 @NgModule({
@@ -36,7 +36,7 @@ import {environment} from '../environments/environment';
         realm: environment.keycloak.realm,
         clientId: environment.keycloak.clientId
       }
-    }
+    }, AppService
   ],
   bootstrap: [AppComponent]
 })
