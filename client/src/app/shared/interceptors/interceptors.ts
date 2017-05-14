@@ -20,7 +20,7 @@ export class HttpStatusErrorInterceptor implements Interceptor {
 
   error(err: Response): void {
     const severity = err.status == 404 ? 'info': 'error'
-    this.appService.events.message.next({summary: err.statusText, detail: err.text(), severity: severity})
+    this.appService.showMessage({summary: err.statusText, detail: err.text(), severity: severity})
   }
 
 }

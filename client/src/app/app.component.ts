@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.slimBarService.interval = 50;
-    this.appService.events.message.subscribe(e => {
+    this.appService.onMessage.subscribe(e => {
 
       // For some reason the change detection for the first item in array doesn't work
       // Create a copy of array then empty array, trigger the detection and then put the previous copy

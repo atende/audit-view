@@ -5,6 +5,8 @@ import br.pucminas.icei.audition.dto.SearchResponse;
 import br.pucminas.icei.audition.repository.AuditEventRepository;
 import info.atende.audition.model.AuditEvent;
 import org.apache.poi.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +58,7 @@ public class AuditController {
         if(accept != null && accept.equalsIgnoreCase("application/csv")){
             Worksheet worksheet = new Worksheet();
             try {
-                InputStream fileStream = worksheet.writeToCSV(result);
+                InputStream fileStream = worksheet.writeToCSV(result.getData());
                 // get your file as InputStream
                 // copy it to response's OutputStream
                 response.setContentType("application/csv");
@@ -71,7 +73,7 @@ public class AuditController {
             // Close response and return OK
             return ResponseEntity.ok().build();
         }
-
+        return ResponseEntity.ok(result);
     }
 
     @RequestMapping(value = "/resourcetypes", method = RequestMethod.GET)

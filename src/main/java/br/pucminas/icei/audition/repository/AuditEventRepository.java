@@ -52,6 +52,10 @@ public class AuditEventRepository {
         return em.createQuery("SELECT distinct e.applicationName from AuditEvent e").getResultList();
     }
 
+    public List<String> listResourceTypes(){
+        return em.createQuery("SELECT distinct e.resource.resourceType from AuditEvent e").getResultList();
+    }
+
     private SearchResponse buildQuery(Map<String, Object> filtro,
                                       Long start,
                                       Long max,

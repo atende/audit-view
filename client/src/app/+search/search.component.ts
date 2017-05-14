@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, Headers, Response} from '@angular/http';
 import { saveAs } from 'file-saver';
 import {AppService} from "../app.service";
 import {Message} from 'primeng/primeng';
@@ -23,9 +23,10 @@ export class SearchComponent implements OnInit {
   dateStart;
   dateEnd;
   filtrados: any = [];
-
+  resourcesTypes: any = []
   totalRecords = 0
   rows = 100
+  down = false
   constructor(private http: Http, private appService: AppService) {
 
   }
@@ -34,7 +35,6 @@ export class SearchComponent implements OnInit {
     this.loadApplications();
     this.loadResourceTypes();
     this.popular();
-
     this.filtro.dateStart = "null";
     this.filtro.dateEnd = "null";
   }
@@ -66,32 +66,6 @@ export class SearchComponent implements OnInit {
     return true;
   }
 
-  search(down){
-    let url = 'rest/auditevent/search';
-
-    if(this.dateStart != undefined && this.dateEnd != undefined){
-      this.filtro.dateStart = this.dateStart;
-      this.filtro.dateEnd = this.dateEnd;
-    }else{
-      this.filtro.dateStart = "null";
-      this.filtro.dateEnd = "null";
-    }
-    let headers = new Headers();
-    if(down) {
-      headers.append("Accept", "application/csv");
-    }
-    this.http.post(url, this.filtro, {headers: headers}).subscribe(response => {
-      if(response.headers.get("Content-Type") == "application/csv") {
-        this.download(response);
-      }else if(response.status >= 200 && response.status < 300) {
-        this.eventos = response.json();
-      }else { // Error 500
-        this.showError(response.text())
-      }
-    }, error => {
-      this.showError(error)
-    });
-  }
   showError(e) {
     let message: Message = {severity: 'error', summary: 'Ocorreu um erro no servidor', detail: e}
     this.appService.showMessage(message)
@@ -101,11 +75,44 @@ export class SearchComponent implements OnInit {
     const blob = new Blob([response.arrayBuffer()], contentType);
     saveAs(blob, 'planilha.csv');
   };
+
+  search(download) {
+    this.down = download;
+    // Max java int
+    let rows = download ? 2147483647 : this.rows
+    this.onLazyLoad({first: 0, rows: rows})
+  }
   popular() {
-    if (this.checkDate()) {
-      this.http.post('rest/auditevent/search', this.filtro).subscribe(function (response) {
-        this.eventos = response.json();
-      });
+    this.down = false;
+    this.onLazyLoad({first: 0, rows: this.rows})
+  }
+  onLazyLoad(event) {
+    let url = 'rest/auditevent/search'
+    let requestHeaders = new Headers()
+    requestHeaders.append("first", event.first)
+    requestHeaders.append("max", event.first + event.rows)
+    if (this.down) {
+      requestHeaders.append("Accept", "application/csv");
+      this.down = false;
     }
+    if (this.dateStart != undefined && this.dateEnd != undefined) {
+      requestHeaders.append("dateStart", this.dateStart);
+      requestHeaders.append("dateEnd", this.dateEnd)
+
+    }
+    this.http.post(url, this.filtro, {headers: requestHeaders}).subscribe(response => {
+
+      if (response.headers.get("Content-Type") == "application/csv") {
+        this.download(response);
+      } else if (response.status >= 200 && response.status < 300) {
+        let json = response.json();
+        let data = json.data
+        let total = json.total
+        this.eventos = data;
+        this.totalRecords = total
+      } else { // Error 500
+        this.showError(response.text())
+      }
+    });
   }
 }
