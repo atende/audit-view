@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Http, Headers} from '@angular/http';
-
+import {Http} from '@angular/http';
+import { saveAs } from 'file-saver';
+import {AppService} from "../app.service";
+import {Message} from 'primeng/primeng';
 /**
  * This class represents the lazy loaded AboutComponent.
  */
@@ -17,26 +19,24 @@ export class SearchComponent implements OnInit {
     resource: {},
     dateTime: {}
   };
-  indexSelecionado = {};
-  filtrosDeAplicacao = [];
   eventos = [];
-  paginados = [];
-  currentPage = 1;
-  numPerPage = 11;
-  maxSize = 10;
   dateStart;
   dateEnd;
   filtrados: any = [];
 
   totalRecords = 0
   rows = 100
-  constructor(private http: Http) {
+  constructor(private http: Http, private appService: AppService) {
 
   }
 
   ngOnInit() {
     this.loadApplications();
+    this.loadResourceTypes();
     this.popular();
+
+    this.filtro.dateStart = "null";
+    this.filtro.dateEnd = "null";
   }
 
   loadApplications() {
@@ -45,31 +45,67 @@ export class SearchComponent implements OnInit {
     });
   };
 
+  loadResourceTypes() {
+    this.http.get('rest/auditevent/resourcetypes').subscribe(r => {
+      this.resourcesTypes = r.json();
+    });
+  };
+
   clickTable(log) {
     this.logSelecionado = log;
   }
 
-
-  popular() {
-    this.onLazyLoad({first: 0, rows: this.rows})
+  checkDate() {
+    let dataInicio = new Date(this.dateStart);
+    let dataFim = new Date(this.dateEnd);
+    if (dataInicio > dataFim) {
+      const message: Message = {severity: 'warning', summary: 'Erro na data', detail: 'Data inicial tem que ser menor ou igual a data final.'}
+      this.appService.showMessage(message);
+      return false;
+    }
+    return true;
   }
 
-  onLazyLoad(event) {
-    let requestHeaders = new Headers()
-    requestHeaders.append("first", event.first)
-    requestHeaders.append("max", event.first + event.rows)
-    let url = 'rest/auditevent/search'
-    if(this.dateStart != undefined && this.dateEnd != undefined) {
-      requestHeaders.append("dateStart", this.dateStart);
-      requestHeaders.append("dateEnd", this.dateEnd)
+  search(down){
+    let url = 'rest/auditevent/search';
 
+    if(this.dateStart != undefined && this.dateEnd != undefined){
+      this.filtro.dateStart = this.dateStart;
+      this.filtro.dateEnd = this.dateEnd;
+    }else{
+      this.filtro.dateStart = "null";
+      this.filtro.dateEnd = "null";
     }
-    this.http.post(url, this.filtro, {headers: requestHeaders}).subscribe(r => {
-      let response = r.json();
-      let data = response.data
-      let total = response.total
-      this.eventos = data;
-      this.totalRecords = total
+    let headers = new Headers();
+    if(down) {
+      headers.append("Accept", "application/csv");
+    }
+    this.http.post(url, this.filtro, {headers: headers}).subscribe(response => {
+      if(response.headers.get("Content-Type") == "application/csv") {
+        this.download(response);
+      }else if(response.status >= 200 && response.status < 300) {
+        this.eventos = response.json();
+      }else { // Error 500
+        this.showError(response.text())
+      }
+    }, error => {
+      this.showError(error)
     });
+  }
+  showError(e) {
+    let message: Message = {severity: 'error', summary: 'Ocorreu um erro no servidor', detail: e}
+    this.appService.showMessage(message)
+  }
+  download(response: Response) {
+    const contentType = {type: "application/csv"};
+    const blob = new Blob([response.arrayBuffer()], contentType);
+    saveAs(blob, 'planilha.csv');
+  };
+  popular() {
+    if (this.checkDate()) {
+      this.http.post('rest/auditevent/search', this.filtro).subscribe(function (response) {
+        this.eventos = response.json();
+      });
+    }
   }
 }

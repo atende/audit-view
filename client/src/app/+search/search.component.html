@@ -17,11 +17,12 @@
           <input name="id" type="text" class="form-control" [(ngModel)]="filtro.id" placeholder="ID do Log">
 
           <br><span>Data Início: </span><br>
-          <p-calendar name="dataInicio" dateFormat="dd.mm.yy" [(ngModel)]="dateStart" [maxDate]="dateEnd" [showTime]="true" [showIcon]="true"></p-calendar>
-
+          <input name="dataInicio" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateStart"
+                 placeholder="dd/mm/aaaa --:--">
 
           <br><span>Data Fim: </span><br>
-          <p-calendar name="dataFim" dateFormat="dd.mm.yy" [(ngModel)]="dateEnd" [minDate]="dateStart" [showTime]="true" [showIcon]="true"></p-calendar>
+          <input name="dataFim" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateEnd"
+                 placeholder="dd/mm/aaaa --:--">
 
           <br><span>Ip: </span><br>
           <input name="ip" type="text" class="input form-control primary-border" [(ngModel)]="filtro.ip" placeholder="IP">
@@ -43,73 +44,61 @@
 
           </select>
 
+          <br>Resource Types
+          <br><select name="resourceTypes" class="form-control"
+                      [(ngModel)]="filtro.resourceType">
+
+          <option value="" selected>---Resource Types---</option> <!-- not selected / blank option -->
+          <option *ngFor="let retp  of resourcesTypes" value="{{retp}}"> {{retp}}</option>
+
+        </select>
+
           <br><br>
-          <button id="btnSearch"
-            (click)="popular()"
-            data-loading-text="<i class='fa fa-spinner fa-spin '></i> Searching"
+          <!--(click)="(dateStart != undefined && dateEnd != undefined) ? searchIncludeDate() : searchWithoutDate()"-->
+          <button
+            (click)="search(false)"
+            id="buttonPesquisar"
             class="btn btn-primary btn-sm btn-block"> Pesquisar
           </button>
 
-          <!--<br> <datepicker />-->
+          <br>
+          <button
+            (click)="search(true)"
+            id="buttonDownload"
+            class="btn btn-primary btn-sm btn-block"> Download
+          </button>
 
         </form>
 
       </div>
     </div>
 
-    <div class="col-sm-9">
-      <h1>Total: {{totalRecords}}</h1>
-      <div class="form-group">
-        <label>Results per page: </label><input type="number" [(ngModel)]="rows" placeholder="Results per page" />
-      </div>
-      <p-dataTable #dt paginator="true" lazy="true" [totalRecords]="totalRecords" (onLazyLoad)="onLazyLoad($event)"
-                   [rows]="rows"  [value]="eventos"
-                   exportFilename="audit_view">
-
-        <p-header>
-          <div class="ui-helper-clearfix">
-            <button type="button" pButton icon="fa-file-o" iconPos="left" label="CSV" (click)="dt.exportCSV()" style="float:left"></button>
-          </div>
-        </p-header>
-
-        <p-column field="id" header="ID"></p-column>
-        <p-column field="applicationName" header="Application"></p-column>
-        <p-column field="userName" header="User"></p-column>
-        <p-column field="action" header="Action"></p-column>
-        <p-column field="resource.resourceType" header="Resource Type"></p-column>
-        <p-column field="resource.resourceId" header="Resource ID"></p-column>
-        <p-column field="dateTime" header="Date Time">
-          <template let-event="rowData" pTemplate type="body">
-            <span> {{event.dateTime[2] + '/' + event.dateTime[1] + '/' + event.dateTime[0] + ' ' +
-              event.dateTime[3] + ':' + event.dateTime[4] + ':' + event.dateTime[5]}}</span>
-          </template>
-        </p-column>
-        <p-column field="ip" header="IP Address"></p-column>
-        <p-column field="securityLevel" header="Security Level"></p-column>
-      </p-dataTable>
-
-    </div>
+    <div class="container">
+      <div class="table-responsive tablescroll">
 
 
-    <!-- Modal Erro na Data -->
-    <div class="modal fade" id="myModal2" role="dialog">
-      <div class="modal-dialog">
+        <p-dataTable [value]="eventos"
+                     [rows]="10"
+                     [paginator]="true"
+                     [pageLinks]="3"
+                     lazy="true"
+                     [totalRecords]="totalRecords"
+                     (onLazyLoad)="onLazyLoad($event)">
+          <p-header>Lista de Eventos</p-header>
+          <p-column field="id" header="ID"></p-column>
+          <p-column field="applicationName" header="Aplicação"></p-column>
+          <p-column field="userName" header="Usuário"></p-column>
+          <p-column field="action" header="Ação"></p-column>
+          <p-column field="resource.resourceType" header="ResourceType"></p-column>
+          <p-column field="resource.resourceId" header="ResourceId"></p-column>
+          <p-column field="dateTime" header="Data e Hora"></p-column>
+          <p-column field="ip" header="IP"></p-column>
+          <p-column field="securityLevel" header="Criticidade"></p-column>
+        </p-dataTable>
 
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Erro na data!</h4>
-          </div>
-          <div class="modal-body">
-            Data inicial tem que ser menor ou igual a data final.
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-          </div>
-        </div>
 
       </div>
+
     </div>
 
     <!-- Modal Descrição -->
@@ -168,22 +157,3 @@
       </div>
     </div>
   </div>
-
-
-
-<!--
-<p>
-  Um usuário com acesso ao sistema deve ser capaz de ver logs de auditoria.
-  O log deve possuir informações como:
-  Aplicação que gerou o log
-  Usuário que executou a ação
-  Ação
-  Data e Hora
-  IP de localização da máquina cliente
-  Criticidade - Indica o grau de criticidade da ação. Se baixo, normal ou alto. Logs com criticidade alta possuem um grau de sensibilidade maior, por exemplo: A ação de troca de senha de um usuário pode ter sensibilidade baixa, a ação de deletar multiplos usuários pode ter sensibilidade alta. Quem define isso é a aplicação.
-  Deve ser possível filtrar e pesquisar por qualquer uma das informações de log
-  Deve ser possível estender as informações de log, adicionando colunas sem que seja necessário programar nova versão do visualizador
-  Aplicação - Usuário - Ação - Data e Hora - IP - Criticidade
-  FILTRO PARA TODOS
-</p>
--->

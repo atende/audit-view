@@ -1,15 +1,18 @@
 package br.pucminas.icei.audition.controller;
 
+import br.pucminas.icei.audition.business.export.Worksheet;
 import br.pucminas.icei.audition.dto.SearchResponse;
 import br.pucminas.icei.audition.repository.AuditEventRepository;
 import info.atende.audition.model.AuditEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -30,16 +33,16 @@ public class AuditController {
     AuditEventRepository auditEventRepository;
 
     @RequestMapping(value="/search", method = RequestMethod.POST, consumes = { "application/json" } )
-    public ResponseEntity<SearchResponse> search(
-            @RequestBody Map<String, Object> filtro,
-            @RequestHeader(value = "dateStart", required = false) Date dateStart,
-            @RequestHeader(value = "dateEnd", required = false) Date dateEnd,
-            @RequestHeader(value = "first", required = false) Long start,
-            @RequestHeader(value = "max", required = false) Long max)
-    {
+    public ResponseEntity search(@RequestBody Map<String, Object> filtro,
+                                                              @RequestHeader(value = "dateStart", required = false) Date dateStart,
+                                                              @RequestHeader(value = "dateEnd", required = false) Date dateEnd,
+                                                              @RequestHeader(value = "first", required = false) Long start,
+                                                              @RequestHeader(value = "max", required = false) Long max,
+                                                              @RequestHeader("Accept") String accept,
+                                                              HttpServletResponse response){
+
         Map<String, Object> novoFiltro = filterBlankParameter(filtro);
         novoFiltro = deleteFilterDate(novoFiltro);
-
         SearchResponse result =  null;
         if(dateStart != null && dateEnd != null) {
             LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
@@ -50,8 +53,30 @@ public class AuditController {
             result = auditEventRepository.search(novoFiltro, start, max);
         }
 
+        if(accept != null && accept.equalsIgnoreCase("application/csv")){
+            Worksheet worksheet = new Worksheet();
+            try {
+                InputStream fileStream = worksheet.writeToCSV(result);
+                // get your file as InputStream
+                // copy it to response's OutputStream
+                response.setContentType("application/csv");
 
-        return ResponseEntity.ok(result);
+                IOUtils.copy(fileStream, response.getOutputStream());
+
+                response.flushBuffer();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+            }
+            // Close response and return OK
+            return ResponseEntity.ok().build();
+        }
+
+    }
+
+    @RequestMapping(value = "/resourcetypes", method = RequestMethod.GET)
+    public List<String> listResourceTypes(){
+        return auditEventRepository.listResourceTypes();
     }
 
     @RequestMapping(value="/create", method = RequestMethod.POST)
@@ -59,6 +84,13 @@ public class AuditController {
         auditEventRepository.create(auditevent);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
+    @RequestMapping(value = "/applications", method = RequestMethod.GET)
+    public List<String> listarApplications(){
+        return auditEventRepository.listApplicationNames();
+    }
+
 
 
     private Map<String, Object> filterBlankParameter(Map<String, Object> filtro){

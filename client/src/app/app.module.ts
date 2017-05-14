@@ -32,7 +32,6 @@ import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
     HomeModule,
     GrowlModule,
     SearchModule
-
   ],
   providers: [
     appRoutingProviders,
