@@ -17,30 +17,30 @@
           <input name="id" type="text" class="form-control" [(ngModel)]="filtro.id" placeholder="ID do Log">
 
           <br><span>Data Início: </span><br>
-          <p-calendar name="dataInicio" dateFormat="dd.mm.yy" [(ngModel)]="dateStart" [maxDate]="dateEnd" [showTime]="true" [showIcon]="true"></p-calendar>
-
+          <input name="dataInicio" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateStart"
+                 placeholder="dd/mm/aaaa --:--">
 
           <br><span>Data Fim: </span><br>
-          <p-calendar name="dataFim" dateFormat="dd.mm.yy" [(ngModel)]="dateEnd" [minDate]="dateStart" [showTime]="true" [showIcon]="true"></p-calendar>
+          <input name="dataFim" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateEnd"
+                 placeholder="dd/mm/aaaa --:--">
 
           <br><span>Ip: </span><br>
           <input name="ip" type="text" class="input form-control primary-border" [(ngModel)]="filtro.ip" placeholder="IP">
 
-          <br>Criticidade
-          <br><select name="securitySevel" class="form-control"
+
+          <br><br><select name="securitySevel" class="form-control"
                           [(ngModel)]="filtro.securityLevel">
 
-          <option value="">---Criticidade---</option> <!-- not selected / blank option -->
+          <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
           <option *ngFor="let crit  of criticidades" value="{{crit}}"> {{crit}}</option>
 
-          </select>
+        </select>
 
-          <br>Aplicação
-          <br><select name="applicationName" class="form-control"
+          <select name="applicationName" class="form-control"
                   [(ngModel)]="filtro.applicationName">
 
             <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
-            <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}" > {{aplic}}</option>
+            <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}"> {{aplic}}</option>
 
           </select>
 
@@ -81,7 +81,9 @@
                      [rows]="10"
                      [paginator]="true"
                      [pageLinks]="3"
-                     [rowsPerPageOptions]="[5,10,20]">
+                     lazy="true"
+                     [totalRecords]="totalRecords"
+                     (onLazyLoad)="onLazyLoad($event)">
           <p-header>Lista de Eventos</p-header>
           <p-column field="id" header="ID"></p-column>
           <p-column field="applicationName" header="Aplicação"></p-column>

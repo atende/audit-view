@@ -1,6 +1,7 @@
 package br.pucminas.icei.audition.controller;
 
 import br.pucminas.icei.audition.business.export.Worksheet;
+import br.pucminas.icei.audition.dto.SearchResponse;
 import br.pucminas.icei.audition.repository.AuditEventRepository;
 import info.atende.audition.model.AuditEvent;
 import org.apache.poi.util.IOUtils;
@@ -14,11 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Claudinei Gomes Mendes
@@ -32,63 +34,31 @@ public class AuditController {
     @Autowired
     AuditEventRepository auditEventRepository;
 
-    @RequestMapping(value="/create", method = RequestMethod.POST)
-    public ResponseEntity createEvent(@RequestBody AuditEvent auditevent){
-        auditEventRepository.create(auditevent);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-
-    @RequestMapping(value = "/applications", method = RequestMethod.GET)
-    public List<String> listarApplications(){
-        return auditEventRepository.listApplicationNames();
-    }
-
-    @RequestMapping(value = "/resourcetypes", method = RequestMethod.GET)
-    public List<String> listResourceTypes(){
-        return auditEventRepository.listResourceTypes();
-    }
-
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @RequestMapping(value="/search", method = RequestMethod.POST, consumes = { "application/json" } )
     public ResponseEntity search(@RequestBody Map<String, Object> filtro,
-                                                   @RequestHeader("Accept") String accept,
-                                                   HttpServletResponse response){
-        List<AuditEvent> result = null;
+                                                              @RequestHeader(value = "dateStart", required = false) Date dateStart,
+                                                              @RequestHeader(value = "dateEnd", required = false) Date dateEnd,
+                                                              @RequestHeader(value = "first", required = false) Long start,
+                                                              @RequestHeader(value = "max", required = false) Long max,
+                                                              @RequestHeader("Accept") String accept,
+                                                              HttpServletResponse response){
 
-        if( !filtro.get("dateStart").toString().equals("null") &&
-            !filtro.get("dateEnd").toString().equals("null")){
+        Map<String, Object> novoFiltro = filterBlankParameter(filtro);
+        novoFiltro = deleteFilterDate(novoFiltro);
+        SearchResponse result =  null;
+        if(dateStart != null && dateEnd != null) {
+            LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
+            LocalDateTime dEnd = LocalDateTime.ofInstant(dateEnd.toInstant(), ZoneId.systemDefault());
+            result = auditEventRepository.search(novoFiltro, start, max, dStart, dEnd);
 
-            Date dateStart = null;
-            Date dateEnd = null;
-            try {
-                dateStart = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-                        .parse(filtro.get("dateStart").toString());
-                dateEnd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-                        .parse(filtro.get("dateEnd").toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if(dateStart != null && dateEnd != null){
-                LocalDateTime dStart = LocalDateTime.ofInstant(dateStart.toInstant(), ZoneId.systemDefault());
-                LocalDateTime dEnd = LocalDateTime.ofInstant(dateEnd.toInstant(), ZoneId.systemDefault());
-                filtro = filterBlankParameter(filtro);
-
-                filtro.remove("dateStart");
-                filtro.remove("dateEnd");
-
-                result = auditEventRepository.searchIncludeDate(filtro, dStart, dEnd);
-            }
-        }else{
-            Map<String, Object> novoFiltro = filterBlankParameter(filtro);
-            novoFiltro = deleteFilterDate(novoFiltro);
-            filtro.remove("dateStart");
-            filtro.remove("dateEnd");
-            result = auditEventRepository.searchWithoutDate(novoFiltro);
+        }else {
+            result = auditEventRepository.search(novoFiltro, start, max);
         }
+
         if(accept != null && accept.equalsIgnoreCase("application/csv")){
             Worksheet worksheet = new Worksheet();
             try {
-                InputStream fileStream = worksheet.writeToCSV(result);
+                InputStream fileStream = worksheet.writeToCSV(result.getData());
                 // get your file as InputStream
                 // copy it to response's OutputStream
                 response.setContentType("application/csv");
@@ -103,9 +73,20 @@ public class AuditController {
             // Close response and return OK
             return ResponseEntity.ok().build();
         }
-
         return ResponseEntity.ok(result);
     }
+
+    @RequestMapping(value = "/resourcetypes", method = RequestMethod.GET)
+    public List<String> listResourceTypes(){
+        return auditEventRepository.listResourceTypes();
+    }
+
+    @RequestMapping(value = "/applications", method = RequestMethod.GET)
+    public List<String> listarApplications(){
+        return auditEventRepository.listApplicationNames();
+    }
+
+
 
     private Map<String, Object> filterBlankParameter(Map<String, Object> filtro){
         Map<String, Object> resp = filtro;
@@ -144,6 +125,7 @@ public class AuditController {
             if(pair.getKey() == "dateStart" || pair.getKey() == "dateEnd"  || pair.getKey() == "timeStart" || pair.getKey() == "timeEnd") {
                 it.remove();
                 resp.remove(pair.getKey(), value);
+                System.out.println(pair.getKey() + " ---> " + pair.getValue());
             }
         }
 

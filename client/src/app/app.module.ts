@@ -1,17 +1,21 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import {BrowserModule} from "@angular/platform-browser";
+import {NgModule} from "@angular/core";
+import {HttpModule} from "@angular/http";
 
-import {routing, appRoutingProviders} from './app.routes';
+import {appRoutingProviders, routing} from "./app.routes";
 
-import { AppComponent } from './app.component';
-import { SharedModule } from "./shared/shared.module";
-import { AuthModule, InitOptions } from 'angular-spa';
-import { HomeModule } from "./+home/home.module";
-import { SearchModule } from "./+search/search.module";
+import {AppComponent} from "./app.component";
+import {SharedModule} from "./shared/shared.module";
+import {AuthModule, InitOptions} from "angular-spa";
+import {HomeModule} from "./+home/home.module";
+import {SearchModule} from "./+search/search.module";
+import {GrowlModule} from "primeng/primeng";
 
-import { environment } from '../environments/environment';
+import {environment} from "../environments/environment";
+import {Interceptor} from "angular-http-interceptor";
+import {HttpStatusErrorInterceptor, LoadingBarInterceptor} from "./shared/interceptors/interceptors";
 import {AppService} from "./app.service";
+import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 
 
 @NgModule({
@@ -22,13 +26,25 @@ import {AppService} from "./app.service";
     AuthModule,
     BrowserModule,
     SharedModule,
+    SlimLoadingBarModule.forRoot(),
     HttpModule,
     routing,
     HomeModule,
+    GrowlModule,
     SearchModule
   ],
   providers: [
     appRoutingProviders,
+    AppService,
+    {
+      provide: Interceptor,
+      useClass: HttpStatusErrorInterceptor,
+      multi: true
+    },  {
+      provide: Interceptor,
+      useClass: LoadingBarInterceptor,
+      multi: true
+    },
     {
       provide: InitOptions,
       useValue: {
@@ -36,7 +52,7 @@ import {AppService} from "./app.service";
         realm: environment.keycloak.realm,
         clientId: environment.keycloak.clientId
       }
-    }, AppService
+    }
   ],
   bootstrap: [AppComponent]
 })
