@@ -81,13 +81,6 @@ public class AuditController {
         return auditEventRepository.listResourceTypes();
     }
 
-    @RequestMapping(value="/create", method = RequestMethod.POST)
-    public ResponseEntity createEvent(@RequestBody AuditEvent auditevent){
-        auditEventRepository.create(auditevent);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-
     @RequestMapping(value = "/applications", method = RequestMethod.GET)
     public List<String> listarApplications(){
         return auditEventRepository.listApplicationNames();
