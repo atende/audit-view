@@ -17,32 +17,32 @@
           <input name="id" type="text" class="form-control" [(ngModel)]="filtro.id" placeholder="ID do Log">
 
           <br><span>Data Início: </span><br>
-          <input name="dataInicio" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateStart"
-                 placeholder="dd/mm/aaaa --:--">
+          <p-calendar name="dataInicio" dateFormat="dd.mm.yy" [(ngModel)]="dateStart" [maxDate]="dateEnd" [showTime]="true" [showIcon]="true"></p-calendar>
+
 
           <br><span>Data Fim: </span><br>
-          <input name="dataFim" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateEnd"
-                 placeholder="dd/mm/aaaa --:--">
+          <p-calendar name="dataFim" dateFormat="dd.mm.yy" [(ngModel)]="dateEnd" [minDate]="dateStart" [showTime]="true" [showIcon]="true"></p-calendar>
 
           <br><span>Ip: </span><br>
           <input name="ip" type="text" class="input form-control primary-border" [(ngModel)]="filtro.ip" placeholder="IP">
 
+          <br>Criticidade
+          <br><select name="securitySevel" class="form-control"
+                      [(ngModel)]="filtro.securityLevel">
 
-          <br><br><select name="securitySevel" class="form-control"
-                          [(ngModel)]="filtro.securityLevel">
-
-          <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
+          <option value="">---Criticidade---</option> <!-- not selected / blank option -->
           <option *ngFor="let crit  of criticidades" value="{{crit}}"> {{crit}}</option>
 
         </select>
 
-          <select name="applicationName" class="form-control"
-                  [(ngModel)]="filtro.applicationName">
+          <br>Aplicação
+          <br><select name="applicationName" class="form-control"
+                      [(ngModel)]="filtro.applicationName">
 
-            <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
-            <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}"> {{aplic}}</option>
+          <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
+          <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}" > {{aplic}}</option>
 
-          </select>
+        </select>
 
           <br>Resource Types
           <br><select name="resourceTypes" class="form-control"
