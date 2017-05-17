@@ -125,7 +125,6 @@ public class AuditController {
             if(pair.getKey() == "dateStart" || pair.getKey() == "dateEnd"  || pair.getKey() == "timeStart" || pair.getKey() == "timeEnd") {
                 it.remove();
                 resp.remove(pair.getKey(), value);
-                System.out.println(pair.getKey() + " ---> " + pair.getValue());
             }
         }
 

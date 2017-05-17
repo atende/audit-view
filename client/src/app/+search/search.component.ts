@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
 import { saveAs } from 'file-saver';
 import {AppService} from "../app.service";
-import {Message} from 'primeng/primeng';
+import {Dialog, Message} from 'primeng/primeng';
 /**
  * This class represents the lazy loaded AboutComponent.
  */
@@ -27,6 +27,9 @@ export class SearchComponent implements OnInit {
   totalRecords = 0
   rows = 100
   down = false
+  selectedEvent
+  display: boolean = false;
+
   constructor(private http: Http, private appService: AppService) {
 
   }
@@ -114,5 +117,8 @@ export class SearchComponent implements OnInit {
         this.showError(response.text())
       }
     });
+  }
+  showDialog() {
+    this.display = true;
   }
 }

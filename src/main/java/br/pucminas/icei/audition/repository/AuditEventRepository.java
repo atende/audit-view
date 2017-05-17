@@ -49,11 +49,11 @@ public class AuditEventRepository {
     }
 
     public List<String> listApplicationNames() {
-        return em.createQuery("SELECT distinct e.applicationName from AuditEvent e").getResultList();
+        return em.createQuery("SELECT distinct e.applicationName from AuditEvent e order by e.applicationName").getResultList();
     }
 
     public List<String> listResourceTypes(){
-        return em.createQuery("SELECT distinct e.resource.resourceType from AuditEvent e").getResultList();
+        return em.createQuery("SELECT distinct e.resource.resourceType from AuditEvent e order by e.resource.resourceType").getResultList();
     }
 
     private SearchResponse buildQuery(Map<String, Object> filtro,
@@ -68,11 +68,14 @@ public class AuditEventRepository {
 
         List<Predicate> predicates = new ArrayList();
 
+
         Iterator it = filtro.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             String key = (String) pair.getKey();
-            if (key == "action") {
+            if(key.equals("resourceType")){
+                predicates.add(cb.equal(root.get("resource").get(key), pair.getValue()));
+            }else if (key.equals("action")) {
                 predicates.add(cb.like(root.get(key), pair.getValue() + "%"));
             } else {
                 predicates.add(cb.equal(root.get(key), pair.getValue()));

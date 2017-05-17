@@ -7,7 +7,7 @@ import { BrowserAnimationsModule} from "@angular/platform-browser/animations"
 import { ToolbarComponent } from './toolbar/index';
 import { NavbarComponent } from './navbar/index';
 
-import { CalendarModule, PaginatorModule, DataTableModule, GrowlModule, SharedModule as PShared } from "primeng/primeng"
+import { CalendarModule, PaginatorModule, DataTableModule, GrowlModule, DialogModule, SharedModule as PShared } from "primeng/primeng"
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -27,6 +27,7 @@ import { CalendarModule, PaginatorModule, DataTableModule, GrowlModule, SharedMo
     PaginatorModule,
     DataTableModule,
     GrowlModule,
+    DialogModule,
     PShared
   ]
 })
