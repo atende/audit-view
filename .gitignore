@@ -43,3 +43,5 @@ _projects/
 _steps/
 .wercker/
 src/main/webapp/
+.directory
+src/main/java/META-INF/
