@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Headers, Http, Response } from "@angular/http";
-import { AuditEvent } from "../shared/models";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Headers, Http, Response } from '@angular/http';
+import { AuditEvent } from '../shared/models';
 
 export interface SearchResult {
   data?: AuditEvent[]
@@ -25,15 +25,14 @@ export class SearchService {
 
   doSearch(filter, first: number, max: number, dateStart?: Date, dateEnd?: Date, headers?: Headers): Observable<Response> {
 
-    let url = 'rest/auditevent/search'
-    let requestHeaders = headers ? headers : new Headers()
-    console.info(requestHeaders)
-    requestHeaders.append("first", first.toString())
-    requestHeaders.append("max", max.toString())
+    const url = 'rest/auditevent/search'
+    const requestHeaders = headers ? headers : new Headers()
+    requestHeaders.append('first', first.toString())
+    requestHeaders.append('max', max.toString())
 
-    if (dateStart != undefined && dateEnd != undefined) {
-      requestHeaders.append("dateStart", dateStart.toISOString());
-      requestHeaders.append("dateEnd", dateEnd.toISOString())
+    if (dateStart !== undefined && dateEnd !== undefined) {
+      requestHeaders.append('dateStart', dateStart.toISOString());
+      requestHeaders.append('dateEnd', dateEnd.toISOString())
 
     }
     return this.http.post(url, filter, {headers: requestHeaders});
@@ -44,9 +43,9 @@ export class SearchService {
 
       let result: SearchResult = {data: [], total: 0}
       if (response.status >= 200 && response.status < 300) {
-        let json = response.json();
-        let data = json.data
-        let total = json.total
+        const json = response.json();
+        const data = json.data
+        const total = json.total
         result = {data: data, total: total}
       }
       return result;
@@ -54,11 +53,11 @@ export class SearchService {
   }
 
   download(filter, first: number, max: number, dateStart?: Date, dateEnd?): Observable<Blob> {
-    let requestHeaders = new Headers()
-    requestHeaders.append("Accept", "application/csv");
+    const requestHeaders = new Headers()
+    requestHeaders.append('Accept', 'application/csv');
     return this.doSearch(filter, first, max, dateStart, dateEnd, requestHeaders).map(response => {
-      const contentType = response.headers.get("Content-Type");
-      if (contentType == "application/csv") {
+      const contentType = response.headers.get('Content-Type');
+      if (contentType === 'application/csv') {
         return new Blob([response.arrayBuffer()], {type: contentType});
       }
     })

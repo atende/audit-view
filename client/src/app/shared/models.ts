@@ -1,4 +1,4 @@
-export type SecurityLevel  = "LOW" | "NORMAL" | "HIGHT"
+export type SecurityLevel  = 'LOW' | 'NORMAL' | 'HIGHT'
 export interface AuditEvent {
   id: number,
   applicationName: string,

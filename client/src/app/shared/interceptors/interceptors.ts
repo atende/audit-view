@@ -1,11 +1,11 @@
 import {Interceptor} from 'angular-http-interceptor'
-import {Injectable} from "@angular/core";
-import {Request, Response} from "@angular/http"
-import {Observable} from "rxjs/Observable";
+import {Injectable} from '@angular/core';
+import {Request, Response} from '@angular/http'
+import {Observable} from 'rxjs/Observable';
 
-import "rxjs/add/observable/of"
-import {AppService} from "../../app.service";
-import {SlimLoadingBarService} from "ng2-slim-loading-bar";
+import 'rxjs/add/observable/of'
+import {AppService} from '../../app.service';
+import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
 
 @Injectable()
 export class HttpStatusErrorInterceptor implements Interceptor {
@@ -19,7 +19,7 @@ export class HttpStatusErrorInterceptor implements Interceptor {
   }
 
   error(err: Response): void {
-    const severity = err.status == 404 ? 'info': 'error'
+    const severity = err.status === 404 ? 'info' : 'error'
     this.appService.showMessage({summary: err.statusText, detail: err.text(), severity: severity})
   }
 
@@ -31,15 +31,12 @@ export class LoadingBarInterceptor implements Interceptor {
   constructor(private loadingBarService: SlimLoadingBarService) {}
 
   before(request: Request): Observable<any> {
-    console.log("Before Loading")
     this.loadingBarService.start(() => {
-      console.log("Completed")
     })
-    return Observable.of("");
+    return Observable.of('');
   }
 
   after(response: Response): void {
-    console.log("After Loading")
     this.loadingBarService.complete()
     this.loadingBarService.stop()
   }

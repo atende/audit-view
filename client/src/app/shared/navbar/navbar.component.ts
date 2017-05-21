@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import {Http} from "@angular/http";
-import { AuthService } from "angular-spa";
+import { Component } from '@angular/core'
+import { AuthService } from 'angular-spa'
 
 /**
  * This class represents the navigation bar component.
@@ -12,11 +11,11 @@ import { AuthService } from "angular-spa";
 })
 export class NavbarComponent {
 
-  constructor(private auth: AuthService){
+  constructor(private auth: AuthService) {
 
   }
 
-  logout(){
+  logout() {
     this.auth.logout();
   }
 }

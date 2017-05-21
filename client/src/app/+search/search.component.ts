@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { saveAs } from "file-saver";
-import { AppService } from "../app.service";
-import { Message } from "primeng/primeng";
-import { SearchService } from "./search.service";
-import { AuditEvent } from "../shared/models";
+import { Component, OnInit } from '@angular/core';
+import { saveAs } from 'file-saver';
+import { AppService } from '../app.service';
+import { Message } from 'primeng/primeng';
+import { SearchService } from './search.service';
+import { AuditEvent } from '../shared/models';
 /**
  * Search component provides search and Download of events
  */
@@ -27,7 +27,7 @@ export class SearchComponent implements OnInit {
   totalRecords = 0
   rows = 100
   selectedEvent: AuditEvent
-  display: boolean = false;
+  display = false;
   constructor(private service: SearchService, private appService: AppService) {
 
   }
@@ -36,8 +36,8 @@ export class SearchComponent implements OnInit {
     this.loadApplications();
     this.loadResourceTypes();
     this.popular();
-    this.filtro.dateStart = "null";
-    this.filtro.dateEnd = "null";
+    this.filtro.dateStart = 'null';
+    this.filtro.dateEnd = 'null';
   }
 
   loadApplications() {
@@ -51,16 +51,19 @@ export class SearchComponent implements OnInit {
       this.resourcesTypes = r;
     })
   };
-
   clickTable(log) {
     this.logSelecionado = log;
   }
 
   checkDate() {
-    let dataInicio = new Date(this.dateStart);
-    let dataFim = new Date(this.dateEnd);
+    const dataInicio = new Date(this.dateStart);
+    const dataFim = new Date(this.dateEnd);
     if (dataInicio > dataFim) {
-      const message: Message = {severity: 'warning', summary: 'Erro na data', detail: 'Data inicial tem que ser menor ou igual a data final.'}
+      const message: Message = {
+        severity: 'warning',
+        summary: 'Erro na data',
+        detail: 'Data inicial tem que ser menor ou igual a data final.'
+      }
       this.appService.showMessage(message);
       return false;
     }
@@ -68,7 +71,7 @@ export class SearchComponent implements OnInit {
   }
 
   showError(e) {
-    let message: Message = {severity: 'error', summary: 'Ocorreu um erro no servidor', detail: e}
+    const message: Message = {severity: 'error', summary: 'Ocorreu um erro no servidor', detail: e}
     this.appService.showMessage(message)
   }
 
