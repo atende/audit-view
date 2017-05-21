@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Headers, Http, Response } from '@angular/http';
-import { AuditEvent } from '../shared/models';
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs/Observable'
+import { Headers, Http, Response } from '@angular/http'
+import { AuditEvent } from '../shared/models'
 
 export interface SearchResult {
   data?: AuditEvent[]

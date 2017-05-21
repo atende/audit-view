@@ -1,11 +1,11 @@
-import {Interceptor} from 'angular-http-interceptor'
-import {Injectable} from '@angular/core';
-import {Request, Response} from '@angular/http'
-import {Observable} from 'rxjs/Observable';
+import { Interceptor } from 'angular-http-interceptor'
+import { Injectable } from '@angular/core'
+import { Request, Response } from '@angular/http'
+import { Observable } from 'rxjs/Observable'
 
 import 'rxjs/add/observable/of'
-import {AppService} from '../../app.service';
-import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
+import { AppService } from '../../app.service'
+import { SlimLoadingBarService } from 'ng2-slim-loading-bar'
 
 @Injectable()
 export class HttpStatusErrorInterceptor implements Interceptor {

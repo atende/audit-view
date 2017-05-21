@@ -1,7 +1,7 @@
-import { Message } from 'primeng/primeng';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Message } from 'primeng/primeng'
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs/Observable'
+import { Observer } from 'rxjs/Observer'
 
 @Injectable()
 export class AppService {

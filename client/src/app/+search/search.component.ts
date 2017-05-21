@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { saveAs } from 'file-saver';
-import { AppService } from '../app.service';
-import { Message } from 'primeng/primeng';
-import { SearchService } from './search.service';
-import { AuditEvent } from '../shared/models';
+import { Component, OnInit } from '@angular/core'
+import { saveAs } from 'file-saver'
+import { AppService } from '../app.service'
+import { Message } from 'primeng/primeng'
+import { SearchService } from './search.service'
+import { AuditEvent } from '../shared/models'
 /**
  * Search component provides search and Download of events
  */
