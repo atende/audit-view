@@ -1,10 +1,11 @@
-import {Component, OnInit} from "@angular/core";
-import {saveAs} from "file-saver";
-import {AppService} from "../app.service";
-import {Message, Dialog} from "primeng/primeng";
-import {SearchService} from "./search.service";
+import { Component, OnInit } from "@angular/core";
+import { saveAs } from "file-saver";
+import { AppService } from "../app.service";
+import { Message } from "primeng/primeng";
+import { SearchService } from "./search.service";
+import { AuditEvent } from "../shared/models";
 /**
- * This class represents the lazy loaded AboutComponent.
+ * Search component provides search and Download of events
  */
 @Component({
   selector: 'app-search',
@@ -22,11 +23,10 @@ export class SearchComponent implements OnInit {
   eventos = [];
   dateStart;
   dateEnd;
-  filtrados: any = [];
   resourcesTypes: any = []
   totalRecords = 0
   rows = 100
-  selectedEvent
+  selectedEvent: AuditEvent
   display: boolean = false;
   constructor(private service: SearchService, private appService: AppService) {
 

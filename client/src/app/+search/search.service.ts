@@ -1,9 +1,10 @@
-import {Injectable} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Http, Headers, Response} from "@angular/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { Headers, Http, Response } from "@angular/http";
+import { AuditEvent } from "../shared/models";
 
 export interface SearchResult {
-  data?: any
+  data?: AuditEvent[]
   total?: number
 }
 
