@@ -7,23 +7,49 @@ services:
 
 build:
   steps:
-    - script: 
-      name: "Wait for POSTGRES connection" 
-      code: | 
+    - script:
+      name: "Wait for POSTGRES connection"
+      code: |
         echo "Postgresql on $POSTGRES_PORT_5432_TCP_ADDR $POSTGRES_PORT_5432_TCP_PORT"
-        while ! pg_isready -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT 
-        do 
-          sleep 3; 
+        while ! pg_isready -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT
+        do
+          sleep 3;
         done
+#    - script:
+#      name: "setup npm cache"
+#      code: |
+#         su ciuser
+#         debug 'Creating $WERCKER_CACHE_DIR/wercker/npm'
+#         mkdir -p $WERCKER_CACHE_DIR/wercker/npm
+#         debug 'Creating $WERCKER_CACHE_DIR/wercker/node_modules'
+#         mkdir -p $WERCKER_CACHE_DIR/wercker/node_modules
+#         debug 'Configuring npm to use wercker cache'
+#         npm config set cache $WERCKER_CACHE_DIR/wercker/npm
+#         rm -rf $WERCKER_SOURCE_DIR/client/node_modules
+#         ln -s $WERCKER_CACHE_DIR/node_modules $WERCKER_SOURCE_DIR/client/node_modules
+
+    - script:
+      name: "start display"
+      code: |
+        /etc/init.d/xvfb start
     - script:
       name: gradle build
       code: |
+        su ciuser
+        export DISPLAY=:99
         export GRADLE_USER_HOME=$WERCKER_CACHE_DIR/gradle
         export SPRING_PROFILES_ACTIVE=ci
-        ./gradlew --full-stacktrace build
+        if [ -e src/main/resources/application-test.properties ]
+        then
+          rm src/main/resources/application-test.properties
+        fi
+        cp client/src/environments/environment.prod.ts.dist client/src/environments/environment.prod.ts
+        cp client/src/environments/environment.ts.dist client/src/environments/environment.ts
+        ./gradlew test
     - script:
       name: build docs
       code: |
+        su ciuser
         mkdocs build
 deploy:
   steps:

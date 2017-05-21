@@ -1,0 +1,200 @@
+  <div class="row">
+    <div class="col-sm-3">
+
+      <div class="leftComboBox">
+
+        <form class="form-inline well well-sm">
+
+          <span class="glyphicon glyphicon-search"></span>
+
+          <br><span>Nome do Usuário: </span><br>
+          <input name="nome" type="text" class="form-control" [(ngModel)]="filtro.userName" placeholder="Nome do Usuário">
+
+          <br><span>Ação: </span><br>
+          <input name="acao" type="text" class="form-control" [(ngModel)]="filtro.action" placeholder="Ação">
+
+          <br><span>Id: </span><br>
+          <input name="id" type="text" class="form-control" [(ngModel)]="filtro.id" placeholder="ID do Log">
+
+          <br><span>Data Início: </span><br>
+          <p-calendar name="dataInicio" dateFormat="dd.mm.yy" [(ngModel)]="dateStart" [maxDate]="dateEnd" [showTime]="true" [showIcon]="true"></p-calendar>
+
+
+          <br><span>Data Fim: </span><br>
+          <p-calendar name="dataFim" dateFormat="dd.mm.yy" [(ngModel)]="dateEnd" [minDate]="dateStart" [showTime]="true" [showIcon]="true"></p-calendar>
+
+          <br><span>Ip: </span><br>
+          <input name="ip" type="text" class="input form-control primary-border" [(ngModel)]="filtro.ip" placeholder="IP">
+
+          <br>Criticidade
+          <br><select name="securitySevel" class="form-control"
+                      [(ngModel)]="filtro.securityLevel">
+
+          <option value="">---Criticidade---</option> <!-- not selected / blank option -->
+          <option *ngFor="let crit  of criticidades" value="{{crit}}"> {{crit}}</option>
+
+        </select>
+
+          <br>Aplicação
+          <br><select name="applicationName" class="form-control"
+                      [(ngModel)]="filtro.applicationName">
+
+          <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
+          <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}" > {{aplic}}</option>
+
+        </select>
+
+          <br>Resource Types
+          <br><select name="resourceTypes" class="form-control"
+                      [(ngModel)]="filtro.resourceType">
+
+          <option value="" selected>---Resource Types---</option> <!-- not selected / blank option -->
+          <option *ngFor="let retp  of resourcesTypes" value="{{retp}}"> {{retp}}</option>
+
+        </select>
+
+          <br><br>
+          <!--(click)="(dateStart != undefined && dateEnd != undefined) ? searchIncludeDate() : searchWithoutDate()"-->
+          <button
+            (click)="search()"
+            id="buttonPesquisar"
+            class="btn btn-primary btn-sm btn-block"> Pesquisar
+          </button>
+
+          <br>
+          <button
+            (click)="download()"
+            id="buttonDownload"
+            class="btn btn-primary btn-sm btn-block"> Download
+          </button>
+
+        </form>
+
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="table-responsive tablescroll">
+
+        <p-dataTable [value]="eventos"
+                     [rows]="10"
+                     [paginator]="true"
+                     [pageLinks]="3"
+                     lazy="true"
+                     [totalRecords]="totalRecords"
+                     (onLazyLoad)="onLazyLoad($event)"
+                     selectionMode="single"
+                     [(selection)]="logSelecionado"
+                     (dblclick)="showDialog()">
+          <p-header>Lista de Eventos</p-header>
+          <p-column field="id" header="ID"></p-column>
+          <p-column field="applicationName" header="Aplicação"></p-column>
+          <p-column field="userName" header="Usuário"></p-column>
+          <p-column field="action" header="Ação"></p-column>
+          <p-column field="resource.resourceType" header="ResourceType"></p-column>
+          <p-column field="resource.resourceId" header="ResourceId"></p-column>
+          <p-column field="dateTime" header="Data e Hora"></p-column>
+          <p-column field="ip" header="IP"></p-column>
+          <p-column field="securityLevel" header="Criticidade"></p-column>
+        </p-dataTable>
+
+
+      </div>
+
+    </div>
+
+    <p-dialog header="Descrição do Log Selecionado" [(visible)]="display">
+      <table class="table display">
+        <thead>
+        <tr>
+          <th> ID</th>
+          <th> Aplicação</th>
+          <th> Usuário</th>
+          <th> Ação</th>
+          <th> Resource Type</th>
+          <th> Resource Id</th>
+          <th> Data e Hora</th>
+          <th> IP</th>
+          <th> Criticidade</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+          <td> {{ logSelecionado.id }}</td>
+          <td> {{ logSelecionado.applicationName }}</td>
+          <td> {{ logSelecionado.userName }}</td>
+          <td> {{ logSelecionado.action }}</td>
+          <td> {{ logSelecionado.resource.resourceType }}</td>
+          <td> {{ logSelecionado.resource.resourceId }}</td>
+          <td> {{ logSelecionado.dateTime[2] + '/' + logSelecionado.dateTime[1] + '/' +
+            logSelecionado.dateTime[0] + ' ' + logSelecionado.dateTime[3] + ':' + logSelecionado.dateTime[4] +
+            ':' + logSelecionado.dateTime[5]}}
+          </td>
+          <td> {{ logSelecionado.ip }}</td>
+          <td> {{ logSelecionado.securityLevel }}</td>
+
+        </tr>
+        </tbody>
+        <th> Descrição</th><br/>
+        <td> {{ logSelecionado.description}}</td>
+      </table>
+    </p-dialog>
+
+
+    <!-- Modal Descrição -->
+    <div id="details">
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+           aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                      aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">Detalhes</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table display">
+                <thead>
+                <tr>
+                  <th> ID</th>
+                  <th> Aplicação</th>
+                  <th> Usuário</th>
+                  <th> Ação</th>
+                  <th> Resource Type</th>
+                  <th> Resource Id</th>
+                  <th> Data e Hora</th>
+                  <th> IP</th>
+                  <th> Criticidade</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr>
+                  <td> {{ logSelecionado.id }}</td>
+                  <td> {{ logSelecionado.applicationName }}</td>
+                  <td> {{ logSelecionado.userName }}</td>
+                  <td> {{ logSelecionado.action }}</td>
+                  <td> {{ logSelecionado.resource.resourceType }}</td>
+                  <td> {{ logSelecionado.resource.resourceId }}</td>
+                  <td> {{ logSelecionado.dateTime[2] + '/' + logSelecionado.dateTime[1] + '/' +
+                    logSelecionado.dateTime[0] + ' ' + logSelecionado.dateTime[3] + ':' + logSelecionado.dateTime[4] +
+                    ':' + logSelecionado.dateTime[5]}}
+                  </td>
+                  <td> {{ logSelecionado.ip }}</td>
+                  <td> {{ logSelecionado.securityLevel }}</td>
+
+                </tr>
+                </tbody>
+                <th> Descrição</th>
+                <td> {{ logSelecionado.description}}</td>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
