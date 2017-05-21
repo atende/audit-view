@@ -56,14 +56,14 @@
           <br><br>
           <!--(click)="(dateStart != undefined && dateEnd != undefined) ? searchIncludeDate() : searchWithoutDate()"-->
           <button
-            (click)="search(false)"
+            (click)="search()"
             id="buttonPesquisar"
             class="btn btn-primary btn-sm btn-block"> Pesquisar
           </button>
 
           <br>
           <button
-            (click)="search(true)"
+            (click)="download()"
             id="buttonDownload"
             class="btn btn-primary btn-sm btn-block"> Download
           </button>

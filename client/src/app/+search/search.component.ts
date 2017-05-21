@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {Http, Headers, Response} from '@angular/http';
-import { saveAs } from 'file-saver';
+import {Component, OnInit} from "@angular/core";
+import {saveAs} from "file-saver";
 import {AppService} from "../app.service";
-import {Message} from 'primeng/primeng';
+import {Message} from "primeng/primeng";
+import {SearchService} from "./search.service";
 /**
  * This class represents the lazy loaded AboutComponent.
  */
@@ -22,12 +22,10 @@ export class SearchComponent implements OnInit {
   eventos = [];
   dateStart;
   dateEnd;
-  filtrados: any = [];
   resourcesTypes: any = []
   totalRecords = 0
   rows = 100
-  down = false
-  constructor(private http: Http, private appService: AppService) {
+  constructor(private service: SearchService, private appService: AppService) {
 
   }
 
@@ -40,15 +38,15 @@ export class SearchComponent implements OnInit {
   }
 
   loadApplications() {
-    this.http.get('rest/auditevent/applications').subscribe(r => {
-      this.aplicacoes = r.json();
+    this.service.getApplications().subscribe(r => {
+      this.aplicacoes = r;
     });
   };
 
   loadResourceTypes() {
-    this.http.get('rest/auditevent/resourcetypes').subscribe(r => {
-      this.resourcesTypes = r.json();
-    });
+    this.service.getResourceTypes().subscribe(r => {
+      this.resourcesTypes = r;
+    })
   };
 
   clickTable(log) {
@@ -70,49 +68,29 @@ export class SearchComponent implements OnInit {
     let message: Message = {severity: 'error', summary: 'Ocorreu um erro no servidor', detail: e}
     this.appService.showMessage(message)
   }
-  download(response: Response) {
-    const contentType = {type: "application/csv"};
-    const blob = new Blob([response.arrayBuffer()], contentType);
-    saveAs(blob, 'planilha.csv');
-  };
 
-  search(download) {
-    this.down = download;
-    // Max java int
-    let rows = download ? 2147483647 : this.rows
-    this.onLazyLoad({first: 0, rows: rows})
+  search() {
+    this.service.search(this.filtro, 1, this.rows).subscribe(response => {
+      this.totalRecords = response.total
+      this.eventos = response.data
+    })
   }
+
+  download() {
+    // Max java int
+    const max = 2147483647
+    this.service.download(this.filtro, 1, max, this.dateStart, this.dateEnd)
+      .subscribe(blob => saveAs(blob, 'planilha.csv'))
+  }
+
   popular() {
-    this.down = false;
     this.onLazyLoad({first: 0, rows: this.rows})
   }
+
   onLazyLoad(event) {
-    let url = 'rest/auditevent/search'
-    let requestHeaders = new Headers()
-    requestHeaders.append("first", event.first)
-    requestHeaders.append("max", event.first + event.rows)
-    if (this.down) {
-      requestHeaders.append("Accept", "application/csv");
-      this.down = false;
-    }
-    if (this.dateStart != undefined && this.dateEnd != undefined) {
-      requestHeaders.append("dateStart", this.dateStart);
-      requestHeaders.append("dateEnd", this.dateEnd)
-
-    }
-    this.http.post(url, this.filtro, {headers: requestHeaders}).subscribe(response => {
-
-      if (response.headers.get("Content-Type") == "application/csv") {
-        this.download(response);
-      } else if (response.status >= 200 && response.status < 300) {
-        let json = response.json();
-        let data = json.data
-        let total = json.total
-        this.eventos = data;
-        this.totalRecords = total
-      } else { // Error 500
-        this.showError(response.text())
-      }
-    });
+    this.service.search(this.filtro, event.first, event.first + event.rows, this.dateStart, this.dateEnd).subscribe(response => {
+      this.totalRecords = response.total
+      this.eventos = response.data
+    })
   }
 }
