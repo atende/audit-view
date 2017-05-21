@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {saveAs} from "file-saver";
 import {AppService} from "../app.service";
-import {Message} from "primeng/primeng";
+import {Message, Dialog} from "primeng/primeng";
 import {SearchService} from "./search.service";
 /**
  * This class represents the lazy loaded AboutComponent.
@@ -22,9 +22,12 @@ export class SearchComponent implements OnInit {
   eventos = [];
   dateStart;
   dateEnd;
+  filtrados: any = [];
   resourcesTypes: any = []
   totalRecords = 0
   rows = 100
+  selectedEvent
+  display: boolean = false;
   constructor(private service: SearchService, private appService: AppService) {
 
   }
@@ -92,5 +95,8 @@ export class SearchComponent implements OnInit {
       this.totalRecords = response.total
       this.eventos = response.data
     })
+  }
+  showDialog() {
+    this.display = true;
   }
 }

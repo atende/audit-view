@@ -17,32 +17,32 @@
           <input name="id" type="text" class="form-control" [(ngModel)]="filtro.id" placeholder="ID do Log">
 
           <br><span>Data Início: </span><br>
-          <input name="dataInicio" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateStart"
-                 placeholder="dd/mm/aaaa --:--">
+          <p-calendar name="dataInicio" dateFormat="dd.mm.yy" [(ngModel)]="dateStart" [maxDate]="dateEnd" [showTime]="true" [showIcon]="true"></p-calendar>
+
 
           <br><span>Data Fim: </span><br>
-          <input name="dataFim" type="datetime-local" class="input form-control primary-border" [(ngModel)]="dateEnd"
-                 placeholder="dd/mm/aaaa --:--">
+          <p-calendar name="dataFim" dateFormat="dd.mm.yy" [(ngModel)]="dateEnd" [minDate]="dateStart" [showTime]="true" [showIcon]="true"></p-calendar>
 
           <br><span>Ip: </span><br>
           <input name="ip" type="text" class="input form-control primary-border" [(ngModel)]="filtro.ip" placeholder="IP">
 
+          <br>Criticidade
+          <br><select name="securitySevel" class="form-control"
+                      [(ngModel)]="filtro.securityLevel">
 
-          <br><br><select name="securitySevel" class="form-control"
-                          [(ngModel)]="filtro.securityLevel">
-
-          <option value="" selected>---Criticidade---</option> <!-- not selected / blank option -->
+          <option value="">---Criticidade---</option> <!-- not selected / blank option -->
           <option *ngFor="let crit  of criticidades" value="{{crit}}"> {{crit}}</option>
 
         </select>
 
-          <select name="applicationName" class="form-control"
-                  [(ngModel)]="filtro.applicationName">
+          <br>Aplicação
+          <br><select name="applicationName" class="form-control"
+                      [(ngModel)]="filtro.applicationName">
 
-            <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
-            <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}"> {{aplic}}</option>
+          <option value="" selected>---Aplicação---</option> <!-- not selected / blank option -->
+          <option *ngFor="let aplic  of aplicacoes" value="{{aplic}}" > {{aplic}}</option>
 
-          </select>
+        </select>
 
           <br>Resource Types
           <br><select name="resourceTypes" class="form-control"
@@ -76,14 +76,16 @@
     <div class="container">
       <div class="table-responsive tablescroll">
 
-
         <p-dataTable [value]="eventos"
                      [rows]="10"
                      [paginator]="true"
                      [pageLinks]="3"
                      lazy="true"
                      [totalRecords]="totalRecords"
-                     (onLazyLoad)="onLazyLoad($event)">
+                     (onLazyLoad)="onLazyLoad($event)"
+                     selectionMode="single"
+                     [(selection)]="logSelecionado"
+                     (dblclick)="showDialog()">
           <p-header>Lista de Eventos</p-header>
           <p-column field="id" header="ID"></p-column>
           <p-column field="applicationName" header="Aplicação"></p-column>
@@ -100,6 +102,45 @@
       </div>
 
     </div>
+
+    <p-dialog header="Descrição do Log Selecionado" [(visible)]="display">
+      <table class="table display">
+        <thead>
+        <tr>
+          <th> ID</th>
+          <th> Aplicação</th>
+          <th> Usuário</th>
+          <th> Ação</th>
+          <th> Resource Type</th>
+          <th> Resource Id</th>
+          <th> Data e Hora</th>
+          <th> IP</th>
+          <th> Criticidade</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+          <td> {{ logSelecionado.id }}</td>
+          <td> {{ logSelecionado.applicationName }}</td>
+          <td> {{ logSelecionado.userName }}</td>
+          <td> {{ logSelecionado.action }}</td>
+          <td> {{ logSelecionado.resource.resourceType }}</td>
+          <td> {{ logSelecionado.resource.resourceId }}</td>
+          <td> {{ logSelecionado.dateTime[2] + '/' + logSelecionado.dateTime[1] + '/' +
+            logSelecionado.dateTime[0] + ' ' + logSelecionado.dateTime[3] + ':' + logSelecionado.dateTime[4] +
+            ':' + logSelecionado.dateTime[5]}}
+          </td>
+          <td> {{ logSelecionado.ip }}</td>
+          <td> {{ logSelecionado.securityLevel }}</td>
+
+        </tr>
+        </tbody>
+        <th> Descrição</th><br/>
+        <td> {{ logSelecionado.description}}</td>
+      </table>
+    </p-dialog>
+
 
     <!-- Modal Descrição -->
     <div id="details">
